@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sei Tu Ituzaingó Sur</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="icono.png">
+    <style>
+        :root {
+            --primary: #0072ff; --secondary: #00c6ff; --accent: #25D366;
+            --bg: #f4f7f9; --text: #333; --white: #ffffff; --sidebar-width: 280px;
+        }
+
+        body { 
+            margin: 0; 
+            font-family: 'Poppins', sans-serif; 
+            /* Cambiá 'tu-imagen-de-fondo.jpg' por el nombre real de tu archivo */
+            background: url('tu-imagen-de-fondo.png') no-repeat center center fixed; 
+            background-size: cover; 
+            color: var(--text); 
+            display: flex; 
+            overflow-x: hidden; 
+            min-height: 100vh; 
+        }
+
+        .sidebar { width: var(--sidebar-width); background: var(--white); height: 100vh; position: fixed; left: calc(-1 * var(--sidebar-width)); top: 0; box-shadow: 5px 0 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; z-index: 8000; transition: 0.4s ease; }
+        .sidebar.active { left: 0; }
+        .sidebar-header { padding: 25px 20px; background: linear-gradient(135deg, var(--secondary), var(--primary)); color: white; text-align: center; }
+        .sidebar-menu { padding: 10px 0; overflow-y: auto; flex-grow: 1; }
+        .menu-item { padding: 12px 20px; cursor: pointer; transition: 0.3s; display: block; color: var(--text); text-decoration: none; font-size: 14px; border-bottom: 1px solid #f9f9f9; }
+        
+        .nav-buttons { position: fixed; top: 15px; left: 15px; z-index: 8500; display: flex; flex-direction: column; gap: 10px; }
+        .menu-toggle { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 10px 18px; /* Mismo padding que horarios */
+            border-radius: 50px; /* Forma de píldora */
+            cursor: pointer; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600; 
+            font-size: 14px; /* Misma fuente que horarios */
+            width: auto; /* Para que el tamaño dependa del contenido igual que el otro */
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            filter: brightness(1.1);
+        }
+        .btn-horarios-flotante {
+            position: fixed;
+            top: 15px;
+            right: 15px; /* Ubicación arriba a la derecha */
+            z-index: 8500;
+            background: linear-gradient(135deg, #666, #333); /* Degradado estético */
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 50px; /* Forma de píldora */
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-horarios-flotante:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #777, #444);
+        }
+
+        .btn-horarios-flotante i {
+            font-size: 16px;
+        }
+
+        /* Ajuste para celulares: si el banner es muy grande, 
+        podemos bajarlo un poquito para que no tape nada importante */
+        @media (max-width: 600px) {
+        /* Achicamos un toque los botones para que no se choquen en el medio */
+            .menu-toggle, .btn-horarios-flotante {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+        }
+
+        /* Clase para ocultar los botones cuando los modales están abiertos */
+        .hidden-btn {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: translateY(-20px);
+        }
+
+        .overlay { position: fixed; top:0; left:0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); display: none; z-index: 9000; opacity: 0; transition: opacity 0.3s ease; }
+        .overlay.active { display: block; opacity: 1; }
+
+        /* AJUSTE DE LA CRUZ DE CIERRE */
+        .btn-cerrar-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 32px;
+            height: 32px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 50%;
+            color: #666;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9100;
+            transition: all 0.2s ease;
+            line-height: 1;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 110px; /* Altura fija para que todas las cards midan lo mismo */
+            object-fit: contain; /* Ajusta la imagen sin deformarla */
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+
+        .btn-cerrar-modal:hover {
+            background: #e74c3c;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-horarios, .modal-sabores { 
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            background: #ffffff;
+            border-radius: 25px;
+            z-index: 10000; 
+            display: none; 
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+            width: 90%;
+            max-width: 450px; 
+            text-align: center; 
+            max-height: 80vh; 
+            overflow-y: auto; 
+            padding: 0;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .modal-horarios.active, .modal-sabores.active { display: block; }
+        
+        .modal-horarios::-webkit-scrollbar, .modal-sabores::-webkit-scrollbar { width: 8px; }
+        .modal-horarios::-webkit-scrollbar-track, .modal-sabores::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .modal-horarios::-webkit-scrollbar-thumb, .modal-sabores::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+
+        /* AJUSTE DEL TÍTULO PARA QUE NO SE SUPERPONGA CON LA CRUZ */
+        #modal-sabores-titulo, .modal-horarios h3 { 
+            color: var(--primary); 
+            margin: 0; 
+            padding: 25px 55px 25px 20px; /* Padding derecho aumentado para la cruz */
+            font-size: 19px; 
+            font-weight: 600; 
+            border-bottom: 2px solid #f0f7ff;
+            background: #fafcff;
+            border-radius: 25px 25px 0 0;
+            text-align: left;
+        }
+
+        .btn-google-maps {
+            background: linear-gradient(45deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);
+            color: white;
+            display: block;
+            padding: 15px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .btn-google-maps:hover { transform: scale(1.02); }
+
+        #modal-sabores-body, .horarios-list { padding: 20px; }
+
+        .horarios-list { text-align: left; font-size: 14px; line-height: 1.8; }
+        .horario-dia { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; }
+        .horario-nota { background: #fff4e5; color: #b7791f; padding: 12px; border-radius: 12px; font-size: 12px; margin-top: 15px; border: 1px solid #fbd38d; }
+
+        .modal-sabores .unidad-bloque { 
+            background: #ffffff;
+            padding: 18px; 
+            border-radius: 18px;
+            margin-bottom: 20px;
+            border: 1px solid #e1e8ed;
+            text-align: left; 
+            width: 100%; 
+            box-sizing: border-box; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        
+        .modal-sabores .unidad-bloque p {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary) !important;
+            margin: 0 0 15px 0 !important;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f3f5;
+        }
+
+        .modal-sabores .opcion-sel { 
+            margin-bottom: 12px;
+            font-size: 15px;
+            background: #fff; 
+            border: 1px solid #d1d8dd;
+            padding: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
+            color: #444;
+        }
+
+        #modal-sabores .btn-principal { 
+            margin: 0 20px 25px;
+            width: calc(100% - 40px);
+            padding: 16px;
+            background: var(--accent); 
+            border-radius: 15px; 
+            font-size: 16px; 
+        }
+
+        .main-content { 
+            flex-grow: 1; 
+            width: 95%; 
+            max-width: 1200px; 
+            margin: 20px auto; 
+            /* Aumentamos el padding bottom para que el carrito no tape el último producto */
+            padding-bottom: 250px !important; 
+            transition: 0.4s; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            background: rgba(255, 255, 255, 0.7); 
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px); 
+            border-radius: 30px; 
+            border: 1px solid rgba(255, 255, 255, 0.3); 
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); 
+        }
+
+        header { text-align: center; padding: 40px 20px 20px; margin-bottom: 10px; }
+
+        .categoria { 
+            margin: 30px 20px 10px; 
+            color: var(--primary); 
+            font-weight: 600; 
+            border-left: 5px solid var(--primary); 
+            padding-left: 15px; 
+            text-transform: uppercase; 
+            font-size: 1.1rem;
+            align-self: flex-start; /* Mantiene el título a la izquierda del contenedor centrado */
+            width: fit-content;
+        }
+        
+        /* Cambiamos el minmax de 280px a 200px para que entren más columnas */
+        .grid { 
+            display: grid; 
+            /* Cambiamos 200px por 140px para que en el celu entren 2 columnas */
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+            gap: 10px; 
+            padding: 15px; 
+            width: 100%;
+            box-sizing: border-box;
+            justify-content: center;
+        }
+
+        #paso-productos, #dinamico {
+            width: 100%;
+        }
+        /* Reducimos el padding interno de la card y el tamaño de los textos */
+        .card { 
+            background: rgba(255, 255, 255, 1.0);
+            border-radius: 15px; /* Bordes un poco más finos */
+            padding: 12px; /* Menos espacio interno */
+            text-align: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: space-between; 
+        }
+
+        .card h4 {
+            margin: 5px 0;
+            font-size: 0.85rem; /* Texto de producto más pequeño */
+            line-height: 1.2;
+        }
+
+        .price { 
+            color: var(--primary); 
+            font-size: 0.9rem; /* Precio un poco más chico */
+            font-weight: 600; 
+            margin-bottom: 10px; 
+        }
+
+        input[type="number"], input[type="text"], textarea, select { width: 100%; box-sizing: border-box; padding: 12px; border-radius: 12px; border: 1px solid #ddd; font-family: inherit; font-size: 14px; }
+        input[type="number"].cantidad { 
+            width: 70px; /* Un poco más angosto */
+            font-size: 16px; 
+            padding: 8px;
+        }
+
+        /* SECCIÓN DATOS DEL PEDIDO */
+        #paso-datos { 
+            display: none; 
+            padding: 20px; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form { 
+            padding: 30px; 
+            background: rgba(255, 255, 255, 0.9); 
+            border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            margin-bottom: 25px; 
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form label { 
+            display: block; 
+            margin-bottom: 10px; 
+            font-weight: 600; 
+            font-size: 14px; 
+            color: var(--primary); 
+            padding-left: 5px;
+        }
+
+        /* INPUTS MODERNOS */
+        input[type="text"], 
+        input[type="number"], 
+        textarea, 
+        select { 
+            width: 100%; 
+            box-sizing: border-box; 
+            padding: 14px 18px; 
+            border-radius: 15px; 
+            border: 2px solid #edf2f7; 
+            font-family: inherit; 
+            font-size: 15px; 
+            background: #fdfdfd;
+            transition: all 0.3s ease;
+            color: #444;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(0, 198, 255, 0.1);
+        }
+
+        /* RESUMEN DE PAGO ESTILIZADO */
+        .resumen-caja {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+            border: 2px dashed var(--primary) !important;
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        #resumen-final {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #444;
+            font-weight: 500;
+        }
+
+        .aviso-delivery { 
+            font-size: 12px; 
+            color: #d68910; 
+            margin-top: 8px; 
+            font-weight: 600; 
+            background: #fff9e6;
+            padding: 8px 12px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        #carrito { 
+            position: fixed !important; 
+            bottom: 0; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 100%; 
+            max-width: 600px; 
+            background: white; 
+            padding: 20px; 
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.2); 
+            /* Bajamos el z-index para que el menú y modales lo tapen */
+            z-index: 5000; 
+            border-radius: 25px 25px 0 0; 
+            box-sizing: border-box;
+            display: none; 
+        }
+        #resumen-mini { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 10px; scrollbar-width: none; }
+        #resumen-mini::-webkit-scrollbar { display: none; }
+        .item-badge { background: #eef6ff; color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; white-space: nowrap; border: 1px solid #d0e7ff; }
+
+        #monto { font-size: 26px; color: var(--primary); font-weight: 600; }
+        .btn-principal { width: 100%; padding: 18px; border: none; border-radius: 15px; background: var(--primary); color: white; font-size: 18px; font-weight: 600; cursor: pointer; }
+        .btn-whatsapp { background: var(--accent); }
+        .btn-volver { background: #eee; color: #555; margin-bottom: 15px; padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; }
+
+        .btn-sabores { 
+            padding: 6px 10px; 
+            font-size: 11px; /* Botón de sabores más compacto */
+        }
+
+        header { 
+            text-align: center; 
+            padding: 0; 
+            background: #00c6ff; 
+            margin: 20px auto; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            width: calc(100% - 40px); 
+            max-width: 1160px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Agregué una sombra suave para que resalte más */
+        }
+
+        .banner-img {
+            width: 100%;
+            height: auto;
+            /* Subimos la altura para que el logo central entre cómodo */
+            max-height: 300px; 
+            display: block;
+            /* 'cover' asegura que llene el ancho, 'center' mantiene el logo al medio */
+            object-fit: cover; 
+            object-position: 50% 40%;
+        }
+
+        /* Ajuste para tablets/PC */
+        @media (min-width: 1024px) {
+            header {
+                width: 100%; 
+            }
+        }
+
+        /* Ajuste para celulares: lo hacemos un poquito más alto también aquí */
+        @media (max-width: 600px) {
+            header {
+                margin: 10px auto;
+                width: calc(100% - 20px);
+                border-radius: 15px;
+            }
+            .banner-img {
+                max-height: 180px; /* Antes estaba en 130px, ahora tiene más aire */
+                object-position: 50% 40%;
+            }
+        }
+
+        /* Posicionamos el contenedor debajo del botón de horarios */
+        .redes-flotantes {
+            position: fixed;
+            top: 65px; /* 15px de margen + ~50px de altura del botón de horarios */
+            right: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 8500; /* Misma prioridad que los botones de arriba */
+            transition: all 0.3s ease;
+        }
+
+        /* Ajuste para que se oculten cuando el modal está abierto (igual que los otros botones) */
+        .redes-flotantes.hidden-btn {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: translateY(-20px);
+        }
+
+        /* En móviles bajamos un toque la posición por el padding de los botones */
+        @media (max-width: 600px) {
+            .redes-flotantes {
+                top: 55px;
+            }
+        }
+
+        .btn-flotante {
+            width: 48px; 
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: white;
+            font-size: 24px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        /* El resto de los colores (wa, ig, maps) se mantienen igual */
+
+        .btn-flotante:hover {
+            transform: scale(1.1);
+        }
+
+        .wa { background: #25D366; }
+        .ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .maps { background: #4285F4; }
+
+        /* Ajuste para que en PC se vean un poquito más grandes si querés */
+        @media (min-width: 768px) {
+            .redes-flotantes { right: 30px; }
+        }
+
+        .btn-cerrar-sidebar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            line-height: 1;
+        }
+
+        .btn-cerrar-sidebar:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+
+        /* Ajuste para que el título no pise el botón */
+        .sidebar-header h3 {
+            margin-top: 5px;
+        }
+
+        #btn-vaciar {
+            background: #fff1f0;
+            color: #e74c3c;
+            border: 1px solid #ffa39e;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 15px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        #btn-vaciar:hover {
+            background: #ffccc7;
+            transform: translateY(-1px);
+        }
+    
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-inicio" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url('tu-imagen-de-fondo.png') no-repeat center center fixed;
+    background-size: cover;
+">
+    <div style="position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);"></div>
+
+    <div style="position: relative; text-align: center; width: 90%; max-width: 500px;">
+        <img src="banner.png" alt="Logo Sei Tu" style="width: 100%; height: auto; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 30px;">
+        
+        <h1 style="color: white; font-family: 'Poppins', sans-serif; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); margin-bottom: 40px;">¡Bienvenidos!</h1>
+
+        <button onclick="comenzarPedido()" style="
+            background: #0072ff;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 22px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0,114,255,0.4);
+            font-family: 'Poppins', sans-serif;
+            transition: transform 0.2s ease;
+            width: 100%;
+        " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            🚀 INICIAR PEDIDO
+        </button>
+    </div>
+</div>
+
+<div class="nav-buttons" id="nav-btns">
+    <button class="menu-toggle" onclick="toggleMenu()">☰ Productos</button>
+</div>
+
+<button class="btn-horarios-flotante" onclick="toggleHorarios()">
+    <i class="fas fa-clock"></i> <span>Horarios</span>
+</button>
+
+<div class="overlay" id="overlay" onclick="cerrarTodo()"></div>
+
+<div class="modal-horarios" id="modal-horarios">
+    <button class="btn-cerrar-modal" onclick="cerrarTodo()">×</button>
+    <h3>Horarios de Atención</h3>
+    <div class="horarios-list">
+        <div class="horario-dia"><span>Lunes</span> <span>11:00hs a 22:00hs</span></div>
+        <div class="horario-dia" style="color: #e74c3c; font-weight: 600;"><span>Martes</span> <span>Cerrado</span></div>
+        <div class="horario-dia"><span>Miércoles</span> <span>11:00hs a 22:00hs</span></div>
+        <div class="horario-dia"><span>Jueves</span> <span>11:00hs a 22:00hs</span></div>
+        <div class="horario-dia" style="font-weight: 600;"><span>Viernes</span> <span>11:00hs a 23:00hs</span></div>
+        <div class="horario-dia" style="font-weight: 600;"><span>Sábado</span> <span>11:00hs a 23:00hs</span></div>
+        <div class="horario-dia"><span>Domingo</span> <span>11:00hs a 22:00hs</span></div>
+    </div>
+    <div class="horario-nota">
+        🛵 <b>Nota:</b> El servicio de envío (Delivery) solo está disponible de <b>18:00hs al cierre</b>.
+    </div>
+</div>
+
+<div class="modal-horarios" id="modal-contactos">
+    <button class="btn-cerrar-modal" onclick="cerrarTodo()">×</button>
+    <h3>Nuestros Contactos</h3>
+    <div class="horarios-list" style="text-align: center; padding: 20px;">
+        <a href="https://wa.me/5491131725515" target="_blank" style="display: block; padding: 15px; margin-bottom: 10px; background: #25D366; color: white; text-decoration: none; border-radius: 12px; font-weight: 600;">
+            WhatsApp
+        </a>
+        <a href="https://www.instagram.com/seitu.ituzaingosur/" target="_blank" style="display: block; padding: 15px; margin-bottom: 10px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; text-decoration: none; border-radius: 12px; font-weight: 600;">
+            Instagram
+        </a>
+        <a href="http://maps.google.com/?q=Sei+Tu+Ituzaingo+Sur" target="_blank" class="btn-google-maps">
+            Cómo llegar (Google Maps)
+        </a>
+    </div>
+</div>
+
+<div class="modal-sabores" id="modal-sabores">
+    <button class="btn-cerrar-modal" onclick="cerrarTodo()">×</button>
+    <h3 id="modal-sabores-titulo">Elegir Sabores</h3>
+    <div id="modal-sabores-body"></div>
+    <button class="btn-principal" onclick="guardarSabores()">Confirmar Selección</button>
+</div>
+
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <button class="btn-cerrar-sidebar" onclick="toggleMenu()">×</button>
+        <h3>SEI TU</h3>
+        <p style="font-size: 10px; margin:0">Ituzaingó Sur</p>
+    </div>
+    <div class="sidebar-menu" id="menu-lateral"></div>
+</nav>
+
+<div class="main-content">
+    <header>
+    <img src="banner.png" alt="Sei Tu Ituzaingó Sur" class="banner-img">
+    </header>
+    <div id="paso-productos"><div id="dinamico"></div></div>
+
+    <div id="paso-datos">
+        <button class="btn-volver" onclick="cambiarPaso(1)">← Volver a productos</button>
+        <h3 class="categoria">📍 Finalizar Pedido</h3>
+        
+        <div class="form">
+            <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" id="nombre" placeholder="Tu nombre">
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de entrega</label>
+                <select id="entrega" onchange="toggleDireccion()">
+                    <option value="Delivery">Delivery</option>
+                    <option value="Retiro en Local">Retiro en Local</option>
+                </select>
+                <span class="aviso-delivery" id="aviso-delivery-texto">⚠️ El delivery funciona a partir de las 18:00hs.</span>
+            </div>
+
+            <div class="form-group" id="group-direccion">
+                <label>Dirección y Altura</label>
+                <input type="text" id="direccion" placeholder="Ej: Av. Rivadavia 1234">
+            </div>
+
+            <div class="form-group">
+                <label>Forma de pago</label>
+                <select id="pago" onchange="toggleEfectivo()">
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Transferencia">Transferencia</option>
+                    <option value="Tarjeta">Tarjeta (Débito/Crédito)</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="group-efectivo" style="display: block;">
+                <label>¿Con cuánto abonás? (Para el vuelto)</label>
+                <input type="number" id="vuelto" placeholder="Ej: 20000">
+            </div>
+
+            <div class="form-group">
+                <label>Notas adicionales</label>
+                <textarea id="comentarios" rows="2" placeholder="Piso, timbre o alguna aclaración..."></textarea>
+            </div>
+        </div>
+
+        <div class="form" style="background: #fafafa; border: 1px dashed #ccc;">
+            <p style="font-weight: 600; margin-top:0;">Resumen del pedido:</p>
+            <div id="resumen-final" style="font-size: 14px; white-space: pre-line;"></div>
+        </div>
+    </div>
+
+    </div><div id="carrito">
+        <div id="resumen-mini">Tu carrito está vacío</div>
+
+            <button id="btn-vaciar" onclick="vaciarCarrito()" style="display: none;">
+                <i class="fas fa-trash-can"></i> Vaciar carrito
+            </button>
+
+        <div class="footer-total" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <span style="font-weight: 600; font-size: 18px;">Total:</span> 
+            <span id="monto">$0</span>
+        </div>
+        <button id="btn-accion" class="btn-principal" onclick="cambiarPaso(2)">Continuar pedido</button>
+    </div>
+</div>
+
+<div class="redes-flotantes">
+    <a href="https://wa.me/5491131725515" target="_blank" class="btn-flotante wa" title="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    <a href="https://www.instagram.com/seitu.ituzaingosur/" target="_blank" class="btn-flotante ig" title="Instagram">
+        <i class="fab fa-instagram"></i>
+    </a>
+    <a href="http://maps.google.com/?q=Sei+Tu+Ituzaingo+Sur" target="_blank" class="btn-flotante maps" title="Cómo llegar">
+        <i class="fas fa-location-dot"></i>
+    </a>
+</div>
+
+<script>
+    // Productos que NO se pueden pedir online (solo consumo en local)
+const productosSoloLocal = [
+    "Cucurucho 1 bocha", 
+    "Cucurucho 2 bochas", 
+    "Cucurucho 3 bochas", 
+    "Vasito 1 bocha", 
+    "Vasito 2 bochas"
+];
+const saboresHelado = ["Limón", "Ananá", "Frutilla al Agua", "Durazno", "Dulce de Leche", "Frutilla a la Crema", "Vainilla", "Americana", "Crema del Cielo", "Multisabor", "Limón a la Reina", "Chocolate", "DDL Granizado", "Granizado", "Super DDL", "Crema Flan", "Banana Split", "Crema Oreo", "Frutos Patagónicos", "Mascarpone con Frutos Rojos", "Pistacho", "DDL con Oreo", "Chocolate Shot", "Frutilla Cadbury", "Choco Milka", "Mouse de Chocolate", "Menta Granizada", "Mantecol", "Tiramisú", "DDL con Nuez", "DDL Sei Tu", "Choco Blanco", "Choco con Almendras", "Cereza a la Crema", "Sambayón", "Bananita Dolca", "Tramontana", "Chocolate Marroc", "Super Choco Sei Tu"];
+const salsas = ["Dulce de leche", "Chocolate", "Frutilla", "Caramelo"];
+const saboresBebida = ["Pomelo", "Manzana", "Naranja"];
+const combos3L = ["Americana-DDL-Frutilla", "Banana-Flan-Granizado", "Frutilla-DDL-Chocolate", "Tiramisú-Tramontana-DDL", "Granizado-Choco-DDL-Flan", "Amer-Choco-DDL-Frutilla"];
+const combos5L = ["Americana-DDL-Frutilla", "Banana-Flan-Granizado", "Granizado-Choco-DDL-Flan", "Amer-Choco-DDL-Frutilla"];
+const saboresGiovi = ["Frutilla", "Chocolate", "Crema"];
+const saboresCaritas = ["Choco-Vainilla", "Americana-Frutilla", "Crema del Cielo-Americana"];
+const saboresAgua = ["Frutilla", "Limón", "Uva"];
+const saboresBomboncitos = ["Menta", "Dulce de Leche", "Americana", "Pistacho"];
+const saboresPotesSinTacc = ["Americana-Frutilla", "Chocolate-DDL", "Limón"];
+const saboresConos = ["Dulce de Leche", "Americana"];
+const saboresCopas = ["Cookies", "Frutilla y Americana", "Chocolate y DDL"];
+const saboresSeiBom = ["Cookies", "Blanco", "Almendras"];
+const saboresTortas = ["Bombón", "Lemon Pie", "Cookies", "Frutilla y DDL", "Chocolate y Vainilla"];
+const opcionesBombonEscoces = ["Clasico", "Nevado", "Pistacho"];
+const opcionesAlfajorHelado = ["Clasico", "Nevado"];
+
+const completo = {
+    helado: {
+        t: "🍦 Helado",
+        i: [
+            // Helado por Peso
+            { n: "1 KG Helado", p: 14000, g: 4, img: "1kg.png" },
+            { n: "1/2 KG Helado", p: 7500, g: 3, img: "medio-kg.png" },
+            { n: "1/4 KG Helado", p: 4500, g: 3, img: "cuarto-kg.png" },
+            //Adicionales
+            { n: "Bolsita Cucuruchos Dulces x3", p: 400, img: "bolsita-cucuruchos.png" },
+            { n: "Cucuruchon Suelto", p: 250, img: "cucuruchon.png" },
+            // Cucuruchones
+            { n: "Cucurucho 1 bocha", p: 2000, g: 1, s: true, img: "cucurucho-1.png" },
+            { n: "Cucurucho 2 bochas", p: 2900, g: 2, s: true, img: "cucurucho-2.png" },
+            { n: "Cucurucho 3 bochas", p: 4000, g: 3, s: true, img: "cucurucho-3.png" },
+            // Vasitos
+            { n: "Vasito 1 bocha", p: 2000, g: 1, s: true, img: "vasito-1.png" },
+            { n: "Vasito 2 bochas", p: 2900, g: 2, s: true, img: "vasito-2.png" },
+        ]
+    },
+    agua: {
+        t: "🧊 Palitos de Agua",
+        i: [
+            { n: "Palito de Agua", p: 850, opt: saboresAgua, img: "palito-agua.png" },
+            { n: "Palito Extra Ácido", p: 1100, img: "palito-acido.png" },
+            { n: "Sei Tu Fan (Naranja)", p: 900, img: "seitu-fan.png" },
+            { n: "Piccole", p: 900, img: "piccole.png" },
+            { n: "Fruti Frozen", p: 1200, img: "fruti-frozen.png" }
+        ]
+    },
+    crema: {
+        t: "🥛 Palitos de Crema",
+        i: [
+            { n: "Palito Giovi", p: 1000, opt: saboresGiovi, img: "giovi.png" },
+            { n: "Granizado Americana", p: 1100, img: "granizado-americana.png" },
+            { n: "Dietético Vainilla-Frutilla", p: 1700, img: "dietetico-palito.png" },
+            { n: "Bombón Helado", p: 1300, img: "bombon-helado.png" },
+            { n: "Bombón Crocante", p: 1400, img: "bombon-crocante.png" },
+            { n: "Friski", p: 1000, img: "frisky.png" },
+            { n: "Palito Carita", p: 1300, opt: saboresCaritas, img: "carita.png" }
+        ]
+    },
+    postres: {
+        t: "🍰 Postres Individuales",
+        i: [
+            { n: "Bombon Escoces", p: 1700, opt: opcionesBombonEscoces, img: "escoces.png" },
+            { n: "Alfajor Seichoc", p: 2000, img: "seichoc.png" },
+            { n: "Alfajor Helado Negro", p: 1800, img: "alfajor-negro.png" },
+            { n: "Postre Almendrado", p: 1500, img: "almendrado-ind.png" },
+            { n: "Postre Suizo", p: 1600, img: "suizo-ind.png" },
+            { n: "Postre Tricolor", p: 1500, img: "tricolor-ind.png" }
+        ]
+    },
+    postres_caja: {
+        t: "📦 Postres por Caja",
+        i: [
+            { n: "Caja Bombon Escoces x8", p: 13000, opt: opcionesBombonEscoces, img: "caja-escoces.png" },
+            { n: "Alfajor Helado x8", p: 13000, opt: opcionesAlfajorHelado, img: "caja-alfajor.png" },
+            { n: "Alfajor Seichoc x8", p: 15800, img: "caja-seichoc.png" },
+            { n: "Minitorta Cookie x8", p: 13000, img: "caja-minitorta.png" },
+            { n: "Bombon Suizo x8", p: 11500, img: "caja-suizo.png" },
+            { n: "Tricolor x8", p: 10500, img: "caja-tricolor.png" },
+            { n: "Almendrado x8", p: 10500, img: "caja-almendrado.png" },
+            { n: "Tricolor Dietetico x6", p: 14000, img: "caja-dietetico.png" }
+        ]
+    },
+    copitas_y_conos: {
+        t: "🍨 Copitas y Conos",
+        i: [
+            // Copas 220cc desglosadas
+            { n: "Copa 220cc Cookies", p: 2600, img: "copa-cookie.png" },
+            { n: "Copa 220cc Frutilla y Americana", p: 2600, img: "copa-fr.png" },
+            { n: "Copa 220cc Chocolate y DDL", p: 2600, img: "copa-ch.png" },
+            // Conos Tu desglosados
+            { n: "Cono Tu Dulce de Leche", p: 2500, img: "cono-ddl.png" },
+            { n: "Cono Tu Americana", p: 2500, img: "cono-ame.png" }
+        ]
+    },
+    seibom: {
+        t: "✨ Palito Sei Bom",
+        i: [
+            { n: "Sei Bom Dubai x4", p: 9500, img: "seibom-dubai-x4.png" },
+            { n: "Sei Bom Dubai Individual", p: 2500, img: "seibom-dubai.png" },
+            { n: "Sei Bom Cookies", p: 2200, img: "seibom-cookie.png" },
+            { n: "Sei Bom Blanco", p: 2200, img: "seibom-blanco.png" },
+            { n: "Sei Bom Almendras", p: 2200, img: "seibom-almendra.png" }
+        ]
+    },
+    tortas: {
+        t: "🎂 Tortas 800gr",
+        i: [
+            { n: "Torta Bombón 800gr", p: 13000, img: "torta-bombon.png" },
+            { n: "Torta Lemon Pie 800gr", p: 13000, img: "torta-lemon-pie.png" },
+            { n: "Torta Cookies 800gr", p: 13000, img: "torta-cookies.png" },
+            { n: "Torta Frutilla y DDL 800gr", p: 13000, img: "torta-frutilla-ddl.png" },
+            { n: "Torta Chocolate y Vainilla 800gr", p: 13000, img: "torta-choc-vainilla.png" }
+        ]
+    },
+    baldes_y_bombones: {
+        t: "📦 Baldes y Bomboncitos",
+        i: [ 
+            // Baldes con selector
+            { n: "Balde 2 Litros (Pistacho-Cookies-Flan)", p: 13000, img: "balde-2l.png" },
+            { n: "Balde 3 Litros", p: 14000, opt: combos3L, img: "balde-3l.png" },
+            { n: "Balde 5 Litros", p: 19500, opt: combos5L, img: "balde-5l.png" },
+
+            // Bomboncitos con selector
+            { n: "Bomboncito Especial (Frambuesa)", p: 7900, img: "bomboncito-especial.png" },
+            { n: "Bomboncito Clásico", p: 7000, opt: saboresBomboncitos, img: "bomboncito-clasico.png" },
+        ]
+    },
+    potes: {
+        t: "🍯 Potes Especiales",
+        i: [
+            { n: "Pote Sin TACC Americana-Frutilla", p: 7500, img: "pote-fr.png" },
+            { n: "Pote Sin TACC Chocolate-DDL", p: 7500, img: "pote-ch.png" },
+            { n: "Pote Sin TACC Limón", p: 7500, img: "pote-limon.png" },
+            { n: "Pote Dietético Choco-Vainilla", p: 5900, img: "pote-dietetico.png" },
+            { n: "Pote Vegano Vainilla-Choc", p: 8000, img: "pote-vegano.png" }
+        ]
+    },
+    bebidas: {
+        t: "🥤 Bebidas",
+        i: [
+            { n: "Coca Cola 600ml", p: 1900, img: "coca-600.png" },
+            { n: "Agua Sierra de los Padres", p: 1200, img: "agua-mineral.png" },
+            { n: "Agua Saborizada 500ml", p: 1400, opt: saboresBebida, img: "agua-saborizada.png" }
+        ]
+    },
+    congelados: {
+        t: "❄️ Congelados",
+        i: [
+            { n: "Papas Fritas 380g", p: 2900, img: "papas-380.png" },
+            { n: "Papas Fritas 2500g", p: 11800, img: "papas-2500.png" },
+            { n: "Patitas de Pollo 500g", p: 5300, img: "patitas-500.png" }
+        ]
+    }
+};
+
+let totalGlobalNumerico = 0;
+let seleccionesUsuario = {};
+let idActualModal = null;
+
+function toggleMenu() { 
+    const sidebar = document.getElementById("sidebar");
+    const btnsNav = document.getElementById("nav-btns");
+    const btnHorarios = document.querySelector(".btn-horarios-flotante");
+
+    sidebar.classList.toggle("active"); 
+    
+    // Si el menú se activa, ocultamos los botones para que no se pisen
+    if(sidebar.classList.contains("active")) {
+        btnsNav.classList.add("hidden-btn");
+        btnHorarios.classList.add("hidden-btn");
+        // Eliminamos la activación del overlay aquí para que no se oscurezca
+    } else {
+        // Si se cierra, restauramos los botones
+        btnsNav.classList.remove("hidden-btn");
+        btnHorarios.classList.remove("hidden-btn");
+    }
+}
+
+function toggleHorarios() {
+    const modal = document.getElementById("modal-horarios");
+    const overlay = document.getElementById("overlay");
+    const btnsNav = document.getElementById("nav-btns");
+    const btnHorarios = document.querySelector(".btn-horarios-flotante");
+    const redes = document.querySelector(".redes-flotantes");
+
+    modal.classList.toggle("active");
+    overlay.classList.toggle("active");
+
+    if(modal.classList.contains("active")) {
+        btnsNav.classList.add("hidden-btn");
+        btnHorarios.classList.add("hidden-btn");
+        redes.classList.add("hidden-btn"); // Agregamos esto
+    } else {
+        cerrarTodo();
+    }
+}
+
+// Función centralizada para limpiar todo y mostrar los botones de nuevo
+function cerrarTodo() {
+    document.getElementById("sidebar").classList.remove("active");
+    document.getElementById("modal-horarios").classList.remove("active");
+    document.getElementById("modal-contactos").classList.remove("active");
+    document.getElementById("modal-sabores").classList.remove("active");
+    document.getElementById("overlay").classList.remove("active");
+
+    // En lugar de remover 'hidden-btn', simplemente nos aseguramos de que los 
+    // botones vuelvan a ser visibles si estamos en el paso 1.
+    const pasoActual = localStorage.getItem('pasoNavegacion') || 1;
+    
+    if (pasoActual == 1) {
+        document.getElementById("nav-btns").classList.remove("hidden-btn");
+        document.querySelector(".btn-horarios-flotante").classList.remove("hidden-btn");
+        document.querySelector(".redes-flotantes").classList.remove("hidden-btn");
+        
+        // Forzamos que se vean por si las dudas
+        document.querySelector(".btn-horarios-flotante").style.display = "flex";
+        document.querySelector(".redes-flotantes").style.display = "flex";
+    }
+}
+
+function esHorarioDelivery() {
+    const ahora = new Date();
+    const dia = ahora.getDay(); // 0: Domingo, 1: Lunes, ..., 2: Martes
+    const hora = ahora.getHours();
+
+    // Martes cerrado (según tu cartel y modal)
+    if (dia === 2) return { abierto: false, motivo: "Los martes el local permanece cerrado." };
+
+    // El delivery arranca a las 18:00hs
+    if (hora < 18) return { abierto: false, motivo: "El servicio de delivery comienza a las 18:00hs." };
+
+    // Cierre según el día (Viernes es 5, Sábado es 6)
+    const horaCierre = (dia === 5 || dia === 6) ? 23 : 22;
+
+    if (hora >= horaCierre) {
+        return { abierto: false, motivo: `El delivery de hoy finalizó a las ${horaCierre}:00hs.` };
+    }
+
+    return { abierto: true };
+}
+
+function toggleDireccion() {
+    const entrega = document.getElementById("entrega").value;
+    const esDelivery = (entrega === "Delivery");
+    const aviso = document.getElementById("aviso-delivery-texto");
+    
+    document.getElementById("group-direccion").style.display = esDelivery ? "block" : "none";
+    aviso.style.display = esDelivery ? "block" : "none";
+
+    if (esDelivery) {
+        const check = esHorarioDelivery();
+        if (!check.abierto) {
+            aviso.style.color = "#e74c3c"; // Rojo alerta
+            aviso.innerHTML = `⚠️ ${check.motivo} Seleccioná 'Retiro en Local' para continuar.`;
+        } else {
+            aviso.style.color = "#e67e22"; // Naranja normal
+            aviso.innerHTML = "✅ Delivery disponible en este momento.";
+        }
+    }
+}
+
+function toggleEfectivo() {
+    const pago = document.getElementById("pago").value;
+    document.getElementById("group-efectivo").style.display = (pago === "Efectivo") ? "block" : "none";
+}
+
+function toggleContactos() {
+    document.getElementById("modal-contactos").classList.toggle("active");
+    document.getElementById("overlay").classList.toggle("active");
+}
+
+function init() {
+    const dinamico = document.getElementById("dinamico");
+    const menu = document.getElementById("menu-lateral");
+    dinamico.innerHTML = ""; 
+    menu.innerHTML = "";
+    
+    for (let catKey in completo) {
+        menu.innerHTML += `<a href="#cat-${catKey}" class="menu-item" onclick="toggleMenu()">${completo[catKey].t}</a>`;
+        let html = `<h3 class="categoria" id="cat-${catKey}">${completo[catKey].t}</h3><div class="grid">`;
+        completo[catKey].i.forEach((item, idx) => {
+            const id = `${catKey}-${idx}`;
+            const imgSrc = item.img ? item.img : 'https://via.placeholder.com/150?text=Sei+Tu';
+            const esSoloLocal = productosSoloLocal.some(p => p.toLowerCase().trim() === item.n.toLowerCase().trim());
+            html += `<div class="card"><img src="${imgSrc}" alt="${item.n}" class="card-img"><div><h4>${item.n}</h4><p class="price">$${item.p}</p></div>${esSoloLocal ? `<span style="font-size: 10px; color: #e74c3c; font-weight: 600; margin-bottom: 10px; background: #fff1f0; padding: 5px 10px; border-radius: 20px; border: 1px solid #ffa39e;">📍 Solo para salón</span>` : `<input type="number" class="cantidad" id="${id}" value="0" min="0" data-n="${item.n}" data-p="${item.p}" oninput="generarSelectores('${id}', '${catKey}', ${idx})">`}<div class="selector-gustos" id="box-${id}"></div></div>`;
+        });
+        dinamico.innerHTML += html + `</div>`;
+    }
+}
+function generarSelectores(id, catKey, itemIdx) {
+    const item = completo[catKey].i[itemIdx];
+    const cant = parseInt(document.getElementById(id).value) || 0;
+    const contenedor = document.getElementById("box-" + id);
+    
+    if (cant === 0) {
+        contenedor.innerHTML = "";
+        delete seleccionesUsuario[id];
+    } else if (item.g || item.s || item.opt) {
+        if (!document.getElementById("btn-sab-" + id)) {
+            contenedor.innerHTML = `<button class="btn-sabores" id="btn-sab-${id}" onclick="abrirModalSabores('${id}', '${catKey}', ${itemIdx})">Elegir Sabores/Opciones</button>`;
+        }
+        const btnProd = document.getElementById("btn-sab-" + id);
+        if (seleccionesUsuario[id]) {
+            if (seleccionesUsuario[id].length > cant) {
+                seleccionesUsuario[id] = seleccionesUsuario[id].slice(0, cant);
+                btnProd.style.background = "#25D366";
+            } else if (seleccionesUsuario[id].length < cant) {
+                btnProd.style.background = "#ff9800";
+            }
+        } else {
+            btnProd.style.background = "#ff9800";
+        }
+    }
+    actualizar();
+}
+
+function abrirModalSabores(id, catKey, itemIdx) {
+    idActualModal = id;
+    const item = completo[catKey].i[itemIdx];
+    const cant = parseInt(document.getElementById(id).value) || 0;
+    const modalBody = document.getElementById("modal-sabores-body");
+    const titulo = document.getElementById("modal-sabores-titulo");
+    
+    titulo.innerText = `Opciones para: ${item.n}`;
+    modalBody.innerHTML = "";
+    const previos = seleccionesUsuario[id] || [];
+
+    for (let u = 1; u <= cant; u++) {
+        let bloque = document.createElement("div"); 
+        bloque.className = "unidad-bloque";
+        let subHtml = `<p>Unidad ${u}</p>`;
+        
+        if (item.g) {
+            for (let g = 1; g <= item.g; g++) {
+                let valorPrevio = previos[u-1]?.gustos?.[g-1] || "";
+                let sel = `<select class="opcion-sel m-gusto"><option value="">-- Gusto ${g} --</option>`;
+                saboresHelado.forEach(s => {
+                    let selected = (s === valorPrevio) ? "selected" : "";
+                    sel += `<option value="${s}" ${selected}>${s}</option>`;
+                });
+                subHtml += sel + `</select>`;
+            }
+        }
+        if (item.s) {
+            let valorPrevio = previos[u-1]?.salsa || "";
+            let selS = `<select class="opcion-sel m-salsa"><option value="">-- Elegir Salsa --</option>`;
+            salsas.forEach(s => {
+                let selected = (s === valorPrevio) ? "selected" : "";
+                selS += `<option value="${s}" ${selected}>${s}</option>`;
+            });
+            subHtml += selS + `</select>`;
+        }
+        if (item.opt) {
+            let valorPrevio = previos[u-1]?.opcion || "";
+            let label = (catKey === 'baldes') ? "Combo" : "Opción";
+            let selO = `<select class="opcion-sel m-opt"><option value="">-- Elegir ${label} --</option>`;
+            item.opt.forEach(s => {
+                let selected = (s === valorPrevio) ? "selected" : "";
+                selO += `<option value="${s}" ${selected}>${s}</option>`;
+            });
+            subHtml += selO + `</select>`;
+        }
+        bloque.innerHTML = subHtml;
+        modalBody.appendChild(bloque);
+    }
+    document.getElementById("modal-sabores").classList.add("active");
+    document.getElementById("overlay").classList.add("active");
+}
+
+function guardarSabores() {
+    if (!idActualModal) return;
+    const bloques = document.querySelectorAll(".modal-sabores .unidad-bloque");
+    let resultadosId = [];
+    let incompleto = false;
+    bloques.forEach((bloque) => {
+        let unidadData = { gustos: [], salsa: "", opcion: "" };
+        bloque.querySelectorAll(".m-gusto").forEach(sel => {
+            if(!sel.value) incompleto = true;
+            unidadData.gustos.push(sel.value);
+        });
+        let salsaSel = bloque.querySelector(".m-salsa");
+        if(salsaSel) {
+            if(!salsaSel.value) incompleto = true;
+            unidadData.salsa = salsaSel.value;
+        }
+        let optSel = bloque.querySelector(".m-opt");
+        if(optSel) {
+            if(!optSel.value) incompleto = true;
+            unidadData.opcion = optSel.value;
+        }
+        resultadosId.push(unidadData);
+    });
+    if(incompleto) {
+        alert("Por favor, completa todas las selecciones de gustos u opciones.");
+        return;
+    }
+    seleccionesUsuario[idActualModal] = resultadosId;
+    const btnProd = document.getElementById("btn-sab-" + idActualModal);
+    if(btnProd) btnProd.style.background = "#25D366"; 
+    cerrarTodo();
+    actualizar();
+}
+
+function actualizar() {
+    let totalGlobal = 0, resFinal = "", resMiniHTML = "";
+    document.querySelectorAll("input.cantidad").forEach(input => {
+        const id = input.id;
+        const cant = parseInt(input.value) || 0;
+        const precioUnitario = parseInt(input.dataset.p);
+        if(cant > 0) {
+            const subtotal = cant * precioUnitario;
+            totalGlobal += subtotal;
+            resMiniHTML += `<div class="item-badge">${cant}x ${input.dataset.n}</div>`;
+            if(seleccionesUsuario[id]) {
+                let detallesAgrupados = [];
+                seleccionesUsuario[id].forEach((unidad) => {
+                    let part = [];
+                    if(unidad.gustos.length > 0) part.push(`[${unidad.gustos.join(", ")}]`);
+                    if(unidad.opcion) part.push(`[${unidad.opcion}]`);
+                    if(unidad.salsa) part.push(`+ Salsa: ${unidad.salsa}`);
+                    if(part.length > 0) detallesAgrupados.push(part.join(" "));
+                });
+                resFinal += `• ${cant}x ${input.dataset.n} ($${subtotal}):\n  ${detallesAgrupados.join("\n  ")}\n`;
+            } else {
+                resFinal += `• ${cant}x ${input.dataset.n} ($${subtotal})\n`;
+            }
+        }
+    });
+    totalGlobalNumerico = totalGlobal;
+
+    const btnVaciar = document.getElementById("btn-vaciar");
+    if (totalGlobal > 0) {
+        btnVaciar.style.display = "flex";
+    } else {
+        btnVaciar.style.display = "none";
+    }
+    document.getElementById("resumen-mini").innerHTML = resMiniHTML || '<span style="color:#aaa; font-size:12px;">Tu carrito está vacío</span>';
+    document.getElementById("resumen-final").innerText = resFinal || "No seleccionaste productos.";
+    document.getElementById("monto").innerText = "$" + totalGlobal;
+    const mini = document.getElementById("resumen-mini"); mini.scrollLeft = mini.scrollWidth;
+}
+
+function cambiarPaso(paso) {
+    localStorage.setItem('pasoNavegacion', paso); 
+    const btnVaciar = document.getElementById("btn-vaciar");
+    const redes = document.querySelector(".redes-flotantes");
+    const btnHorarios = document.querySelector(".btn-horarios-flotante"); // Referencia al botón de horarios
+    
+    if (paso === 2) {
+        if (totalGlobalNumerico === 0) return alert("Selecciona productos.");
+        
+        // Validación de sabores/opciones
+        let faltanConfigurar = [];
+        document.querySelectorAll("input.cantidad").forEach(input => {
+            const id = input.id;
+            const cant = parseInt(input.value) || 0;
+            const catKey = id.split("-")[0];
+            const itemIdx = id.split("-")[1];
+            const item = completo[catKey].i[itemIdx];
+            if (cant > 0 && (item.g || item.s || item.opt) && !seleccionesUsuario[id]) {
+                faltanConfigurar.push(item.n);
+            }
+        });
+        if (faltanConfigurar.length > 0) {
+            return alert("Debes elegir los sabores/opciones para:\n- " + faltanConfigurar.join("\n- "));
+        }
+
+        // --- OCULTAR ELEMENTOS EN EL PASO 2 ---
+        document.getElementById("paso-productos").style.display = "none";
+        document.getElementById("paso-datos").style.display = "block";
+        document.getElementById("nav-btns").style.display = "none";
+        document.getElementById("resumen-mini").style.display = "none";
+        
+        redes.style.display = "none";       // Oculta redes
+        btnHorarios.style.display = "none"; // Oculta botón horarios
+        btnVaciar.style.display = "none";   // Oculta vaciar carrito
+        
+        const btn = document.getElementById("btn-accion");
+        btn.innerText = "Pedir por WhatsApp"; 
+        btn.className = "btn-principal btn-whatsapp"; 
+        btn.onclick = enviar;
+        window.scrollTo(0,0);
+
+    } else {
+        // --- MOSTRAR ELEMENTOS AL VOLVER AL PASO 1 ---
+        document.getElementById("paso-productos").style.display = "block";
+        document.getElementById("paso-datos").style.display = "none";
+        document.getElementById("nav-btns").style.display = "flex";
+        document.getElementById("resumen-mini").style.display = "flex";
+        
+        redes.style.display = "flex";       // Muestra redes
+        btnHorarios.style.display = "flex"; // Muestra botón horarios
+
+        if (totalGlobalNumerico > 0) {
+            btnVaciar.style.display = "flex";
+        }
+
+        const btn = document.getElementById("btn-accion");
+        btn.innerText = "Continuar pedido"; 
+        btn.className = "btn-principal"; 
+        btn.onclick = () => cambiarPaso(2);
+    }
+}
+
+function vaciarCarrito() {
+    if (confirm("¿Estás seguro de que quieres vaciar todo el carrito?")) {
+        // Ponemos todos los inputs en 0
+        document.querySelectorAll("input.cantidad").forEach(input => {
+            input.value = 0;
+            const id = input.id;
+            const contenedor = document.getElementById("box-" + id);
+            if (contenedor) contenedor.innerHTML = "";
+        });
+
+        // Limpiamos las selecciones de sabores
+        seleccionesUsuario = {};
+        
+        // Actualizamos la vista
+        actualizar();
+    }
+}
+
+function enviar() {
+    const n = document.getElementById("nombre").value.trim();
+    const entrega = document.getElementById("entrega").value;
+    const d = document.getElementById("direccion").value.trim();
+    const pago = document.getElementById("pago").value;
+    const vuelto = parseFloat(document.getElementById("vuelto").value) || 0;
+    const t = document.getElementById("monto").innerText;
+    const r = document.getElementById("resumen-final").innerText;
+    const c = document.getElementById("comentarios").value;
+
+    // --- NUEVA VALIDACIÓN DE HORARIO ---
+    if (entrega === "Delivery") {
+        const check = esHorarioDelivery(); // Llamamos a la función de control
+        if (!check.abierto) {
+            return alert(`❌ ATENCIÓN:\n\n${check.motivo}\n\nPor favor, cambiá el método a 'Retiro en Local' o realizá el pedido en otro momento.`);
+        }
+    }
+    // ------------------------------------
+
+    if(!n) return alert("Por favor, ingresá tu nombre.");
+    if(entrega === "Delivery" && !d) return alert("Por favor, ingresá tu dirección.");
+    
+    if(pago === "Efectivo") {
+        if(!vuelto) return alert("Por favor, indica con cuánto vas a pagar.");
+        if(vuelto < totalGlobalNumerico) return alert(`El monto con el que abonás ($${vuelto}) es menor al total del pedido ($${totalGlobalNumerico}).`);
+    }
+
+    let mensaje = `*PEDIDO SEI TU - ITUZAINGÓ SUR*\n\n`;
+    mensaje += `*Cliente:* ${n}\n`;
+    mensaje += `*Entrega:* ${entrega}${entrega === "Delivery" ? " (" + d + ")" : ""}\n`;
+    mensaje += `*Pago:* ${pago}${pago === "Efectivo" ? " (Abona con $" + vuelto + ". Vuelto: $" + (vuelto - totalGlobalNumerico) + ")" : ""}\n\n`;
+    mensaje += `*Pedido:*\n${r}\n`;
+    mensaje += `*Total:* ${t}`;
+    if(c) mensaje += `\n\n*Notas:* ${c}`;
+
+    window.open(`https://wa.me/5491131725515?text=${encodeURIComponent(mensaje)}`);
+}
+window.onload = init;
+function comenzarPedido() {
+    const inicio = document.getElementById('pantalla-inicio');
+    const carrito = document.getElementById('carrito'); // Referencia al carrito
+
+    inicio.style.transition = "all 0.6s ease";
+    inicio.style.opacity = "0";
+    inicio.style.transform = "scale(1.1)";
+    
+    setTimeout(() => {
+        inicio.style.display = "none";
+        carrito.style.display = "block"; // MOSTRAMOS el carrito recién acá
+        window.scrollTo(0, 0);
+    }, 600);
+}
+</script>
+</body>
+</html>
