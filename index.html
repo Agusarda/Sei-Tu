@@ -25,11 +25,81 @@
             min-height: 100vh; 
         }
 
-        .sidebar { width: var(--sidebar-width); background: var(--white); height: 100vh; position: fixed; left: calc(-1 * var(--sidebar-width)); top: 0; box-shadow: 5px 0 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; z-index: 8000; transition: 0.4s ease; }
+        .sidebar { 
+            width: var(--sidebar-width); 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            height: 100vh; 
+            position: fixed; 
+            left: calc(-1 * var(--sidebar-width)); 
+            top: 0; 
+            box-shadow: 10px 0 30px rgba(0,0,0,0.1); 
+            display: flex; 
+            flex-direction: column; 
+            z-index: 9500; 
+            transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1); 
+            border-right: 1px solid rgba(255,255,255,0.3);
+        }  
+
         .sidebar.active { left: 0; }
-        .sidebar-header { padding: 25px 20px; background: linear-gradient(135deg, var(--secondary), var(--primary)); color: white; text-align: center; }
-        .sidebar-menu { padding: 10px 0; overflow-y: auto; flex-grow: 1; }
-        .menu-item { padding: 12px 20px; cursor: pointer; transition: 0.3s; display: block; color: var(--text); text-decoration: none; font-size: 14px; border-bottom: 1px solid #f9f9f9; }
+
+        .sidebar-header { 
+            padding: 40px 20px; 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            color: white; 
+            text-align: center; 
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); /* Corte diagonal moderno */
+        }
+
+        .sidebar-header h3 { 
+            font-size: 24px; 
+            letter-spacing: 2px; 
+            margin: 0; 
+            font-weight: 600;
+        }
+        .sidebar-menu { 
+            padding: 20px 15px; 
+            overflow-y: auto; 
+            flex-grow: 1; 
+        }
+        .menu-item { 
+            padding: 14px 18px; 
+            margin-bottom: 8px;
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #555; 
+            text-decoration: none; 
+            font-size: 15px; 
+            font-weight: 500;
+            border-radius: 12px;
+            border: 1px solid transparent;
+        }
+
+        .menu-item i {
+            width: 25px;
+            color: var(--primary);
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .menu-item:hover { 
+            background: #f0f7ff; 
+            color: var(--primary);
+            transform: translateX(5px);
+            border-color: rgba(0, 114, 255, 0.1);
+        }
+
+        .menu-item:active {
+            transform: scale(0.95);
+        }
+
+        /* Scrollbar personalizado para el menú */
+        .sidebar-menu::-webkit-scrollbar { width: 4px; }
+        .sidebar-menu::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
         
         .nav-buttons { position: fixed; top: 15px; left: 15px; z-index: 8500; display: flex; flex-direction: column; gap: 10px; }
         .menu-toggle { 
@@ -845,7 +915,7 @@ const opcionesAlfajorHelado = ["Clasico", "Nevado"];
 
 const completo = {
     helado: {
-        t: "🍦 Helado",
+        t: "Helado",
         i: [
             // Helado por Peso
             { n: "1 KG Helado", p: 14000, g: 4, img: "1kg.png" },
@@ -864,7 +934,7 @@ const completo = {
         ]
     },
     agua: {
-        t: "🧊 Palitos de Agua",
+        t: "Palitos de Agua",
         i: [
             { n: "Palito de Agua", p: 850, opt: saboresAgua, img: "palito-agua.png" },
             { n: "Palito Extra Ácido", p: 1100, img: "palito-acido.png" },
@@ -874,7 +944,7 @@ const completo = {
         ]
     },
     crema: {
-        t: "🥛 Palitos de Crema",
+        t: "Palitos de Crema",
         i: [
             { n: "Palito Giovi", p: 1000, opt: saboresGiovi, img: "giovi.png" },
             { n: "Granizado Americana", p: 1100, img: "granizado-americana.png" },
@@ -886,7 +956,7 @@ const completo = {
         ]
     },
     postres: {
-        t: "🍰 Postres Individuales",
+        t: "Postres Individuales",
         i: [
             { n: "Bombon Escoces", p: 1700, opt: opcionesBombonEscoces, img: "escoces.png" },
             { n: "Alfajor Seichoc", p: 2000, img: "seichoc.png" },
@@ -897,7 +967,7 @@ const completo = {
         ]
     },
     postres_caja: {
-        t: "📦 Postres por Caja",
+        t: "Postres por Caja",
         i: [
             { n: "Caja Bombon Escoces x8", p: 13000, opt: opcionesBombonEscoces, img: "caja-escoces.png" },
             { n: "Alfajor Helado x8", p: 13000, opt: opcionesAlfajorHelado, img: "caja-alfajor.png" },
@@ -910,7 +980,7 @@ const completo = {
         ]
     },
     copitas_y_conos: {
-        t: "🍨 Copitas y Conos",
+        t: "Copitas y Conos",
         i: [
             // Copas 220cc desglosadas
             { n: "Copa 220cc Cookies", p: 2600, img: "copa-cookie.png" },
@@ -922,7 +992,7 @@ const completo = {
         ]
     },
     seibom: {
-        t: "✨ Palito Sei Bom",
+        t: "Palito Sei Bom",
         i: [
             { n: "Sei Bom Dubai x4", p: 9500, img: "seibom-dubai-x4.png" },
             { n: "Sei Bom Dubai Individual", p: 2500, img: "seibom-dubai.png" },
@@ -932,7 +1002,7 @@ const completo = {
         ]
     },
     tortas: {
-        t: "🎂 Tortas 800gr",
+        t: "Tortas 800gr",
         i: [
             { n: "Torta Bombón 800gr", p: 13000, img: "torta-bombon.png" },
             { n: "Torta Lemon Pie 800gr", p: 13000, img: "torta-lemon-pie.png" },
@@ -942,7 +1012,7 @@ const completo = {
         ]
     },
     baldes_y_bombones: {
-        t: "📦 Baldes y Bomboncitos",
+        t: "Baldes y Bomboncitos",
         i: [ 
             // Baldes con selector
             { n: "Balde 2 Litros (Pistacho-Cookies-Flan)", p: 13000, img: "balde-2l.png" },
@@ -955,7 +1025,7 @@ const completo = {
         ]
     },
     potes: {
-        t: "🍯 Potes Especiales",
+        t: "Potes Especiales",
         i: [
             { n: "Pote Sin TACC Americana-Frutilla", p: 7500, img: "pote-fr.png" },
             { n: "Pote Sin TACC Chocolate-DDL", p: 7500, img: "pote-ch.png" },
@@ -965,7 +1035,7 @@ const completo = {
         ]
     },
     bebidas: {
-        t: "🥤 Bebidas",
+        t: "Bebidas",
         i: [
             { n: "Coca Cola 600ml", p: 1900, img: "coca-600.png" },
             { n: "Agua Sierra de los Padres", p: 1200, img: "agua-mineral.png" },
@@ -973,7 +1043,7 @@ const completo = {
         ]
     },
     congelados: {
-        t: "❄️ Congelados",
+        t: "Congelados",
         i: [
             { n: "Papas Fritas 380g", p: 2900, img: "papas-380.png" },
             { n: "Papas Fritas 2500g", p: 11800, img: "papas-2500.png" },
@@ -1026,24 +1096,31 @@ function toggleHorarios() {
 
 // Función centralizada para limpiar todo y mostrar los botones de nuevo
 function cerrarTodo() {
+    // Cerramos todos los componentes visuales
     document.getElementById("sidebar").classList.remove("active");
     document.getElementById("modal-horarios").classList.remove("active");
     document.getElementById("modal-contactos").classList.remove("active");
     document.getElementById("modal-sabores").classList.remove("active");
     document.getElementById("overlay").classList.remove("active");
 
-    // En lugar de remover 'hidden-btn', simplemente nos aseguramos de que los 
-    // botones vuelvan a ser visibles si estamos en el paso 1.
-    const pasoActual = localStorage.getItem('pasoNavegacion') || 1;
-    
-    if (pasoActual == 1) {
+    // Detectamos en qué paso estamos (1 = Productos, 2 = Datos)
+    // Usamos el ID del contenedor porque es más fiable que el localStorage en este caso
+    const esPasoProductos = document.getElementById("paso-productos").style.display !== "none";
+
+    if (esPasoProductos) {
+        // 1. Removemos la clase que oculta por opacidad
         document.getElementById("nav-btns").classList.remove("hidden-btn");
         document.querySelector(".btn-horarios-flotante").classList.remove("hidden-btn");
         document.querySelector(".redes-flotantes").classList.remove("hidden-btn");
-        
-        // Forzamos que se vean por si las dudas
+
+        // 2. Forzamos el display por si se quedó en "none"
+        document.getElementById("nav-btns").style.display = "flex";
         document.querySelector(".btn-horarios-flotante").style.display = "flex";
         document.querySelector(".redes-flotantes").style.display = "flex";
+        
+        // 3. Aseguramos opacidad total (por si acaso)
+        document.getElementById("nav-btns").style.opacity = "1";
+        document.getElementById("nav-btns").style.pointerEvents = "auto";
     }
 }
 
@@ -1102,19 +1179,40 @@ function init() {
     const dinamico = document.getElementById("dinamico");
     const menu = document.getElementById("menu-lateral");
     dinamico.innerHTML = ""; 
-    menu.innerHTML = "";
-    
+    menu.innerHTML = ""; // Limpiamos el menú antes de cargar
+
+    const emojis = {
+        helado: "🍦",
+        agua: "🧊",
+        crema: "🥛",
+        postres: "🍰",
+        postres_caja: "📦",
+        copitas_y_conos: "🍨",
+        seibom: "✨",
+        tortas: "🎂",
+        baldes_y_bombones: "🍱",
+        potes: "🍯",      // Corregido: coincide con la clave 'potes'
+        bebidas: "🥤",    // Corregido: coincide con la clave 'bebidas'
+        congelados: "❄️"
+    };
+
     for (let catKey in completo) {
-        // Agrega el ítem al menú lateral
-        menu.innerHTML += `<a href="#cat-${catKey}" class="menu-item" onclick="toggleMenu()">${completo[catKey].t}</a>`;
-        
+        const emoji = emojis[catKey] || "🏷️";
+
+        // Agregar al menú lateral
+        menu.innerHTML += `
+            <a href="#cat-${catKey}" class="menu-item" onclick="toggleMenu()">
+                <span class="emoji-icon">${emoji}</span>
+                ${completo[catKey].t}
+            </a>`;
+            
+        // Generar el HTML de los productos
         let html = `<h3 class="categoria" id="cat-${catKey}">${completo[catKey].t}</h3><div class="grid">`;
         
         completo[catKey].i.forEach((item, idx) => {
             const id = `${catKey}-${idx}`;
             const imgSrc = item.img ? item.img : 'https://via.placeholder.com/150?text=Sei+Tu';
             
-            // Verifica si el producto es solo para consumo en el local
             const esSoloLocal = productosSoloLocal.some(p => p.toLowerCase().trim() === item.n.toLowerCase().trim());
             
             html += `
