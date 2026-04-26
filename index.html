@@ -501,6 +501,53 @@
             }
         }
 
+        .control-cantidad {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-qty {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .btn-qty:active {
+            transform: scale(0.9);
+        }
+
+        /* Para que el input no se vea como un cuadro de texto editable */
+        input[type="number"].cantidad {
+            width: 40px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 0;
+            -moz-appearance: textfield; /* Quita flechas en Firefox */
+        }
+
+        /* Quita las flechas originales en Chrome/Safari */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }       
+
         .btn-flotante {
             width: 48px; 
             height: 48px;
@@ -1058,15 +1105,51 @@ function init() {
     menu.innerHTML = "";
     
     for (let catKey in completo) {
+        // Agrega el ítem al menú lateral
         menu.innerHTML += `<a href="#cat-${catKey}" class="menu-item" onclick="toggleMenu()">${completo[catKey].t}</a>`;
+        
         let html = `<h3 class="categoria" id="cat-${catKey}">${completo[catKey].t}</h3><div class="grid">`;
+        
         completo[catKey].i.forEach((item, idx) => {
             const id = `${catKey}-${idx}`;
             const imgSrc = item.img ? item.img : 'https://via.placeholder.com/150?text=Sei+Tu';
+            
+            // Verifica si el producto es solo para consumo en el local
             const esSoloLocal = productosSoloLocal.some(p => p.toLowerCase().trim() === item.n.toLowerCase().trim());
-            html += `<div class="card"><img src="${imgSrc}" alt="${item.n}" class="card-img"><div><h4>${item.n}</h4><p class="price">$${item.p}</p></div>${esSoloLocal ? `<span style="font-size: 10px; color: #e74c3c; font-weight: 600; margin-bottom: 10px; background: #fff1f0; padding: 5px 10px; border-radius: 20px; border: 1px solid #ffa39e;">📍 Solo para salón</span>` : `<input type="number" class="cantidad" id="${id}" value="0" min="0" data-n="${item.n}" data-p="${item.p}" oninput="generarSelectores('${id}', '${catKey}', ${idx})">`}<div class="selector-gustos" id="box-${id}"></div></div>`;
+            
+            html += `
+                <div class="card">
+                    <img src="${imgSrc}" alt="${item.n}" class="card-img" loading="lazy">
+                    <div>
+                        <h4>${item.n}</h4>
+                        <p class="price">$${item.p}</p>
+                    </div>
+                    
+                    ${esSoloLocal ? 
+                        `<span style="font-size: 10px; color: #e74c3c; font-weight: 600; margin-bottom: 10px; background: #fff1f0; padding: 5px 10px; border-radius: 20px; border: 1px solid #ffa39e;">📍 Solo para salón</span>` : 
+                        `<div class="control-cantidad">
+                            <button type="button" class="btn-qty" onclick="ajustarCant('${id}', -1, '${catKey}', ${idx})">-</button>
+                            <input type="number" class="cantidad" id="${id}" value="0" min="0" readonly data-n="${item.n}" data-p="${item.p}">
+                            <button type="button" class="btn-qty" onclick="ajustarCant('${id}', 1, '${catKey}', ${idx})">+</button>
+                        </div>`
+                    }
+                    
+                    <div class="selector-gustos" id="box-${id}"></div>
+                </div>`;
         });
         dinamico.innerHTML += html + `</div>`;
+    }
+}
+
+function ajustarCant(id, cambio, catKey, itemIdx) {
+    const input = document.getElementById(id);
+    let valorActual = parseInt(input.value) || 0;
+    let nuevoValor = valorActual + cambio;
+
+    if (nuevoValor >= 0) {
+        input.value = nuevoValor;
+        // Dispara la lógica de sabores y actualización del carrito
+        generarSelectores(id, catKey, itemIdx);
     }
 }
 function generarSelectores(id, catKey, itemIdx) {
