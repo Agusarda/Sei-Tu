@@ -1608,11 +1608,25 @@ function moverCat(catKey, direccion) {
 }
 // Funciones Auxiliares ABM
 function nuevaCategoria() {
-    const key = prompt("ID de la categoría (ej: postres_especiales):").toLowerCase().replace(/\s/g, '_');
-    if (key && !completo[key]) {
-        completo[key] = { t: "Nueva Categoría", i: [] };
-        renderAdminDashboard();
+    const nombreVisible = prompt("Nombre de la categoría (ej: Postres Especiales):");
+    if (!nombreVisible) return; // Si cancela, no hace nada
+
+    // Generamos un ID técnico basado en el nombre (minúsculas y sin espacios)
+    const key = nombreVisible.toLowerCase().trim().replace(/\s/g, '_');
+
+    if (completo[key]) {
+        alert("Ya existe una categoría con un nombre similar.");
+        return;
     }
+
+    // Creamos la estructura con el nombre que el usuario escribió
+    completo[key] = { 
+        t: nombreVisible, 
+        i: [] 
+    };
+
+    // Refrescamos el panel administrativo para que aparezca
+    renderAdminDashboard();
 }
 
 function nuevoProducto(catKey) {
