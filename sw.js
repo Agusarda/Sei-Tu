@@ -1,4 +1,4 @@
-const CACHE_NAME = 'seitu-v1';
+const CACHE_NAME = 'seitu-v2';
 const ASSETS = [
   './',
   './index.html',
