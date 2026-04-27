@@ -7,7 +7,7 @@
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="icono.png">
+    <link rel="icon" type="image/png" href="icono.webp">
     <style>
         :root {
             --primary: #0072ff; --secondary: #00c6ff; --accent: #25D366;
@@ -18,7 +18,7 @@
             margin: 0; 
             font-family: 'Poppins', sans-serif; 
             /* Cambiá 'tu-imagen-de-fondo.jpg' por el nombre real de tu archivo */
-            background: url('tu-imagen-de-fondo.png') no-repeat center center fixed; 
+            background: url('tu-imagen-de-fondo.webp') no-repeat center center fixed; 
             background-size: cover; 
             color: var(--text); 
             display: flex; 
@@ -774,13 +774,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: url('tu-imagen-de-fondo.png') no-repeat center center fixed;
+    background: url('tu-imagen-de-fondo.webp') no-repeat center center fixed;
     background-size: cover;
 ">
     <div style="position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);"></div>
 
     <div style="position: relative; text-align: center; width: 90%; max-width: 500px;">
-        <img src="banner.png" alt="Logo Sei Tu" style="width: 100%; height: auto; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 30px;">
+        <img src="banner.webp" alt="Logo Sei Tu" style="width: 100%; height: auto; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 30px;">
         
         <h1 style="color: white; font-family: 'Poppins', sans-serif; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); margin-bottom: 40px;">¡Bienvenidos!</h1>
 
@@ -864,7 +864,7 @@
 
 <div class="main-content">
     <header>
-    <img src="banner.png" alt="Sei Tu Ituzaingó Sur" class="banner-img">
+    <img src="banner.webp" alt="Sei Tu Ituzaingó Sur" class="banner-img">
     </header>
     <div id="paso-productos"><div id="dinamico"></div></div>
 
@@ -1612,7 +1612,7 @@ function renderAdminDashboard() {
                         <div class="admin-row-producto">
                             <input type="text" value="${prod.n}" onchange="completo['${catKey}'].i[${idx}].n = this.value" style="width: 100%;">
                             <input type="number" value="${prod.p}" onchange="completo['${catKey}'].i[${idx}].p = parseInt(this.value)" style="width: 100%;">
-                            <input type="text" value="${prod.img || ''}" onchange="completo['${catKey}'].i[${idx}].img = this.value" placeholder="img/foto.png" style="width: 100%;">
+                            <input type="text" value="${prod.img || ''}" onchange="completo['${catKey}'].i[${idx}].img = this.value" placeholder="img/foto.webp" style="width: 100%;">
                             
                             <label style="display: flex; justify-content: center; align-items: center; cursor: pointer;">
                                 <input type="checkbox" ${prod.sl ? 'checked' : ''} onchange="completo['${catKey}'].i[${idx}].sl = this.checked" style="width: 20px; height: 20px;">
