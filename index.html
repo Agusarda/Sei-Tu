@@ -1394,6 +1394,10 @@ function actualizar() {
         }
     });
 
+    if (btnVaciar) {
+        btnVaciar.style.display = t > 0 ? "flex" : "none";
+    }
+
     window.totalGlobalNumerico = t;
     window.resumenWhatsApp = resumenConSabores; 
 
