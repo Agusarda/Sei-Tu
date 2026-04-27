@@ -138,24 +138,24 @@
             filter: brightness(1.1);
         }
         .btn-horarios-flotante {
-            position: fixed;
-            top: 15px;
-            right: 15px; /* Ubicación arriba a la derecha */
-            z-index: 8500;
-            background: linear-gradient(135deg, #666, #333); /* Degradado estético */
+            background: linear-gradient(135deg, #666, #333);
             color: white;
             border: none;
             padding: 10px 18px;
-            border-radius: 50px; /* Forma de píldora */
+            border-radius: 50px;
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
+            justify-content: center; /* Centra el contenido */
             gap: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
+            margin: 10px auto; /* Agrega espacio arriba y lo centra */
+            width: 100%; /* Para que ocupe el ancho de su contenedor */
+            max-width: 200px; /* Evita que sea gigante en PC */
         }
 
         .btn-horarios-flotante:hover {
@@ -614,31 +614,6 @@
             }
         }
 
-        /* Posicionamos el contenedor debajo del botón de horarios */
-        .redes-flotantes {
-            position: fixed;
-            top: 65px; /* 15px de margen + ~50px de altura del botón de horarios */
-            right: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 8500; /* Misma prioridad que los botones de arriba */
-            transition: all 0.3s ease;
-        }
-
-        /* Ajuste para que se oculten cuando el modal está abierto (igual que los otros botones) */
-        .redes-flotantes.hidden-btn {
-            opacity: 0 !important;
-            pointer-events: none !important;
-            transform: translateY(-20px);
-        }
-
-        /* En móviles bajamos un toque la posición por el padding de los botones */
-        @media (max-width: 600px) {
-            .redes-flotantes {
-                top: 55px;
-            }
-        }
 
         .control-cantidad {
             display: flex;
@@ -677,7 +652,6 @@
             font-size: 18px;
             font-weight: 600;
             padding: 0;
-            -moz-appearance: textfield; /* Quita flechas en Firefox */
         }
 
         /* Quita las flechas originales en Chrome/Safari */
@@ -686,35 +660,12 @@
             -webkit-appearance: none;
             margin: 0;
         }       
-
-        .btn-flotante {
-            width: 48px; 
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            color: white;
-            font-size: 24px; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
-        }
-
-        /* El resto de los colores (wa, ig, maps) se mantienen igual */
-
-        .btn-flotante:hover {
-            transform: scale(1.1);
-        }
+      
 
         .wa { background: #25D366; }
         .ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
         .maps { background: #4285F4; }
-
-        /* Ajuste para que en PC se vean un poquito más grandes si querés */
-        @media (min-width: 768px) {
-            .redes-flotantes { right: 30px; }
-        }
+        
 
         .btn-cerrar-sidebar {
             position: absolute;
@@ -769,6 +720,42 @@
             background: #ffccc7;
             transform: translateY(-1px);
         }
+        /* Estilos generales para los iconos de redes (reutilizables) */
+        .red-item {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            text-decoration: none;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .red-item:hover { transform: scale(1.1); }
+        .wa { background: #25D366; }
+        .ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .maps { background: #4285F4; }
+
+        /* Contenedor dentro del Sidebar */
+        .sidebar-redes {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+                background: #fdfdfd;
+        }
+
+        /* Contenedor en la Pantalla de Inicio */
+        .inicio-redes {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 30px;
+        }
     
     </style>
 </head>
@@ -811,16 +798,20 @@
         " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
             🚀 INICIAR PEDIDO
         </button>
+        <div class="inicio-redes">
+            <a href="https://wa.me/5491131725515" target="_blank" class="red-item wa"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.instagram.com/seitu.ituzaingosur/" target="_blank" class="red-item ig"><i class="fab fa-instagram"></i></a>
+            <a href="http://maps.google.com/?q=Sei+Tu+Ituzaingo+Sur" target="_blank" class="red-item maps"><i class="fas fa-location-dot"></i></a>
+        </div>
+        <button class="btn-horarios-flotante" onclick="toggleHorarios()">
+            <i class="fas fa-clock"></i> <span>Horarios</span>
+        </button>
     </div>
 </div>
 
 <div class="nav-buttons" id="nav-btns">
     <button class="menu-toggle" onclick="toggleMenu()">☰ Productos</button>
 </div>
-
-<button class="btn-horarios-flotante" onclick="toggleHorarios()">
-    <i class="fas fa-clock"></i> <span>Horarios</span>
-</button>
 
 <div class="overlay" id="overlay" onclick="cerrarTodo()"></div>
 
@@ -869,6 +860,16 @@
         <button class="btn-cerrar-sidebar" onclick="toggleMenu()">×</button>
         <h3>SEI TU</h3>
         <p style="font-size: 10px; margin:0">Ituzaingó Sur</p>
+    </div>
+    <div class="sidebar-redes">
+        <a href="https://wa.me/5491131725515" target="_blank" class="red-item wa"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://www.instagram.com/seitu.ituzaingosur/" target="_blank" class="red-item ig"><i class="fab fa-instagram"></i></a>
+        <a href="http://maps.google.com/?q=Sei+Tu+Ituzaingo+Sur" target="_blank" class="red-item maps"><i class="fas fa-location-dot"></i></a>
+    </div>
+    <div style="padding: 0 20px;">
+        <button class="btn-horarios-flotante" onclick="toggleHorarios()">
+            <i class="fas fa-clock"></i> <span>Horarios</span>
+        </button>
     </div>
     <div class="sidebar-menu" id="menu-lateral"></div>
 </nav>
@@ -945,17 +946,6 @@
     </div>
 </div>
 
-<div class="redes-flotantes">
-    <a href="https://wa.me/5491131725515" target="_blank" class="btn-flotante wa" title="WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-    <a href="https://www.instagram.com/seitu.ituzaingosur/" target="_blank" class="btn-flotante ig" title="Instagram">
-        <i class="fab fa-instagram"></i>
-    </a>
-    <a href="http://maps.google.com/?q=Sei+Tu+Ituzaingo+Sur" target="_blank" class="btn-flotante maps" title="Cómo llegar">
-        <i class="fas fa-location-dot"></i>
-    </a>
-</div>
 <div id="modal-admin" class="modal-sabores">
     <div class="admin-header" style="padding: 15px 25px; border-bottom: 2px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #fff;">
         <h2 style="margin:0; color: var(--primary);">🛠️ Panel de Administración</h2>
@@ -1057,7 +1047,6 @@ let idActualModal = null;
 function toggleMenu() { 
     const sidebar = document.getElementById("sidebar");
     const btnsNav = document.getElementById("nav-btns");
-    const btnHorarios = document.querySelector(".btn-horarios-flotante");
 
     sidebar.classList.toggle("active"); 
     
@@ -1078,7 +1067,7 @@ function toggleHorarios() {
     const overlay = document.getElementById("overlay");
     const btnsNav = document.getElementById("nav-btns");
     const btnHorarios = document.querySelector(".btn-horarios-flotante");
-    const redes = document.querySelector(".redes-flotantes");
+  
 
     modal.classList.toggle("active");
     overlay.classList.toggle("active");
@@ -1109,12 +1098,10 @@ function cerrarTodo() {
         // 1. Removemos la clase que oculta por opacidad
         document.getElementById("nav-btns").classList.remove("hidden-btn");
         document.querySelector(".btn-horarios-flotante").classList.remove("hidden-btn");
-        document.querySelector(".redes-flotantes").classList.remove("hidden-btn");
 
         // 2. Forzamos el display por si se quedó en "none"
         document.getElementById("nav-btns").style.display = "flex";
         document.querySelector(".btn-horarios-flotante").style.display = "flex";
-        document.querySelector(".redes-flotantes").style.display = "flex";
         
         // 3. Aseguramos opacidad total (por si acaso)
         document.getElementById("nav-btns").style.opacity = "1";
@@ -1358,76 +1345,87 @@ function actualizar() {
     }
 }
 function cambiarPaso(paso) {
-    // Actualizamos el carrito una última vez antes de validar para estar seguros
+    // Actualizamos el carrito una última vez para asegurar que los totales sean correctos
     actualizar();
 
     const btnVaciar = document.getElementById("btn-vaciar");
-    const redes = document.querySelector(".redes-flotantes");
     const btnHorarios = document.querySelector(".btn-horarios-flotante");
-    
+    const navBtns = document.getElementById("nav-btns");
+    const resumenMini = document.getElementById("resumen-mini");
+    const pasoProductos = document.getElementById("paso-productos");
+    const pasoDatos = document.getElementById("paso-datos");
+    const btnAccion = document.getElementById("btn-accion");
+
     if (paso === 2) {
-        // VALIDACIÓN REFORZADA: Leemos el total desde el objeto global y verificamos que sea mayor a 0
+        // 1. VALIDACIÓN DE CARRITO VACÍO
+        // Usamos window.totalGlobalNumerico que se setea en actualizar()
         if (!window.totalGlobalNumerico || window.totalGlobalNumerico <= 0) {
-            alert("Tu carrito está vacío. Por favor, selecciona al menos un producto.");
+            alert("Tu carrito está vacío. Por favor, seleccioná al menos un producto para continuar.");
             return;
         }
         
-        // Validación de sabores/opciones (mantenemos tu lógica existente)
+        // 2. VALIDACIÓN DE SABORES / OPCIONES
         let faltanConfigurar = [];
         document.querySelectorAll("input.cantidad").forEach(input => {
             const id = input.id;
             const cant = parseInt(input.value) || 0;
-            const catKey = id.split("-")[0];
-            const itemIdx = id.split("-")[1];
+            const partes = id.split("-");
+            const catKey = partes[0];
+            const itemIdx = partes[1];
+            
             const item = completo[catKey].i[itemIdx];
-            if (cant > 0 && (item.g || item.opt.length > 0) && !seleccionesUsuario[id]) {
+
+            // Verificamos si el producto requiere configuración (gustos o opciones)
+            // Agregamos la comprobación (item.opt && item.opt.length > 0) para evitar errores si opt no existe
+            const requiereConfig = item.g || (item.opt && item.opt.length > 0);
+
+            if (cant > 0 && requiereConfig && !seleccionesUsuario[id]) {
                 faltanConfigurar.push(item.n);
             }
         });
 
         if (faltanConfigurar.length > 0) {
-            alert("Debes elegir los sabores/opciones para:\n- " + faltanConfigurar.join("\n- "));
+            alert("Por favor, elegí los sabores u opciones para:\n- " + faltanConfigurar.join("\n- "));
             return;
         }
 
-        // Si pasó las validaciones, cambiamos de pantalla
-        document.getElementById("paso-productos").style.display = "none";
-        document.getElementById("paso-datos").style.display = "block";
-        document.getElementById("nav-btns").style.display = "none";
-        document.getElementById("resumen-mini").style.display = "none";
-
-        const contenedorResumen = document.getElementById("resumen-final");
-        if (contenedorResumen) {
-            // Usamos innerText para que los saltos de línea (\n) se respeten
-            contenedorResumen.innerText = window.resumenWhatsApp;
-        }
+        // 3. CAMBIO DE PANTALLA
+        pasoProductos.style.display = "none";
+        pasoDatos.style.display = "block";
+        if (navBtns) navBtns.style.display = "none";
+        if (resumenMini) resumenMini.style.display = "none";
         
-        if(redes) redes.style.display = "none";
-        if(btnHorarios) btnHorarios.style.display = "none";
-        if(btnVaciar) btnVaciar.style.display = "none";
+        // Ocultar elementos flotantes
+        if (redes) redes.style.display = "none";
+        if (btnHorarios) btnHorarios.style.display = "none";
+        if (btnVaciar) btnVaciar.style.display = "none";
         
-        const btn = document.getElementById("btn-accion");
-        btn.innerText = "Pedir por WhatsApp"; 
-        btn.className = "btn-principal btn-whatsapp"; 
-        btn.onclick = enviar;
-        window.scrollTo(0,0);
+        // Transformar el botón de acción
+        btnAccion.innerText = "Pedir por WhatsApp"; 
+        btnAccion.className = "btn-principal btn-whatsapp"; 
+        btnAccion.onclick = enviar;
+        
+        window.scrollTo(0, 0);
 
     } else {
-        // Lógica para volver al paso 1...
-        document.getElementById("paso-productos").style.display = "block";
-        document.getElementById("paso-datos").style.display = "none";
-        document.getElementById("nav-btns").style.display = "flex";
-        document.getElementById("resumen-mini").style.display = "flex";
-        if(redes) redes.style.display = "flex";
-        if(btnHorarios) btnHorarios.style.display = "flex";
+        // VOLVER AL PASO 1
+        pasoProductos.style.display = "block";
+        pasoDatos.style.display = "none";
+        if (navBtns) navBtns.style.display = "flex";
+        if (resumenMini) resumenMini.style.display = "flex";
+        
+        if (redes) redes.style.display = "flex";
+        if (btnHorarios) btnHorarios.style.display = "flex";
+        if (btnVaciar && window.totalGlobalNumerico > 0) btnVaciar.style.display = "flex";
 
-        const btn = document.getElementById("btn-accion");
-        btn.innerText = "Continuar pedido"; 
-        btn.className = "btn-principal"; 
-        btn.onclick = () => cambiarPaso(2);
+        // Restaurar el botón de acción
+        btnAccion.innerText = "Continuar pedido"; 
+        btnAccion.className = "btn-principal"; 
+        btnAccion.onclick = () => cambiarPaso(2);
+        
+        window.scrollTo(0, 0);
     }
 }
-
 function vaciarCarrito() {
     if (confirm("¿Estás seguro de que quieres vaciar todo el carrito?")) {
         // Ponemos todos los inputs en 0
