@@ -1688,56 +1688,6 @@ if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js').catch(err => console.log("SW error", err));
     });
 }
-
-// Lógica para el cartel de instalación
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    // Opcional: Podrías mostrar un botón propio que diga "Descargar App"
-    console.log("PWA lista para instalar");
-});
-    
-</script>
-
-<div id="pwa-custom-banner" style="display:none; position:fixed; bottom:20px; width:90%; left:5%; background:white; padding:15px; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); z-index:9999; border: 2px solid var(--primary);">
-    <div style="display:flex; align-items:center; justify-content:space-between;">
-        <div style="display:flex; align-items:center;">
-            <img src="icono.png" width="40" height="40" style="border-radius:8px; margin-right:10px;">
-            <span style="font-weight:600; font-size:14px;">Instalar App Sei Tu</span>
-        </div>
-        <button id="pwa-install-btn" style="background:var(--primary); color:white; border:none; padding:8px 15px; border-radius:8px; font-weight:bold;">INSTALAR</button>
-    </div>
-</div>
-
-<script>
-let deferredPrompt;
-const pwaBanner = document.getElementById('pwa-custom-banner');
-const pwaBtn = document.getElementById('pwa-install-btn');
-
-window.addEventListener('beforeinstallprompt', (e) => {
-    // Evitamos que salga el mini-banner de Chrome para que salga el nuestro
-    e.preventDefault();
-    deferredPrompt = e;
-    
-    // Mostramos nuestro banner después de 2 segundos de que entró
-    setTimeout(() => {
-        pwaBanner.style.display = 'block';
-    }, 2000);
-});
-
-pwaBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-            pwaBanner.style.display = 'none';
-        }
-        deferredPrompt = null;
-    }
-});
-</script>
-    
     
 </body>
 </html>
