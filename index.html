@@ -1686,15 +1686,6 @@ function eliminarCategoria(catKey) {
         renderAdminDashboard();
     }
 }
-// Comando de autodestrucción del Service Worker
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function(registrations) {
-        for(let registration of registrations) {
-            registration.unregister();
-            console.log("Service Worker desactivado correctamente");
-        }
-    });
-}
 </script>
 </body>
 </html>
