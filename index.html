@@ -248,6 +248,78 @@
         .modal-horarios::-webkit-scrollbar-track, .modal-sabores::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
         .modal-horarios::-webkit-scrollbar-thumb, .modal-sabores::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
 
+        .modal-sabores-premium {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 95%; /* Casi todo el ancho en móviles */
+            max-width: 800px; /* Mucho más grande en PC */
+            z-index: 3000; /* Por encima de todo */
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-sabores-premium.active {
+            visibility: visible;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-content-wrapper {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            /* Sombra mucho más fuerte ya que no hay fondo oscuro */
+            box-shadow: 0 0 100px rgba(0,0,0,0.5), 0 20px 50px rgba(0,0,0,0.3);
+            border: 1px solid #ddd;
+            position: relative;
+        }
+
+        .img-container-sabores {
+            max-height: 85vh; /* Aumentamos la altura permitida */
+            overflow-y: auto;
+            background: #fff;
+        }
+
+        .img-container-sabores img {
+            width: 100%;
+            display: block;
+            height: auto; /* Mantiene la proporción de tu catálogo */
+        }
+
+        .btn-cerrar-modal-pro {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #e74c3c;
+            color: white;
+            border: 3px solid white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .btn-cerrar-modal-pro:hover {
+            background: #e74c3c;
+        }
+
+        /* Scrollbar estética para el contenedor de la imagen */
+        .img-container-sabores::-webkit-scrollbar {
+            width: 6px;
+        }
+        .img-container-sabores::-webkit-scrollbar-thumb {
+            background: #e67e22;
+            border-radius: 10px;
+        }
         /* AJUSTE DEL TÍTULO PARA QUE NO SE SUPERPONGA CON LA CRUZ */
         #modal-sabores-titulo, .modal-horarios h3 { 
             color: var(--primary); 
@@ -816,6 +888,9 @@
 
 <div class="nav-buttons" id="nav-btns">
     <button class="menu-toggle" onclick="toggleMenu()">☰ Productos</button>
+    <button class="menu-toggle" onclick="abrirCatSabores()" style="background: #e67e22; margin-top: 5px;">
+        <i class="fas fa-ice-cream"></i> Sabores
+    </button>
 </div>
 
 <button class="btn-horarios-flotante" onclick="toggleHorarios()">
@@ -955,6 +1030,14 @@
     <a href="http://maps.google.com/?q=Sei+Tu+Ituzaingo+Sur" target="_blank" class="btn-flotante maps" title="Cómo llegar">
         <i class="fas fa-location-dot"></i>
     </a>
+</div>
+<div id="modal-sabores-img" class="modal-sabores-premium">
+    <div class="modal-content-wrapper">
+        <button class="btn-cerrar-modal-pro" onclick="cerrarModalSabores()">×</button>
+
+        <div class="img-container-sabores">
+            <img src="sabores.webp" alt="Catálogo de Sabores">
+        </div> 
 </div>
 <div id="modal-admin" class="modal-sabores">
     <div class="admin-header" style="padding: 15px 25px; border-bottom: 2px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #fff;">
@@ -1100,6 +1183,7 @@ function cerrarTodo() {
     document.getElementById("modal-contactos").classList.remove("active");
     document.getElementById("modal-sabores").classList.remove("active");
     document.getElementById("overlay").classList.remove("active");
+    document.getElementById("modal-sabores-img").classList.remove("active");
 
     // Detectamos en qué paso estamos (1 = Productos, 2 = Datos)
     // Usamos el ID del contenedor porque es más fiable que el localStorage en este caso
@@ -1645,6 +1729,26 @@ function eliminarCategoria(catKey) {
     if (confirm("¿Eliminar TODA la categoría?")) {
         delete completo[catKey];
         renderAdminDashboard();
+    }
+}
+function abrirCatSabores() {
+    document.getElementById("modal-sabores-img").classList.add("active");
+    
+    // Ocultar botones para que no se superpongan
+    document.getElementById("nav-btns").classList.add("hidden-btn");
+    if(document.querySelector(".btn-horarios-flotante")) {
+        document.querySelector(".btn-horarios-flotante").classList.add("hidden-btn");
+    }
+}
+
+function cerrarModalSabores() {
+    document.getElementById("modal-sabores-img").classList.remove("active");
+    document.getElementById("overlay").classList.remove("active");
+    
+    // Volver a mostrar botones
+    document.getElementById("nav-btns").classList.remove("hidden-btn");
+    if(document.querySelector(".btn-horarios-flotante")) {
+        document.querySelector(".btn-horarios-flotante").classList.remove("hidden-btn");
     }
 }
 
