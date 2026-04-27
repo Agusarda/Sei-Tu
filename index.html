@@ -578,6 +578,479 @@
             max-height: 300px; 
             display: block;
             /* 'cover' asegura que llene el ancho, 'center' mantiene el logo al medio */
+                       border: none; 
+            padding: 10px 18px; /* Mismo padding que horarios */
+            border-radius: 50px; /* Forma de píldora */
+            cursor: pointer; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600; 
+            font-size: 14px; /* Misma fuente que horarios */
+            width: auto; /* Para que el tamaño dependa del contenido igual que el otro */
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            filter: brightness(1.1);
+        }
+        .btn-horarios-flotante {
+            position: fixed;
+            top: 15px;
+            right: 15px; /* Ubicación arriba a la derecha */
+            z-index: 8500;
+            background: linear-gradient(135deg, #666, #333); /* Degradado estético */
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 50px; /* Forma de píldora */
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-horarios-flotante:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #777, #444);
+        }
+
+        .btn-horarios-flotante i {
+            font-size: 16px;
+        }
+
+        /* Ajuste para celulares: si el banner es muy grande, 
+        podemos bajarlo un poquito para que no tape nada importante */
+        @media (max-width: 600px) {
+        /* Achicamos un toque los botones para que no se choquen en el medio */
+            .menu-toggle, .btn-horarios-flotante {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+        }
+
+        /* Clase para ocultar los botones cuando los modales están abiertos */
+        .hidden-btn {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: translateY(-20px);
+        }
+
+        .overlay { position: fixed; top:0; left:0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); display: none; z-index: 9000; opacity: 0; transition: opacity 0.3s ease; }
+        .overlay.active { display: block; opacity: 1; }
+
+        /* AJUSTE DE LA CRUZ DE CIERRE */
+        .btn-cerrar-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 32px;
+            height: 32px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 50%;
+            color: #666;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9100;
+            transition: all 0.2s ease;
+            line-height: 1;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 110px; /* Altura fija para que todas las cards midan lo mismo */
+            object-fit: contain; /* Ajusta la imagen sin deformarla */
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+
+        .btn-cerrar-modal:hover {
+            background: #e74c3c;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-horarios, .modal-sabores { 
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            background: #ffffff;
+            border-radius: 25px;
+            z-index: 10000; 
+            display: none; 
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+            width: 90%;
+            max-width: 450px; 
+            text-align: center; 
+            max-height: 80vh; 
+            overflow-y: auto; 
+            padding: 0;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .modal-horarios.active, .modal-sabores.active { display: block; }
+        
+        .modal-horarios::-webkit-scrollbar, .modal-sabores::-webkit-scrollbar { width: 8px; }
+        .modal-horarios::-webkit-scrollbar-track, .modal-sabores::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .modal-horarios::-webkit-scrollbar-thumb, .modal-sabores::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+
+        /* AJUSTE DEL TÍTULO PARA QUE NO SE SUPERPONGA CON LA CRUZ */
+        #modal-sabores-titulo, .modal-horarios h3 { 
+            color: var(--primary); 
+            margin: 0; 
+            padding: 25px 55px 25px 20px; /* Padding derecho aumentado para la cruz */
+            font-size: 19px; 
+            font-weight: 600; 
+            border-bottom: 2px solid #f0f7ff;
+            background: #fafcff;
+            border-radius: 25px 25px 0 0;
+            text-align: left;
+        }
+
+        .btn-google-maps {
+            background: linear-gradient(45deg, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);
+            color: white;
+            display: block;
+            padding: 15px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .btn-google-maps:hover { transform: scale(1.02); }
+
+        #modal-sabores-body, .horarios-list { padding: 20px; }
+
+        .horarios-list { text-align: left; font-size: 14px; line-height: 1.8; }
+        .horario-dia { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; }
+        .horario-nota { background: #fff4e5; color: #b7791f; padding: 12px; border-radius: 12px; font-size: 12px; margin-top: 15px; border: 1px solid #fbd38d; }
+
+        .modal-sabores .unidad-bloque { 
+            background: #ffffff;
+            padding: 18px; 
+            border-radius: 18px;
+            margin-bottom: 20px;
+            border: 1px solid #e1e8ed;
+            text-align: left; 
+            width: 100%; 
+            box-sizing: border-box; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        
+        .modal-sabores .unidad-bloque p {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary) !important;
+            margin: 0 0 15px 0 !important;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f3f5;
+        }
+
+        .modal-sabores .opcion-sel { 
+            margin-bottom: 12px;
+            font-size: 15px;
+            background: #fff; 
+            border: 1px solid #d1d8dd;
+            padding: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
+            color: #444;
+        }
+
+        #modal-sabores .btn-principal { 
+            margin: 0 20px 25px;
+            width: calc(100% - 40px);
+            padding: 16px;
+            background: var(--accent); 
+            border-radius: 15px; 
+            font-size: 16px; 
+        }
+
+        .main-content { 
+            flex-grow: 1; 
+            width: 95%; 
+            max-width: 1200px; 
+            margin: 20px auto; 
+            /* Aumentamos el padding bottom para que el carrito no tape el último producto */
+            padding-bottom: 250px !important; 
+            transition: 0.4s; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            background: rgba(255, 255, 255, 0.7); 
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px); 
+            border-radius: 30px; 
+            border: 1px solid rgba(255, 255, 255, 0.3); 
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); 
+        }
+
+        header { text-align: center; padding: 40px 20px 20px; margin-bottom: 10px; }
+
+        .categoria { 
+            margin: 30px 20px 10px; 
+            color: var(--primary); 
+            font-weight: 600; 
+            border-left: 5px solid var(--primary); 
+            padding-left: 15px; 
+            text-transform: uppercase; 
+            font-size: 1.1rem;
+            align-self: flex-start; /* Mantiene el título a la izquierda del contenedor centrado */
+            width: fit-content;
+        }
+        
+        /* Cambiamos el minmax de 280px a 200px para que entren más columnas */
+        .grid { 
+            display: grid; 
+            /* Cambiamos 200px por 140px para que en el celu entren 2 columnas */
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+            gap: 10px; 
+            padding: 15px; 
+            width: 100%;
+            box-sizing: border-box;
+            justify-content: center;
+        }
+
+        #paso-productos, #dinamico {
+            width: 100%;
+        }
+        /* Reducimos el padding interno de la card y el tamaño de los textos */
+        .card { 
+            background: rgba(255, 255, 255, 1.0);
+            border-radius: 15px; /* Bordes un poco más finos */
+            padding: 12px; /* Menos espacio interno */
+            text-align: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: space-between; 
+        }
+
+        .card h4 {
+            margin: 5px 0;
+            font-size: 0.85rem; /* Texto de producto más pequeño */
+            line-height: 1.2;
+        }
+
+        .price { 
+            color: var(--primary); 
+            font-size: 0.9rem; /* Precio un poco más chico */
+            font-weight: 600; 
+            margin-bottom: 10px; 
+        }
+
+        input[type="number"], input[type="text"], textarea, select { width: 100%; box-sizing: border-box; padding: 12px; border-radius: 12px; border: 1px solid #ddd; font-family: inherit; font-size: 14px; }
+        input[type="number"].cantidad { 
+            width: 70px; /* Un poco más angosto */
+            font-size: 16px; 
+            padding: 8px;
+        }
+
+        /* SECCIÓN DATOS DEL PEDIDO */
+        #paso-datos { 
+            display: none; 
+            padding: 20px; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form { 
+            padding: 30px; 
+            background: rgba(255, 255, 255, 0.9); 
+            border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            margin-bottom: 25px; 
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form label { 
+            display: block; 
+            margin-bottom: 10px; 
+            font-weight: 600; 
+            font-size: 14px; 
+            color: var(--primary); 
+            padding-left: 5px;
+        }
+
+        /* INPUTS MODERNOS */
+        input[type="text"], 
+        input[type="number"], 
+        textarea, 
+        select { 
+            width: 100%; 
+            box-sizing: border-box; 
+            padding: 14px 18px; 
+            border-radius: 15px; 
+            border: 2px solid #edf2f7; 
+            font-family: inherit; 
+            font-size: 15px; 
+            background: #fdfdfd;
+            transition: all 0.3s ease;
+            color: #444;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(0, 198, 255, 0.1);
+        }
+
+        #modal-admin {
+            max-width: 1200px !important; /* Aumentamos mucho el ancho */
+            width: 95%;
+            height: 90vh; /* Casi toda la altura de la pantalla */
+            overflow: hidden; /* El scroll lo maneja el contenedor interno */
+            display: none;
+            flex-direction: column;
+            padding: 0; /* Quitamos el padding para que la cabecera sea pegada */
+        }
+
+        #modal-admin.active {
+            display: flex;
+        }
+
+        /* Contenedor de los productos para que no se amontonen */
+        .admin-row-producto {
+            display: grid; 
+            grid-template-columns: 2fr 100px 1.5fr 100px 90px 40px; 
+            gap: 10px; 
+            margin-bottom: 10px; 
+            align-items: center; 
+            background: #fdfdfd;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }   
+
+        /* Estilo para los inputs dentro del admin para que se vean mejor */
+        #modal-admin input {
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .admin-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-footer {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            z-index: 10;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+
+        /* RESUMEN DE PAGO ESTILIZADO */
+        .resumen-caja {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+            border: 2px dashed var(--primary) !important;
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        #resumen-final {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #444;
+            font-weight: 500;
+        }
+
+        .aviso-delivery { 
+            font-size: 12px; 
+            color: #d68910; 
+            margin-top: 8px; 
+            font-weight: 600; 
+            background: #fff9e6;
+            padding: 8px 12px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        #carrito { 
+            position: fixed !important; 
+            bottom: 0; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 100%; 
+            max-width: 600px; 
+            background: white; 
+            padding: 20px; 
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.2); 
+            /* Bajamos el z-index para que el menú y modales lo tapen */
+            z-index: 5000; 
+            border-radius: 25px 25px 0 0; 
+            box-sizing: border-box;
+            display: none; 
+        }
+        #resumen-mini { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 10px; scrollbar-width: none; }
+        #resumen-mini::-webkit-scrollbar { display: none; }
+        .item-badge { background: #eef6ff; color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; white-space: nowrap; border: 1px solid #d0e7ff; }
+
+        #monto { font-size: 26px; color: var(--primary); font-weight: 600; }
+        .btn-principal { width: 100%; padding: 18px; border: none; border-radius: 15px; background: var(--primary); color: white; font-size: 18px; font-weight: 600; cursor: pointer; }
+        .btn-whatsapp { background: var(--accent); }
+        .btn-volver { background: #eee; color: #555; margin-bottom: 15px; padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; }
+
+        .btn-sabores { 
+            padding: 6px 10px; 
+            font-size: 11px; /* Botón de sabores más compacto */
+        }
+
+        header { 
+            text-align: center; 
+            padding: 0; 
+            background: #00c6ff; 
+            margin: 20px auto; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            width: calc(100% - 40px); 
+            max-width: 1160px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Agregué una sombra suave para que resalte más */
+        }
+
+        .banner-img {
+            width: 100%;
+            height: auto;
+            /* Subimos la altura para que el logo central entre cómodo */
+            max-height: 300px; 
+            display: block;
+            /* 'cover' asegura que llene el ancho, 'center' mantiene el logo al medio */
             object-fit: cover; 
             object-position: 50% 40%;
         }
