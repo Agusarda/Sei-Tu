@@ -808,6 +808,11 @@
 <div class="nav-buttons" id="nav-btns">
     <button class="menu-toggle" onclick="toggleMenu()">☰ Productos</button>
 </div>
+<div id="install-container" style="display: none; padding: 20px; text-align: center;">
+    <button id="btn-install" style="background-color: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif;">
+        <i class="fa-solid fa-download"></i> Instalar Aplicación
+    </button>
+</div>
 
 <button class="btn-horarios-flotante" onclick="toggleHorarios()">
     <i class="fas fa-clock"></i> <span>Horarios</span>
@@ -1691,7 +1696,39 @@ function eliminarCategoria(catKey) {
         .catch(err => console.error('Error al registrar SW', err));
     });
   }
-</script>
+  let deferredPrompt;
+  const installContainer = document.getElementById('install-container');
+  const btnInstall = document.getElementById('btn-install');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // 1. Evita que el navegador muestre el banner automático
+    e.preventDefault();
+    // 2. Guarda el evento para usarlo después
+    deferredPrompt = e;
+    // 3. Muestra el botón que estaba oculto
+    installContainer.style.display = 'block';
+
+    btnInstall.addEventListener('click', () => {
+        // 4. Muestra la notificación nativa de instalación
+        deferredPrompt.prompt();
+        
+        // 5. Espera la respuesta del usuario
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('El usuario instaló la app');
+                installContainer.style.display = 'none'; // Oculta el botón tras instalar
+            }
+            deferredPrompt = null;
+        });
+    });
+});
+
+// Opcional: Ocultar el botón si la app ya se instaló
+window.addEventListener('appinstalled', () => {
+    console.log('PWA instalada con éxito');
+    installContainer.style.display = 'none';
+});
     
+</script>
 </body>
 </html>
