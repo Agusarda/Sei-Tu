@@ -1699,5 +1699,50 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
     
 </script>
+<div id="pwa-install-banner" style="display:none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #0072ff; color: white; padding: 15px 25px; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 10000; width: 80%; text-align: center; font-weight: bold;">
+    ¿Querés la App de Sei Tu? 
+    <button id="btn-instalar-pwa" style="background: white; color: #0072ff; border: none; border-radius: 20px; padding: 5px 15px; margin-left: 10px; cursor: pointer; font-weight: bold;">
+        INSTALAR
+    </button>
+</div>
+
+<script>
+let promptInstalacion;
+const banner = document.getElementById('pwa-install-banner');
+const btnInstalar = document.getElementById('btn-instalar-pwa');
+
+// El navegador dispara este evento si la web es instalable
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Evita que Chrome muestre su propio banner pequeño por defecto
+    e.preventDefault();
+    // Guarda el evento para usarlo después
+    promptInstalacion = e;
+    
+    // Mostramos nuestro propio banner personalizado
+    banner.style.display = 'block';
+});
+
+btnInstalar.addEventListener('click', async () => {
+    if (!promptInstalacion) return;
+    
+    // Muestra el cartel oficial de instalación
+    promptInstalacion.prompt();
+    
+    // Espera la respuesta del usuario
+    const { outcome } = await promptInstalacion.userChoice;
+    console.log(`Respuesta del usuario: ${outcome}`);
+    
+    // Limpiamos y ocultamos nuestro banner
+    promptInstalacion = null;
+    banner.style.display = 'none';
+});
+
+// Ocultar si ya está instalada (opcional)
+window.addEventListener('appinstalled', () => {
+    banner.style.display = 'none';
+    console.log('¡App instalada con éxito!');
+});
+</script>
+    
 </body>
 </html>
