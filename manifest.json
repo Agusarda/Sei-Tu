@@ -1,0 +1,20 @@
+{
+  "name": "Sei Tu Ituzaingó Sur",
+  "short_name": "Sei Tu",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0072ff",
+  "theme_color": "#0072ff",
+  "icons": [
+    {
+      "src": "icono.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icono.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
