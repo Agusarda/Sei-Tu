@@ -1688,6 +1688,27 @@ if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js').catch(err => console.log("SW error", err));
     });
 }
+let deferredPrompt;
+const btnInstalar = document.getElementById('btnInstalar');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Mostramos el botón si la app es instalable
+  btnInstalar.style.display = 'block';
+
+  btnInstalar.addEventListener('click', () => {
+    btnInstalar.style.display = 'none';
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('El usuario instaló la App');
+      }
+      deferredPrompt = null;
+    });
+  });
+});
+    
     
 </body>
 </html>
