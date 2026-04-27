@@ -1682,6 +1682,22 @@ function eliminarCategoria(catKey) {
         renderAdminDashboard();
     }
 }
+// Registro del Service Worker (necesario para PWA)
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log("SW error", err));
+    });
+}
+
+// Lógica para el cartel de instalación
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    // Opcional: Podrías mostrar un botón propio que diga "Descargar App"
+    console.log("PWA lista para instalar");
+});
+    
 </script>
 </body>
 </html>
