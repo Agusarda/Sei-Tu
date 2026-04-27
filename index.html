@@ -446,6 +446,63 @@
             box-shadow: 0 0 0 4px rgba(0, 198, 255, 0.1);
         }
 
+        #modal-admin {
+            max-width: 1200px !important; /* Aumentamos mucho el ancho */
+            width: 95%;
+            height: 90vh; /* Casi toda la altura de la pantalla */
+            overflow: hidden; /* El scroll lo maneja el contenedor interno */
+            display: none;
+            flex-direction: column;
+            padding: 0; /* Quitamos el padding para que la cabecera sea pegada */
+        }
+
+        #modal-admin.active {
+            display: flex;
+        }
+
+        /* Contenedor de los productos para que no se amontonen */
+        .admin-row-producto {
+            display: grid; 
+            grid-template-columns: 2fr 100px 1.5fr 100px 90px 40px; 
+            gap: 10px; 
+            margin-bottom: 10px; 
+            align-items: center; 
+            background: #fdfdfd;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }   
+
+        /* Estilo para los inputs dentro del admin para que se vean mejor */
+        #modal-admin input {
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .admin-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-footer {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            z-index: 10;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+
         /* RESUMEN DE PAGO ESTILIZADO */
         .resumen-caja {
             background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
@@ -886,6 +943,26 @@
         <i class="fas fa-location-dot"></i>
     </a>
 </div>
+<div id="modal-admin" class="modal-sabores">
+    <div class="admin-header" style="padding: 15px 25px; border-bottom: 2px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #fff;">
+        <h2 style="margin:0; color: var(--primary);">🛠️ Panel de Administración</h2>
+        <button class="btn-cerrar-modal" onclick="cerrarAdmin()" style="position: static; font-size: 35px; cursor: pointer; border: none; background: none;">&times;</button>
+    </div>
+
+    <div id="admin-content" style="flex: 1; overflow-y: auto; padding: 25px; background: #f4f7f9;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <button class="btn-principal" onclick="nuevaCategoria()" style="margin: 0;">+ Nueva Categoría</button>
+            <p style="font-size: 12px; color: #666;">Tip: Usá las flechas para organizar el menú</p>
+        </div>
+        <div id="admin-lista-categorias"></div>
+    </div>
+
+    <div class="admin-footer" style="padding: 15px; border-top: 2px solid #eee; background: #fff; text-align: center;">
+        <button class="btn-principal" onclick="guardarEnNube()" style="background: var(--accent); width: 100%; max-width: 500px; font-size: 18px; height: 50px;">
+            <i class="fas fa-save"></i> GUARDAR CAMBIOS Y CERRAR
+        </button>
+    </div>
+</div>
 
 <script>
     // Productos que NO se pueden pedir online (solo consumo en local)
@@ -913,144 +990,66 @@ const saboresTortas = ["Bombón", "Lemon Pie", "Cookies", "Frutilla y DDL", "Cho
 const opcionesBombonEscoces = ["Clasico", "Nevado", "Pistacho"];
 const opcionesAlfajorHelado = ["Clasico", "Nevado"];
 
-const completo = {
-    helado: {
-        t: "Helado",
-        i: [
-            // Helado por Peso
-            { n: "1 KG Helado", p: 14000, g: 4, img: "1kg.png" },
-            { n: "1/2 KG Helado", p: 7500, g: 3, img: "medio-kg.png" },
-            { n: "1/4 KG Helado", p: 4500, g: 3, img: "cuarto-kg.png" },
-            //Adicionales
-            { n: "Bolsita Cucuruchos Dulces x3", p: 400, img: "bolsita-cucuruchos.png" },
-            { n: "Cucuruchon Suelto", p: 250, img: "cucuruchon.png" },
-            // Cucuruchones
-            { n: "Cucurucho 1 bocha", p: 2000, g: 1, s: true, img: "cucurucho-1.png" },
-            { n: "Cucurucho 2 bochas", p: 2900, g: 2, s: true, img: "cucurucho-2.png" },
-            { n: "Cucurucho 3 bochas", p: 4000, g: 3, s: true, img: "cucurucho-3.png" },
-            // Vasitos
-            { n: "Vasito 1 bocha", p: 2000, g: 1, s: true, img: "vasito-1.png" },
-            { n: "Vasito 2 bochas", p: 2900, g: 2, s: true, img: "vasito-2.png" },
-        ]
-    },
-    agua: {
-        t: "Palitos de Agua",
-        i: [
-            { n: "Palito de Agua", p: 850, opt: saboresAgua, img: "palito-agua.png" },
-            { n: "Palito Extra Ácido", p: 1100, img: "palito-acido.png" },
-            { n: "Sei Tu Fan (Naranja)", p: 900, img: "seitu-fan.png" },
-            { n: "Piccole", p: 900, img: "piccole.png" },
-            { n: "Fruti Frozen", p: 1200, img: "fruti-frozen.png" }
-        ]
-    },
-    crema: {
-        t: "Palitos de Crema",
-        i: [
-            { n: "Palito Giovi", p: 1000, opt: saboresGiovi, img: "giovi.png" },
-            { n: "Granizado Americana", p: 1100, img: "granizado-americana.png" },
-            { n: "Dietético Vainilla-Frutilla", p: 1700, img: "dietetico-palito.png" },
-            { n: "Bombón Helado", p: 1300, img: "bombon-helado.png" },
-            { n: "Bombón Crocante", p: 1400, img: "bombon-crocante.png" },
-            { n: "Friski", p: 1000, img: "frisky.png" },
-            { n: "Palito Carita", p: 1300, opt: saboresCaritas, img: "carita.png" }
-        ]
-    },
-    postres: {
-        t: "Postres Individuales",
-        i: [
-            { n: "Bombon Escoces", p: 1700, opt: opcionesBombonEscoces, img: "escoces.png" },
-            { n: "Alfajor Seichoc", p: 2000, img: "seichoc.png" },
-            { n: "Alfajor Helado Negro", p: 1800, img: "alfajor-negro.png" },
-            { n: "Postre Almendrado", p: 1500, img: "almendrado-ind.png" },
-            { n: "Postre Suizo", p: 1600, img: "suizo-ind.png" },
-            { n: "Postre Tricolor", p: 1500, img: "tricolor-ind.png" }
-        ]
-    },
-    postres_caja: {
-        t: "Postres por Caja",
-        i: [
-            { n: "Caja Bombon Escoces x8", p: 13000, opt: opcionesBombonEscoces, img: "caja-escoces.png" },
-            { n: "Alfajor Helado x8", p: 13000, opt: opcionesAlfajorHelado, img: "caja-alfajor.png" },
-            { n: "Alfajor Seichoc x8", p: 15800, img: "caja-seichoc.png" },
-            { n: "Minitorta Cookie x8", p: 13000, img: "caja-minitorta.png" },
-            { n: "Bombon Suizo x8", p: 11500, img: "caja-suizo.png" },
-            { n: "Tricolor x8", p: 10500, img: "caja-tricolor.png" },
-            { n: "Almendrado x8", p: 10500, img: "caja-almendrado.png" },
-            { n: "Tricolor Dietetico x6", p: 14000, img: "caja-dietetico.png" }
-        ]
-    },
-    copitas_y_conos: {
-        t: "Copitas y Conos",
-        i: [
-            // Copas 220cc desglosadas
-            { n: "Copa 220cc Cookies", p: 2600, img: "copa-cookie.png" },
-            { n: "Copa 220cc Frutilla y Americana", p: 2600, img: "copa-fr.png" },
-            { n: "Copa 220cc Chocolate y DDL", p: 2600, img: "copa-ch.png" },
-            // Conos Tu desglosados
-            { n: "Cono Tu Dulce de Leche", p: 2500, img: "cono-ddl.png" },
-            { n: "Cono Tu Americana", p: 2500, img: "cono-ame.png" }
-        ]
-    },
-    seibom: {
-        t: "Palito Sei Bom",
-        i: [
-            { n: "Sei Bom Dubai x4", p: 9500, img: "seibom-dubai-x4.png" },
-            { n: "Sei Bom Dubai Individual", p: 2500, img: "seibom-dubai.png" },
-            { n: "Sei Bom Cookies", p: 2200, img: "seibom-cookie.png" },
-            { n: "Sei Bom Blanco", p: 2200, img: "seibom-blanco.png" },
-            { n: "Sei Bom Almendras", p: 2200, img: "seibom-almendra.png" }
-        ]
-    },
-    tortas: {
-        t: "Tortas 800gr",
-        i: [
-            { n: "Torta Bombón 800gr", p: 13000, img: "torta-bombon.png" },
-            { n: "Torta Lemon Pie 800gr", p: 13000, img: "torta-lemon-pie.png" },
-            { n: "Torta Cookies 800gr", p: 13000, img: "torta-cookies.png" },
-            { n: "Torta Frutilla y DDL 800gr", p: 13000, img: "torta-frutilla-ddl.png" },
-            { n: "Torta Chocolate y Vainilla 800gr", p: 13000, img: "torta-choc-vainilla.png" }
-        ]
-    },
-    baldes_y_bombones: {
-        t: "Baldes y Bomboncitos",
-        i: [ 
-            // Baldes con selector
-            { n: "Balde 2 Litros (Pistacho-Cookies-Flan)", p: 13000, img: "balde-2l.png" },
-            { n: "Balde 3 Litros", p: 14000, opt: combos3L, img: "balde-3l.png" },
-            { n: "Balde 5 Litros", p: 19500, opt: combos5L, img: "balde-5l.png" },
+// --- CONFIGURACIÓN JSONBIN ---
+const BIN_ID = '69ee89a1aaba8821973e6cfb';
+const API_KEY = '$2a$10$fJiPGkrz/fa4Ow2tyjqLiO/6bGQAiR5SqeToPjraAi0NFaoDOaXZ6'; 
+const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-            // Bomboncitos con selector
-            { n: "Bomboncito Especial (Frambuesa)", p: 7900, img: "bomboncito-especial.png" },
-            { n: "Bomboncito Clásico", p: 7000, opt: saboresBomboncitos, img: "bomboncito-clasico.png" },
-        ]
-    },
-    potes: {
-        t: "Potes Especiales",
-        i: [
-            { n: "Pote Sin TACC Americana-Frutilla", p: 7500, img: "pote-fr.png" },
-            { n: "Pote Sin TACC Chocolate-DDL", p: 7500, img: "pote-ch.png" },
-            { n: "Pote Sin TACC Limón", p: 7500, img: "pote-limon.png" },
-            { n: "Pote Dietético Choco-Vainilla", p: 5900, img: "pote-dietetico.png" },
-            { n: "Pote Vegano Vainilla-Choc", p: 8000, img: "pote-vegano.png" }
-        ]
-    },
-    bebidas: {
-        t: "Bebidas",
-        i: [
-            { n: "Coca Cola 600ml", p: 1900, img: "coca-600.png" },
-            { n: "Agua Sierra de los Padres", p: 1200, img: "agua-mineral.png" },
-            { n: "Agua Saborizada 500ml", p: 1400, opt: saboresBebida, img: "agua-saborizada.png" }
-        ]
-    },
-    congelados: {
-        t: "Congelados",
-        i: [
-            { n: "Papas Fritas 380g", p: 2900, img: "papas-380.png" },
-            { n: "Papas Fritas 2500g", p: 11800, img: "papas-2500.png" },
-            { n: "Patitas de Pollo 500g", p: 5300, img: "patitas-500.png" }
-        ]
+let completo = {}; // Se cargará desde la nube
+let passwordBuffer = "";
+const ADMIN_PASS = "admin123"; // Cambiá esto
+
+// --- CARGA DE DATOS ---
+async function cargarDatos() {
+    try {
+        const res = await fetch(`${URL}/latest`, {
+            method: 'GET', // Aseguramos el método
+            headers: { 
+                "X-Master-Key": API_KEY, // Verificá que esta variable tenga la Key
+                "X-Bin-Meta": false 
+            }
+        });
+
+        if (!res.ok) {
+            throw new Error(`Error HTTP: ${res.status}`);
+        }
+
+        completo = await res.json();
+        console.log("Datos cargados:", completo); // Para debug
+        init(); 
+    } catch (err) {
+        console.error("Error detallado:", err);
+        alert("Error al conectar con la base de datos. Revisá la consola (F12).");
     }
-};
+}
+
+async function guardarEnNube() {
+    try {
+        await fetch(URL, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "X-Master-Key": API_KEY
+            },
+            body: JSON.stringify(completo)
+        });
+        alert("¡Cambios guardados!");
+        cerrarAdmin(); // <--- Ahora se cierra solo
+        init(); 
+    } catch (err) {
+        alert("Error al guardar.");
+    }
+}
+
+// --- DETECTOR DE CONTRASEÑA ---
+window.addEventListener('keydown', (e) => {
+    passwordBuffer += e.key;
+    if (passwordBuffer.includes(ADMIN_PASS)) {
+        abrirAdmin();
+        passwordBuffer = "";
+    }
+    if (passwordBuffer.length > 20) passwordBuffer = "";
+});
 
 let totalGlobalNumerico = 0;
 let seleccionesUsuario = {};
@@ -1176,105 +1175,101 @@ function toggleContactos() {
 }
 
 function init() {
-    const dinamico = document.getElementById("dinamico");
-    const menu = document.getElementById("menu-lateral");
-    dinamico.innerHTML = ""; 
-    menu.innerHTML = ""; // Limpiamos el menú antes de cargar
+    const sidebarList = document.getElementById('menu-lateral'); 
+    const container = document.getElementById('dinamico'); 
 
-    const emojis = {
-        helado: "🍦",
-        agua: "🧊",
-        crema: "🥛",
-        postres: "🍰",
-        postres_caja: "📦",
-        copitas_y_conos: "🍨",
-        seibom: "✨",
-        tortas: "🎂",
-        baldes_y_bombones: "🍱",
-        potes: "🍯",      // Corregido: coincide con la clave 'potes'
-        bebidas: "🥤",    // Corregido: coincide con la clave 'bebidas'
-        congelados: "❄️"
-    };
+    if (!sidebarList || !container) return;
 
-    for (let catKey in completo) {
-        const emoji = emojis[catKey] || "🏷️";
+    sidebarList.innerHTML = '';
+    container.innerHTML = '';
 
-        // Agregar al menú lateral
-        menu.innerHTML += `
-            <a href="#cat-${catKey}" class="menu-item" onclick="toggleMenu()">
-                <span class="emoji-icon">${emoji}</span>
-                ${completo[catKey].t}
-            </a>`;
-            
-        // Generar el HTML de los productos
-        let html = `<h3 class="categoria" id="cat-${catKey}">${completo[catKey].t}</h3><div class="grid">`;
+    for (const key in completo) {
+        const cat = completo[key];
         
-        completo[catKey].i.forEach((item, idx) => {
-            const id = `${catKey}-${idx}`;
-            const imgSrc = item.img ? item.img : 'https://via.placeholder.com/150?text=Sei+Tu';
-            
-            const esSoloLocal = productosSoloLocal.some(p => p.toLowerCase().trim() === item.n.toLowerCase().trim());
-            
-            html += `
-                <div class="card">
-                    <img src="${imgSrc}" alt="${item.n}" class="card-img" loading="lazy">
-                    <div>
-                        <h4>${item.n}</h4>
-                        <p class="price">$${item.p}</p>
+        const a = document.createElement('a');
+        a.className = 'menu-item';
+        a.href = `#${key}`;
+        a.onclick = toggleMenu;
+        a.innerHTML = `<i class="fas fa-ice-cream"></i> ${cat.t}`;
+        sidebarList.appendChild(a);
+
+        const section = document.createElement('section');
+        section.id = key;
+        section.innerHTML = `
+            <h3 class="categoria">${cat.t}</h3>
+            <div class="grid">
+                ${cat.i.map((p, idx) => {
+                    const esSoloLocal = p.sl === true;
+                    
+                    return `
+                    <div class="card" style="${esSoloLocal ? 'border: 1px solid #ddd; background: #f9f9f9; opacity: 0.8;' : ''}">
+                        ${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''}
+                        <h4>${p.n}</h4>
+                        <p class="price">$${p.p}</p>
+    
+                        ${esSoloLocal ? 
+                            `<div style="color: #e74c3c; font-size: 11px; font-weight: 600; padding: 10px 0;">
+                                📍 Solo consumo en local
+                             </div>` 
+                            : 
+                            `<div class="control-cantidad">
+                                <button class="btn-qty" onclick="ajustarCant('${key}-${idx}', -1, '${key}', ${idx})">-</button>
+                                <input type="number" value="0" class="cantidad" id="${key}-${idx}" 
+                                        data-n="${p.n}" data-p="${p.p}" data-sl="${esSoloLocal}" readonly>
+                                <button class="btn-qty" onclick="ajustarCant('${key}-${idx}', 1, '${key}', ${idx})">+</button>
+                            </div>`
+                        }
+                        <div id="box-${key}-${idx}"></div> 
                     </div>
-                    
-                    ${esSoloLocal ? 
-                        `<span style="font-size: 10px; color: #e74c3c; font-weight: 600; margin-bottom: 10px; background: #fff1f0; padding: 5px 10px; border-radius: 20px; border: 1px solid #ffa39e;">📍 Solo para salón</span>` : 
-                        `<div class="control-cantidad">
-                            <button type="button" class="btn-qty" onclick="ajustarCant('${id}', -1, '${catKey}', ${idx})">-</button>
-                            <input type="number" class="cantidad" id="${id}" value="0" min="0" readonly data-n="${item.n}" data-p="${item.p}">
-                            <button type="button" class="btn-qty" onclick="ajustarCant('${id}', 1, '${catKey}', ${idx})">+</button>
-                        </div>`
-                    }
-                    
-                    <div class="selector-gustos" id="box-${id}"></div>
-                </div>`;
-        });
-        dinamico.innerHTML += html + `</div>`;
+                `}).join('')}
+            </div>
+        `;
+        container.appendChild(section);
     }
+    actualizar(); 
 }
 
 function ajustarCant(id, cambio, catKey, itemIdx) {
     const input = document.getElementById(id);
-    let valorActual = parseInt(input.value) || 0;
-    let nuevoValor = valorActual + cambio;
+    if (!input) return;
 
-    if (nuevoValor >= 0) {
-        input.value = nuevoValor;
-        // Dispara la lógica de sabores y actualización del carrito
-        generarSelectores(id, catKey, itemIdx);
-    }
+    let valor = parseInt(input.value) || 0;
+    valor += cambio;
+    if (valor < 0) valor = 0;
+    
+    // Seteamos el valor directamente en el elemento
+    input.value = valor;
+    // Forzamos el atributo visual para la persistencia del selector
+    input.setAttribute('value', valor); 
+
+    generarSelectores(id, catKey, itemIdx);
+    actualizar(); // Esto ahora detectará el 'valor' correctamente
 }
 function generarSelectores(id, catKey, itemIdx) {
     const item = completo[catKey].i[itemIdx];
     const cant = parseInt(document.getElementById(id).value) || 0;
     const contenedor = document.getElementById("box-" + id);
     
+    if (!contenedor) return;
+
     if (cant === 0) {
         contenedor.innerHTML = "";
         delete seleccionesUsuario[id];
     } else if (item.g || item.s || item.opt) {
+        // Solo creamos el botón si no existe
         if (!document.getElementById("btn-sab-" + id)) {
-            contenedor.innerHTML = `<button class="btn-sabores" id="btn-sab-${id}" onclick="abrirModalSabores('${id}', '${catKey}', ${itemIdx})">Elegir Sabores/Opciones</button>`;
+            contenedor.innerHTML = `<button class="btn-sabores" id="btn-sab-${id}" 
+                onclick="abrirModalSabores('${id}', '${catKey}', ${itemIdx})" 
+                style="background: #ff9800; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 5px;">
+                Elegir Sabores
+            </button>`;
         }
-        const btnProd = document.getElementById("btn-sab-" + id);
-        if (seleccionesUsuario[id]) {
-            if (seleccionesUsuario[id].length > cant) {
-                seleccionesUsuario[id] = seleccionesUsuario[id].slice(0, cant);
-                btnProd.style.background = "#25D366";
-            } else if (seleccionesUsuario[id].length < cant) {
-                btnProd.style.background = "#ff9800";
-            }
-        } else {
-            btnProd.style.background = "#ff9800";
+        
+        // Si bajaste la cantidad, recortamos el array de sabores guardados
+        if (seleccionesUsuario[id] && seleccionesUsuario[id].length > cant) {
+            seleccionesUsuario[id] = seleccionesUsuario[id].slice(0, cant);
         }
     }
-    actualizar();
 }
 
 function abrirModalSabores(id, catKey, itemIdx) {
@@ -1365,54 +1360,70 @@ function guardarSabores() {
 }
 
 function actualizar() {
-    let totalGlobal = 0, resFinal = "", resMiniHTML = "";
-    document.querySelectorAll("input.cantidad").forEach(input => {
-        const id = input.id;
+    let r = ""; 
+    let t = 0;  
+    let miniResumen = ""; 
+    let resumenConSabores = ""; 
+
+    const inputs = document.querySelectorAll(".cantidad");
+    inputs.forEach(input => {
         const cant = parseInt(input.value) || 0;
-        const precioUnitario = parseInt(input.dataset.p);
-        if(cant > 0) {
-            const subtotal = cant * precioUnitario;
-            totalGlobal += subtotal;
-            resMiniHTML += `<div class="item-badge">${cant}x ${input.dataset.n}</div>`;
-            if(seleccionesUsuario[id]) {
-                let detallesAgrupados = [];
-                seleccionesUsuario[id].forEach((unidad) => {
-                    let part = [];
-                    if(unidad.gustos.length > 0) part.push(`[${unidad.gustos.join(", ")}]`);
-                    if(unidad.opcion) part.push(`[${unidad.opcion}]`);
-                    if(unidad.salsa) part.push(`+ Salsa: ${unidad.salsa}`);
-                    if(part.length > 0) detallesAgrupados.push(part.join(" "));
+        if (cant > 0) {
+            const id = input.id;
+            const nombre = input.dataset.n;
+            const precio = parseFloat(input.dataset.p);
+            
+            // Emoji de carrito para el producto principal
+            const lineaBasica = `🛒 ${cant} x ${nombre} ($${precio * cant})\n`;
+            r += lineaBasica;
+            resumenConSabores += lineaBasica;
+            
+            if (seleccionesUsuario[id]) {
+                seleccionesUsuario[id].forEach((unidad, index) => {
+                    // Emoji de helado/punto para los sabores
+                    resumenConSabores += `   ✨ Un. ${index + 1}: ${unidad.gustos.join(", ")}`;
+                    if(unidad.salsa) resumenConSabores += ` (Salsa: ${unidad.salsa})`;
+                    if(unidad.opcion) resumenConSabores += ` (${unidad.opcion})`;
+                    resumenConSabores += `\n`;
                 });
-                resFinal += `• ${cant}x ${input.dataset.n} ($${subtotal}):\n  ${detallesAgrupados.join("\n  ")}\n`;
-            } else {
-                resFinal += `• ${cant}x ${input.dataset.n} ($${subtotal})\n`;
             }
+            
+            t += (precio * cant);
+            miniResumen += `<span class="item-badge">${cant} x ${nombre}</span>`;
         }
     });
-    totalGlobalNumerico = totalGlobal;
 
-    const btnVaciar = document.getElementById("btn-vaciar");
-    if (totalGlobal > 0) {
-        btnVaciar.style.display = "flex";
-    } else {
-        btnVaciar.style.display = "none";
+    window.totalGlobalNumerico = t;
+    window.resumenWhatsApp = resumenConSabores; 
+
+    // Actualizar Total y Mini Carrito
+    if (document.getElementById("monto")) document.getElementById("monto").innerText = `$${t}`;
+    if (document.getElementById("resumen-mini")) document.getElementById("resumen-mini").innerHTML = miniResumen || "Tu carrito está vacío";
+    
+    // MOSTRAR EN LA SECCIÓN DE DATOS
+    const contenedorResumen = document.getElementById("resumen-final");
+    if (contenedorResumen) {
+        // Añadimos el total al final del resumen visual
+        const textoFinal = resumenConSabores + `\n💰 TOTAL: $${t}`;
+        contenedorResumen.innerText = t > 0 ? textoFinal : "No hay productos seleccionados.";
     }
-    document.getElementById("resumen-mini").innerHTML = resMiniHTML || '<span style="color:#aaa; font-size:12px;">Tu carrito está vacío</span>';
-    document.getElementById("resumen-final").innerText = resFinal || "No seleccionaste productos.";
-    document.getElementById("monto").innerText = "$" + totalGlobal;
-    const mini = document.getElementById("resumen-mini"); mini.scrollLeft = mini.scrollWidth;
 }
-
 function cambiarPaso(paso) {
-    localStorage.setItem('pasoNavegacion', paso); 
+    // Actualizamos el carrito una última vez antes de validar para estar seguros
+    actualizar();
+
     const btnVaciar = document.getElementById("btn-vaciar");
     const redes = document.querySelector(".redes-flotantes");
-    const btnHorarios = document.querySelector(".btn-horarios-flotante"); // Referencia al botón de horarios
+    const btnHorarios = document.querySelector(".btn-horarios-flotante");
     
     if (paso === 2) {
-        if (totalGlobalNumerico === 0) return alert("Selecciona productos.");
+        // VALIDACIÓN REFORZADA: Leemos el total desde el objeto global y verificamos que sea mayor a 0
+        if (!window.totalGlobalNumerico || window.totalGlobalNumerico <= 0) {
+            alert("Tu carrito está vacío. Por favor, selecciona al menos un producto.");
+            return;
+        }
         
-        // Validación de sabores/opciones
+        // Validación de sabores/opciones (mantenemos tu lógica existente)
         let faltanConfigurar = [];
         document.querySelectorAll("input.cantidad").forEach(input => {
             const id = input.id;
@@ -1424,19 +1435,27 @@ function cambiarPaso(paso) {
                 faltanConfigurar.push(item.n);
             }
         });
+
         if (faltanConfigurar.length > 0) {
-            return alert("Debes elegir los sabores/opciones para:\n- " + faltanConfigurar.join("\n- "));
+            alert("Debes elegir los sabores/opciones para:\n- " + faltanConfigurar.join("\n- "));
+            return;
         }
 
-        // --- OCULTAR ELEMENTOS EN EL PASO 2 ---
+        // Si pasó las validaciones, cambiamos de pantalla
         document.getElementById("paso-productos").style.display = "none";
         document.getElementById("paso-datos").style.display = "block";
         document.getElementById("nav-btns").style.display = "none";
         document.getElementById("resumen-mini").style.display = "none";
+
+        const contenedorResumen = document.getElementById("resumen-final");
+        if (contenedorResumen) {
+            // Usamos innerText para que los saltos de línea (\n) se respeten
+            contenedorResumen.innerText = window.resumenWhatsApp;
+        }
         
-        redes.style.display = "none";       // Oculta redes
-        btnHorarios.style.display = "none"; // Oculta botón horarios
-        btnVaciar.style.display = "none";   // Oculta vaciar carrito
+        if(redes) redes.style.display = "none";
+        if(btnHorarios) btnHorarios.style.display = "none";
+        if(btnVaciar) btnVaciar.style.display = "none";
         
         const btn = document.getElementById("btn-accion");
         btn.innerText = "Pedir por WhatsApp"; 
@@ -1445,18 +1464,13 @@ function cambiarPaso(paso) {
         window.scrollTo(0,0);
 
     } else {
-        // --- MOSTRAR ELEMENTOS AL VOLVER AL PASO 1 ---
+        // Lógica para volver al paso 1...
         document.getElementById("paso-productos").style.display = "block";
         document.getElementById("paso-datos").style.display = "none";
         document.getElementById("nav-btns").style.display = "flex";
         document.getElementById("resumen-mini").style.display = "flex";
-        
-        redes.style.display = "flex";       // Muestra redes
-        btnHorarios.style.display = "flex"; // Muestra botón horarios
-
-        if (totalGlobalNumerico > 0) {
-            btnVaciar.style.display = "flex";
-        }
+        if(redes) redes.style.display = "flex";
+        if(btnHorarios) btnHorarios.style.display = "flex";
 
         const btn = document.getElementById("btn-accion");
         btn.innerText = "Continuar pedido"; 
@@ -1485,42 +1499,60 @@ function vaciarCarrito() {
 
 function enviar() {
     const n = document.getElementById("nombre").value.trim();
-    const entrega = document.getElementById("entrega").value;
     const d = document.getElementById("direccion").value.trim();
+    const entrega = document.getElementById("entrega").value;
     const pago = document.getElementById("pago").value;
-    const vuelto = parseFloat(document.getElementById("vuelto").value) || 0;
-    const t = document.getElementById("monto").innerText;
-    const r = document.getElementById("resumen-final").innerText;
-    const c = document.getElementById("comentarios").value;
+    const vueltoInput = document.getElementById("vuelto");
+    const notas = document.getElementById("comentarios").value.trim();
 
-    // --- NUEVA VALIDACIÓN DE HORARIO ---
+    if (!n) return alert("Por favor, ingresá tu nombre.");
+    
     if (entrega === "Delivery") {
-        const check = esHorarioDelivery(); // Llamamos a la función de control
-        if (!check.abierto) {
-            return alert(`❌ ATENCIÓN:\n\n${check.motivo}\n\nPor favor, cambiá el método a 'Retiro en Local' o realizá el pedido en otro momento.`);
+        if (!d) return alert("Por favor, ingresá tu dirección.");
+        const checkHorario = esHorarioDelivery();
+        if (!checkHorario.abierto) {
+            alert("ATENCIÓN: " + checkHorario.motivo);
+            return;
         }
     }
-    // ------------------------------------
 
-    if(!n) return alert("Por favor, ingresá tu nombre.");
-    if(entrega === "Delivery" && !d) return alert("Por favor, ingresá tu dirección.");
-    
-    if(pago === "Efectivo") {
-        if(!vuelto) return alert("Por favor, indica con cuánto vas a pagar.");
-        if(vuelto < totalGlobalNumerico) return alert(`El monto con el que abonás ($${vuelto}) es menor al total del pedido ($${totalGlobalNumerico}).`);
+    // Formato de pago
+    let detallePago = "*Pago:* " + pago;
+    if (pago === "Efectivo") {
+        const montoVuelto = parseFloat(vueltoInput.value);
+        if (!montoVuelto || montoVuelto < window.totalGlobalNumerico) {
+            return alert("Indicá con cuánto abonás.");
+        }
+        detallePago += " (Abona con: $" + montoVuelto + ". Vuelto: $" + (montoVuelto - window.totalGlobalNumerico) + ")";
     }
 
-    let mensaje = `*PEDIDO SEI TU - ITUZAINGÓ SUR*\n\n`;
-    mensaje += `*Cliente:* ${n}\n`;
-    mensaje += `*Entrega:* ${entrega}${entrega === "Delivery" ? " (" + d + ")" : ""}\n`;
-    mensaje += `*Pago:* ${pago}${pago === "Efectivo" ? " (Abona con $" + vuelto + ". Vuelto: $" + (vuelto - totalGlobalNumerico) + ")" : ""}\n\n`;
-    mensaje += `*Pedido:*\n${r}\n`;
-    mensaje += `*Total:* ${t}`;
-    if(c) mensaje += `\n\n*Notas:* ${c}`;
+    // Construcción del mensaje usando solo emojis clásicos y seguros
+    // Nota: Usamos concatenación simple para evitar errores de plantillas
+    let msj = "SEI TU - ITUZAINGO SUR\n";
+    msj += "--------------------------\n";
+    msj += "Nombre: " + n + "\n";
+    msj += "Entrega: " + entrega + (entrega === "Delivery" ? " (" + d + ")" : "") + "\n";
+    msj += detallePago + "\n";
+    msj += "--------------------------\n";
+    msj += "DETALLE:\n" + window.resumenWhatsApp + "\n";
+    msj += "--------------------------\n";
+    msj += "TOTAL: $" + window.totalGlobalNumerico;
+    
+    if (notas) {
+        msj += "\n\nNotas: " + notas;
+    }
 
-    window.open(`https://wa.me/5491131725515?text=${encodeURIComponent(mensaje)}`);
+    // CODIFICACIÓN MANUAL PARA WHATSAPP
+    // Esto asegura que los saltos de línea y espacios se conviertan correctamente
+    const textoFinal = encodeURIComponent(msj);
+    const telefono = "5491131725515";
+    
+    // Usamos el formato de link más compatible que existe
+    const url = "https://api.whatsapp.com/send?phone=" + telefono + "&text=" + textoFinal;
+    
+    window.open(url, "_blank");
 }
-window.onload = init;
+window.onload = cargarDatos;
 function comenzarPedido() {
     const inicio = document.getElementById('pantalla-inicio');
     const carrito = document.getElementById('carrito'); // Referencia al carrito
@@ -1534,6 +1566,118 @@ function comenzarPedido() {
         carrito.style.display = "block"; // MOSTRAMOS el carrito recién acá
         window.scrollTo(0, 0);
     }, 600);
+}
+function abrirAdmin() {
+    document.getElementById('modal-admin').classList.add('active');
+    document.getElementById('overlay').classList.add('active');
+    renderAdminDashboard();
+}
+
+function cerrarAdmin() {
+    document.getElementById('modal-admin').classList.remove('active');
+    document.getElementById('overlay').classList.remove('active');
+}
+
+function renderAdminDashboard() {
+    const container = document.getElementById('admin-lista-categorias');
+    container.innerHTML = "";
+    const keys = Object.keys(completo);
+
+    keys.forEach((catKey, index) => {
+        const cat = completo[catKey];
+        let catHtml = `
+            <div style="border: 1px solid #ddd; border-left: 5px solid var(--primary); padding: 20px; border-radius: 12px; margin-bottom: 30px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
+                    <input type="text" value="${cat.t}" onchange="completo['${catKey}'].t = this.value" style="font-weight: bold; font-size: 18px; flex-grow: 1; color: var(--primary);">
+                    
+                    <div style="display: flex; gap: 5px;">
+                        <button class="btn-qty" onclick="moverCat('${catKey}', -1)" ${index === 0 ? 'disabled' : ''}>▲</button>
+                        <button class="btn-qty" onclick="moverCat('${catKey}', 1)" ${index === keys.length - 1 ? 'disabled' : ''}>▼</button>
+                    </div>
+                    <button onclick="eliminarCategoria('${catKey}')" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 20px;"><i class="fas fa-trash"></i></button>
+                </div>
+                
+                <div id="productos-${catKey}">
+                    <div style="display: grid; grid-template-columns: 2fr 100px 1.5fr 100px 90px 40px; gap: 10px; margin-bottom: 10px; padding: 0 10px; font-size: 11px; font-weight: bold; color: #888;">
+                        <div>NOMBRE DEL PRODUCTO</div>
+                        <div>PRECIO ($)</div>
+                        <div>LINK IMAGEN (OPCIONAL)</div>
+                        <div style="text-align: center;">SOLO LOCAL</div>
+                        <div style="text-align: center;">ORDEN</div>
+                        <div></div>
+                    </div>
+
+                    ${cat.i.map((prod, idx) => `
+                        <div class="admin-row-producto">
+                            <input type="text" value="${prod.n}" onchange="completo['${catKey}'].i[${idx}].n = this.value" style="width: 100%;">
+                            <input type="number" value="${prod.p}" onchange="completo['${catKey}'].i[${idx}].p = parseInt(this.value)" style="width: 100%;">
+                            <input type="text" value="${prod.img || ''}" onchange="completo['${catKey}'].i[${idx}].img = this.value" placeholder="img/foto.png" style="width: 100%;">
+                            
+                            <label style="display: flex; justify-content: center; align-items: center; cursor: pointer;">
+                                <input type="checkbox" ${prod.sl ? 'checked' : ''} onchange="completo['${catKey}'].i[${idx}].sl = this.checked" style="width: 20px; height: 20px;">
+                            </label>
+
+                            <div style="display: flex; gap: 4px; justify-content: center;">
+                                <button class="btn-qty" onclick="moverProd('${catKey}', ${idx}, -1)" ${idx === 0 ? 'disabled' : ''} style="padding: 2px 8px;">↑</button>
+                                <button class="btn-qty" onclick="moverProd('${catKey}', ${idx}, 1)" ${idx === cat.i.length - 1 ? 'disabled' : ''} style="padding: 2px 8px;">↓</button>
+                            </div>
+
+                            <button onclick="eliminarProducto('${catKey}', ${idx})" style="color: #e74c3c; border: none; background: none; font-size: 18px; cursor: pointer;">&times;</button>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="btn-principal" onclick="nuevoProducto('${catKey}')" style="margin-top: 15px; background: #eee; color: #333; font-size: 13px; padding: 8px 15px;">+ Agregar Producto a ${cat.t}</button>
+            </div>
+        `;
+        container.innerHTML += catHtml;
+    });
+}
+function moverProd(catKey, index, direccion) {
+    const arr = completo[catKey].i;
+    const nuevoIndex = index + direccion;
+    // Intercambio de posición (Swap)
+    [arr[index], arr[nuevoIndex]] = [arr[nuevoIndex], arr[index]];
+    renderAdminDashboard();
+}
+
+function moverCat(catKey, direccion) {
+    const keys = Object.keys(completo);
+    const index = keys.indexOf(catKey);
+    const nuevoIndex = index + direccion;
+    
+    const entries = Object.entries(completo);
+    [entries[index], entries[nuevoIndex]] = [entries[nuevoIndex], entries[index]];
+    
+    // Reconstruimos el objeto 'completo' con el nuevo orden de las keys
+    completo = Object.fromEntries(entries);
+    renderAdminDashboard();
+}
+// Funciones Auxiliares ABM
+function nuevaCategoria() {
+    const key = prompt("ID de la categoría (ej: postres_especiales):").toLowerCase().replace(/\s/g, '_');
+    if (key && !completo[key]) {
+        completo[key] = { t: "Nueva Categoría", i: [] };
+        renderAdminDashboard();
+    }
+}
+
+function nuevoProducto(catKey) {
+    completo[catKey].i.push({ n: "Nuevo Producto", p: 0, img: "" });
+    renderAdminDashboard();
+}
+
+function eliminarProducto(catKey, idx) {
+    if (confirm("¿Eliminar producto?")) {
+        completo[catKey].i.splice(idx, 1);
+        renderAdminDashboard();
+    }
+}
+
+function eliminarCategoria(catKey) {
+    if (confirm("¿Eliminar TODA la categoría?")) {
+        delete completo[catKey];
+        renderAdminDashboard();
+    }
 }
 </script>
 </body>
