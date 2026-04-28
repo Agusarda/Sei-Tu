@@ -399,13 +399,6 @@
             margin-bottom: 10px; 
         }
 
-        input[type="number"], input[type="text"], textarea, select { width: 100%; box-sizing: border-box; padding: 12px; border-radius: 12px; border: 1px solid #ddd; font-family: inherit; font-size: 14px; }
-        input[type="number"].cantidad { 
-            width: 70px; /* Un poco más angosto */
-            font-size: 16px; 
-            padding: 8px;
-        }
-
         /* SECCIÓN DATOS DEL PEDIDO */
         #paso-datos { 
             display: none; 
@@ -660,12 +653,6 @@
             -webkit-appearance: none;
             margin: 0;
         }       
-      
-
-        .wa { background: #25D366; }
-        .ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-        .maps { background: #4285F4; }
-        
 
         .btn-cerrar-sidebar {
             position: absolute;
@@ -1292,7 +1279,6 @@ function guardarSabores() {
 }
 
 function actualizar() {
-    let r = ""; 
     let t = 0;  
     let miniResumen = ""; 
     let resumenConSabores = ""; 
@@ -1305,14 +1291,12 @@ function actualizar() {
             const nombre = input.dataset.n;
             const precio = parseFloat(input.dataset.p);
             
-            // Emoji de carrito para el producto principal
+            // Línea para el resumen de WhatsApp y visual
             const lineaBasica = `🛒 ${cant} x ${nombre} ($${precio * cant})\n`;
-            r += lineaBasica;
             resumenConSabores += lineaBasica;
             
             if (seleccionesUsuario[id]) {
                 seleccionesUsuario[id].forEach((unidad, index) => {
-                    // Emoji de helado/punto para los sabores
                     resumenConSabores += `   ✨ Un. ${index + 1}: ${unidad.gustos.join(", ")}`;
                     if(unidad.salsa) resumenConSabores += ` (Salsa: ${unidad.salsa})`;
                     if(unidad.opcion) resumenConSabores += ` (${unidad.opcion})`;
@@ -1333,15 +1317,17 @@ function actualizar() {
     window.resumenWhatsApp = resumenConSabores; 
 
     // Actualizar Total y Mini Carrito
-    if (document.getElementById("monto")) document.getElementById("monto").innerText = `$${t}`;
-    if (document.getElementById("resumen-mini")) document.getElementById("resumen-mini").innerHTML = miniResumen || "Tu carrito está vacío";
+    const montoDisplay = document.getElementById("monto");
+    const resumenMiniDisplay = document.getElementById("resumen-mini");
+    
+    if (montoDisplay) montoDisplay.innerText = `$${t}`;
+    if (resumenMiniDisplay) resumenMiniDisplay.innerHTML = miniResumen || "Tu carrito está vacío";
     
     // MOSTRAR EN LA SECCIÓN DE DATOS
     const contenedorResumen = document.getElementById("resumen-final");
     if (contenedorResumen) {
-        // Añadimos el total al final del resumen visual
-        const textoFinal = resumenConSabores + `\n💰 TOTAL: $${t}`;
-        contenedorResumen.innerText = t > 0 ? textoFinal : "No hay productos seleccionados.";
+        const textoFinal = t > 0 ? resumenConSabores + `\n💰 TOTAL: $${t}` : "No hay productos seleccionados.";
+        contenedorResumen.innerText = textoFinal;
     }
 }
 function cambiarPaso(paso) {
@@ -1396,7 +1382,6 @@ function cambiarPaso(paso) {
         if (resumenMini) resumenMini.style.display = "none";
         
         // Ocultar elementos flotantes
-        if (redes) redes.style.display = "none";
         if (btnHorarios) btnHorarios.style.display = "none";
         if (btnVaciar) btnVaciar.style.display = "none";
         
@@ -1414,7 +1399,7 @@ function cambiarPaso(paso) {
         if (navBtns) navBtns.style.display = "flex";
         if (resumenMini) resumenMini.style.display = "flex";
         
-        if (redes) redes.style.display = "flex";
+      
         if (btnHorarios) btnHorarios.style.display = "flex";
         if (btnVaciar && window.totalGlobalNumerico > 0) btnVaciar.style.display = "flex";
 
