@@ -1134,29 +1134,25 @@ function toggleHorarios() {
 
 // Función centralizada para limpiar todo y mostrar los botones de nuevo
 function cerrarTodo() {
-    // Cerramos todos los componentes visuales
     document.getElementById("sidebar").classList.remove("active");
     document.getElementById("modal-horarios").classList.remove("active");
     document.getElementById("modal-contactos").classList.remove("active");
     document.getElementById("modal-sabores").classList.remove("active");
     document.getElementById("overlay").classList.remove("active");
 
-    // Detectamos en qué paso estamos (1 = Productos, 2 = Datos)
-    // Usamos el ID del contenedor porque es más fiable que el localStorage en este caso
     const esPasoProductos = document.getElementById("paso-productos").style.display !== "none";
 
     if (esPasoProductos) {
-        // 1. Removemos la clase que oculta por opacidad
-        document.getElementById("nav-btns").classList.remove("hidden-btn");
-        document.querySelector(".btn-horarios-flotante").classList.remove("hidden-btn");
+        const navBtns = document.getElementById("nav-btns");
+        const quickSwitch = document.getElementById("quick-switch");
 
-        // 2. Forzamos el display por si se quedó en "none"
-        document.getElementById("nav-btns").style.display = "flex";
-        document.querySelector(".btn-horarios-flotante").style.display = "flex";
-        
-        // 3. Aseguramos opacidad total (por si acaso)
-        document.getElementById("nav-btns").style.opacity = "1";
-        document.getElementById("nav-btns").style.pointerEvents = "auto";
+        if (navBtns) {
+            navBtns.classList.remove("hidden-btn");
+            navBtns.style.display = "flex";
+        }
+        if (quickSwitch) {
+            quickSwitch.style.display = "flex";
+        }
     }
 }
 
@@ -1435,85 +1431,78 @@ function actualizar() {
     }
 }
 function cambiarPaso(paso) {
-    // Actualizamos el carrito una última vez para asegurar que los totales sean correctos
     actualizar();
 
-    const btnVaciar = document.getElementById("btn-vaciar");
-    const btnHorarios = document.querySelector(".btn-horarios-flotante");
-    const navBtns = document.getElementById("nav-btns");
-    const resumenMini = document.getElementById("resumen-mini");
     const pasoProductos = document.getElementById("paso-productos");
     const pasoDatos = document.getElementById("paso-datos");
+    const quickSwitch = document.getElementById('quick-switch');
+    const navBtns = document.getElementById("nav-btns");
     const btnAccion = document.getElementById("btn-accion");
 
     if (paso === 2) {
-        document.getElementById('quick-switch').style.display = "none";
-        // 1. VALIDACIÓN DE CARRITO VACÍO
-        // Usamos window.totalGlobalNumerico que se setea en actualizar()
+        // --- VALIDACIÓN 1: Carrito vacío ---
         if (!window.totalGlobalNumerico || window.totalGlobalNumerico <= 0) {
-            alert("Tu carrito está vacío. Por favor, seleccioná al menos un producto para continuar.");
+            alert("Tu carrito está vacío.");
             return;
         }
-        
-        // 2. VALIDACIÓN DE SABORES / OPCIONES
+
+        // --- VALIDACIÓN 2: Restricción de Delivery para productos "Solo Local" ---
+        let productosProhibidos = [];
         let faltanConfigurar = [];
+
         document.querySelectorAll("input.cantidad").forEach(input => {
-            const id = input.id;
             const cant = parseInt(input.value) || 0;
-            const partes = id.split("-");
-            const catKey = partes[0];
-            const itemIdx = partes[1];
-            
-            const item = completo[catKey].i[itemIdx];
+            if (cant > 0) {
+                const id = input.id;
+                const partes = id.split("-");
+                const item = completo[partes[0]].i[partes[1]];
 
-            // Verificamos si el producto requiere configuración (gustos o opciones)
-            // Agregamos la comprobación (item.opt && item.opt.length > 0) para evitar errores si opt no existe
-            const requiereConfig = item.g || (item.opt && item.opt.length > 0);
+                // Verificar si es solo local y estamos en delivery
+                if (modoEntregaGlobal === "Delivery" && item.sl === true) {
+                    productosProhibidos.push(item.n);
+                }
 
-            if (cant > 0 && requiereConfig && !seleccionesUsuario[id]) {
-                faltanConfigurar.push(item.n);
+                // Verificar sabores
+                const requiereConfig = item.g || (item.opt && item.opt.length > 0);
+                if (requiereConfig && !seleccionesUsuario[id]) {
+                    faltanConfigurar.push(item.n);
+                }
             }
         });
 
-        if (faltanConfigurar.length > 0) {
-            alert("Por favor, elegí los sabores u opciones para:\n- " + faltanConfigurar.join("\n- "));
-            return;
+        if (productosProhibidos.length > 0) {
+            alert("⚠️ No podemos enviar por Delivery los siguientes productos:\n- " + 
+                  productosProhibidos.join("\n- ") + 
+                  "\n\nPor favor, quitalos del carrito o cambia a 'Take Away'.");
+            return; // Detiene el proceso y NO oculta los botones de arriba
         }
 
-        // 3. CAMBIO DE PANTALLA
+        if (faltanConfigurar.length > 0) {
+            alert("Por favor, elegí los sabores para:\n- " + faltanConfigurar.join("\n- "));
+            return; // Detiene el proceso y NO oculta los botones de arriba
+        }
+
+        // --- SI TODO ESTÁ BIEN: Recién aquí ocultamos la navegación y cambiamos de paso ---
         pasoProductos.style.display = "none";
         pasoDatos.style.display = "block";
+        quickSwitch.style.display = "none";
         if (navBtns) navBtns.style.display = "none";
-        if (resumenMini) resumenMini.style.display = "none";
         
-        // Ocultar elementos flotantes
-        if (btnHorarios) btnHorarios.style.display = "none";
-        if (btnVaciar) btnVaciar.style.display = "none";
-        
-        // Transformar el botón de acción
-        btnAccion.innerText = "Pedir por WhatsApp"; 
-        btnAccion.className = "btn-principal btn-whatsapp"; 
+        btnAccion.innerText = "Pedir por WhatsApp";
+        btnAccion.className = "btn-principal btn-whatsapp";
         btnAccion.onclick = enviar;
-        
         window.scrollTo(0, 0);
 
     } else {
-        document.getElementById('quick-switch').style.display = "flex";
         // VOLVER AL PASO 1
         pasoProductos.style.display = "block";
         pasoDatos.style.display = "none";
+        quickSwitch.style.display = "flex";
         if (navBtns) navBtns.style.display = "flex";
-        if (resumenMini) resumenMini.style.display = "flex";
         
-      
-        if (btnHorarios) btnHorarios.style.display = "flex";
-        if (btnVaciar && window.totalGlobalNumerico > 0) btnVaciar.style.display = "flex";
-
-        // Restaurar el botón de acción
-        btnAccion.innerText = "Continuar pedido"; 
-        btnAccion.className = "btn-principal"; 
+        btnAccion.innerText = "Continuar pedido";
+        btnAccion.className = "btn-principal";
         btnAccion.onclick = () => cambiarPaso(2);
-        
         window.scrollTo(0, 0);
     }
 }
@@ -1642,28 +1631,17 @@ function comenzarPedido(tipo) {
     }
 }
 function filtrarProductosPorEntrega() {
-    // Si todavía no se eligió modo (está en la pantalla de inicio), no hacemos nada
-    if (!modoEntregaGlobal) return;
-
+    // Eliminamos la lógica de ocultar (display: none) para que siempre se vean
+    // pero puedes añadir un estilo opaco para indicar que no son para delivery
     const cardsSoloLocal = document.querySelectorAll('.solo-local-card');
     
     cardsSoloLocal.forEach(card => {
         if (modoEntregaGlobal === 'Delivery') {
-            card.style.display = "none"; 
+            card.style.opacity = "0.6"; // Efecto visual de deshabilitado
+            card.style.border = "1px solid #ffccc7";
         } else {
-            card.style.display = "flex"; 
-        }
-    });
-
-    // Ocultar categorías enteras si todos sus productos están ocultos
-    document.querySelectorAll('section').forEach(seccion => {
-        const cards = Array.from(seccion.querySelectorAll('.card'));
-        const visibles = cards.filter(c => c.style.display !== 'none');
-        
-        if (visibles.length === 0) {
-            seccion.style.display = 'none';
-        } else {
-            seccion.style.display = 'block';
+            card.style.opacity = "1";
+            card.style.border = "none";
         }
     });
 }
