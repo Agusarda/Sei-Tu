@@ -1132,7 +1132,26 @@ function esHorarioDelivery() {
 
     return { abierto: true };
 }
+function esHorarioLocalAbierto() {
+    const ahora = new Date();
+    const dia = ahora.getDay(); // 0: Domingo, 1: Lunes...
+    const hora = ahora.getHours();
 
+    // Martes cerrado
+    if (dia === 2) return { abierto: false, motivo: "Los martes el local permanece cerrado." };
+
+    // Horarios de apertura general (11:00hs)
+    if (hora < 11) return { abierto: false, motivo: "El local abre a las 11:00hs." };
+
+    // Cierre según el día
+    const horaCierre = (dia === 5 || dia === 6) ? 23 : 22;
+
+    if (hora >= horaCierre) {
+        return { abierto: false, motivo: `El local ya cerró. Nuestro horario de hoy era hasta las ${horaCierre}:00hs.` };
+    }
+
+    return { abierto: true };
+}
 function toggleDireccion() {
     // CAMBIO: Ahora usamos la variable global en lugar de buscar el elemento en el HTML
     const esDelivery = (modoEntregaGlobal === "Delivery");
@@ -1475,6 +1494,12 @@ function enviar() {
     const notas = document.getElementById("comentarios").value.trim();
 
     if (!n) return alert("Por favor, ingresá tu nombre.");
+
+    const checkLocal = esHorarioLocalAbierto();
+    if (!checkLocal.abierto) {
+        alert("LO SENTIMOS: " + checkLocal.motivo);
+        return;
+    }
     
     if (entrega === "Delivery") {
         if (!d) return alert("Por favor, ingresá tu dirección.");
