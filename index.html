@@ -1770,7 +1770,7 @@ function eliminarCategoria(catKey) {
 
 function abrirModalSabores(idInput, catKey, itemIdx) {
     const item = completo[catKey].i[itemIdx];
-    const cantidadItems = parseInt(document.getElementById(idInput).value) || 0;
+    const cantidadTotal = parseInt(document.getElementById(idInput).value) || 0;
     const modal = document.getElementById("modal-sabores");
     const body = document.getElementById("modal-sabores-body");
     
@@ -1778,30 +1778,28 @@ function abrirModalSabores(idInput, catKey, itemIdx) {
     body.innerHTML = "";
     const previas = seleccionesUsuario[idInput] || [];
 
-    for (let i = 1; i <= cantidadItems; i++) {
+    for (let i = 1; i <= cantidadTotal; i++) {
         const datosUnidad = previas[i - 1] || { gustos: [], salsa: "", opcion: "" };
-        let htmlUnidad = `<div class="unidad-bloque" id="bloque-${idInput}-${i}"><p>Unidad ${i}</p>`;
+        let htmlUnidad = `<div class="unidad-bloque"><p>Unidad ${i}</p>`;
         
+        // --- SECCIÓN GUSTOS DINÁMICOS ---
         if (item.g && item.g > 0) {
             htmlUnidad += `<div class="contenedor-gustos">`;
-            
-            // Si ya tenía gustos guardados, los cargamos. Si no, cargamos solo 1.
             const gustosAMostrar = datosUnidad.gustos.length > 0 ? datosUnidad.gustos : [""];
             
             gustosAMostrar.forEach((gustoGuardado, index) => {
-                // El primer gusto (index 0) no se puede borrar
                 htmlUnidad += renderizarSelectGusto(item.opt, gustoGuardado, index > 0);
             });
-
             htmlUnidad += `</div>`;
             
-            // Botón para agregar más gustos (solo si no alcanzó el máximo g)
+            const ocultarBtn = gustosAMostrar.length >= item.g ? 'none' : 'block';
             htmlUnidad += `
-                <button class="btn-add-selector" onclick="agregarGustoSelector(this, ${item.g}, '${catKey}', ${itemIdx})">
+                <button class="btn-add-selector" style="display: ${ocultarBtn}" 
+                        onclick="agregarGustoSelector(this, ${item.g}, '${catKey}', ${itemIdx})">
                     <i class="fas fa-plus"></i> Agregar otro gusto
                 </button>`;
         } 
-        // ... (resto de lógica para opciones fijas o salsas se mantiene igual)
+        // --- SECCIÓN OPCIÓN ÚNICA (Si no usa variable G) ---
         else if (item.opt && item.opt.length > 0) {
             const opcionGuardada = datosUnidad.opcion || "";
             htmlUnidad += `
@@ -1809,6 +1807,19 @@ function abrirModalSabores(idInput, catKey, itemIdx) {
                     <option value="">-- Seleccionar opción --</option>
                     ${item.opt.map(o => `<option value="${o}" ${o === opcionGuardada ? 'selected' : ''}>${o}</option>`).join('')}
                 </select>`;
+        }
+
+        // --- SECCIÓN SALSAS (RESTAURADA) ---
+        if (item.llevaSalsa && item.salsas && item.salsas.length > 0) {
+            const salsaGuardada = datosUnidad.salsa || "";
+            htmlUnidad += `
+                <div style="margin-top:10px; border-top: 1px dashed #ccc; padding-top:10px;">
+                    <label style="font-size:11px; color:#e67e22; font-weight:bold; display:block; margin-bottom:5px;">¿Lleva salsa?</label>
+                    <select class="opcion-sel m-salsa" style="border-color:#e67e22">
+                        <option value="Sin salsa">Sin salsa</option>
+                        ${item.salsas.map(s => `<option value="${s}" ${s === salsaGuardada ? 'selected' : ''}>${s}</option>`).join('')}
+                    </select>
+                </div>`;
         }
 
         htmlUnidad += `</div>`;
@@ -1827,16 +1838,13 @@ function renderizarSelectGusto(opciones, seleccionado = "", puedeBorrar = false)
             ${opciones.map(o => `<option value="${o}" ${o === seleccionado ? 'selected' : ''}>${o}</option>`).join('')}
         </select>`;
 
-    if (!puedeBorrar) {
-        return `<div class="wrapper-gusto">${selectHtml}</div>`;
-    }
-
     return `
         <div class="wrapper-gusto">
             ${selectHtml}
-            <button class="btn-eliminar-gusto" onclick="eliminarGustoSelector(this)">
-                <i class="fas fa-trash-can"></i>
-            </button>
+            ${puedeBorrar ? `
+                <button class="btn-eliminar-gusto" onclick="eliminarGustoSelector(this)">
+                    <i class="fas fa-trash-can"></i>
+                </button>` : ''}
         </div>`;
 }
 
@@ -1845,26 +1853,20 @@ function agregarGustoSelector(btn, maxG, catKey, itemIdx) {
     const contenedor = btn.parentElement.querySelector(".contenedor-gustos");
     const opciones = completo[catKey].i[itemIdx].opt;
     
-    const nuevoGustoHtml = renderizarSelectGusto(opciones, "", true); // Siempre puede borrar los nuevos
     const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = nuevoGustoHtml;
+    tempDiv.innerHTML = renderizarSelectGusto(opciones, "", true);
     contenedor.appendChild(tempDiv.firstElementChild);
 
     if (contenedor.querySelectorAll(".m-gusto").length >= maxG) {
         btn.style.display = "none";
     }
 }
-function eliminarGustoSelector(btnEliminar) {
-    const wrapper = btnEliminar.parentElement;
-    const unidadBloque = wrapper.closest(".unidad-bloque");
-    const btnAdd = unidadBloque.querySelector(".btn-add-selector");
-    
-    wrapper.remove();
 
-    // Al borrar uno, siempre nos aseguramos de que el botón "Agregar" vuelva a aparecer
-    if (btnAdd) {
-        btnAdd.style.display = "block";
-    }
+function eliminarGustoSelector(btnEliminar) {
+    const unidadBloque = btnEliminar.closest(".unidad-bloque");
+    const btnAdd = unidadBloque.querySelector(".btn-add-selector");
+    btnEliminar.parentElement.remove();
+    if (btnAdd) btnAdd.style.display = "block";
 }
 function gestionarOpciones(catKey, idx, campo) {
     const prod = completo[catKey].i[idx];
