@@ -1525,7 +1525,7 @@ function comenzarPedido(tipo) {
     if(selectEntrega) {
         selectEntrega.value = (tipo === 'Delivery') ? 'Delivery' : 'Retiro en Local';
     }
-
+    filtrarProductosPorEntrega();
     toggleDireccion()
 
     inicio.style.transition = "all 0.6s ease";
@@ -1535,7 +1535,6 @@ function comenzarPedido(tipo) {
     setTimeout(() => {
         inicio.style.display = "none";
         carrito.style.display = "block"; // MOSTRAMOS el carrito recién acá
-        filtrarProductosPorEntrega();
         window.scrollTo(0, 0);
     }, 600);
 }
