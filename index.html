@@ -550,9 +550,24 @@
             box-sizing: border-box;
             display: none; 
         }
-        #resumen-mini { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 10px; scrollbar-width: none; }
-        #resumen-mini::-webkit-scrollbar { display: none; }
-        .item-badge { background: #eef6ff; color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; white-space: nowrap; border: 1px solid #d0e7ff; }
+        #resumen-mini { 
+            display: flex; 
+            flex-direction: column; /* Cambiado a columna para que los items bajen */
+            gap: 8px; 
+            max-height: 120px;      /* Altura máxima antes de activar el scroll */
+            overflow-y: auto;       /* Activa el scroll vertical */
+            padding-right: 10px; 
+            margin-bottom: 10px; 
+        }
+
+        /* Opcional: Estilo para la barrita de scroll para que no sea fea */
+        #resumen-mini::-webkit-scrollbar { 
+            width: 4px; 
+        }
+        #resumen-mini::-webkit-scrollbar-thumb { 
+            background: #ccc; 
+            border-radius: 10px; 
+        }
 
         #monto { font-size: 26px; color: var(--primary); font-weight: 600; }
         .btn-principal { width: 100%; padding: 18px; border: none; border-radius: 15px; background: var(--primary); color: white; font-size: 18px; font-weight: 600; cursor: pointer; }
@@ -1405,7 +1420,10 @@ function actualizar() {
             }
             
             t += (precio * cant);
-            miniResumen += `<span class="item-badge">${cant} x ${nombre}</span>`;
+            miniResumen += `<div style="display:flex; justify-content:space-between; font-size:13px; border-bottom:1px solid #f0f0f0; padding:4px 0;">
+                    <span>${cant} x ${nombre}</span>
+                    <span style="font-weight:600;">$${precio * cant}</span>
+                </div>`;
         }
     });
 
