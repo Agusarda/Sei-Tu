@@ -1636,26 +1636,47 @@ function filtrarProductosPorEntrega() {
     const cardsSoloLocal = document.querySelectorAll('.solo-local-card');
     
     cardsSoloLocal.forEach(card => {
-        const inputsYBotones = card.querySelectorAll('button, input');
+        // Buscamos todos los elementos interactivos, incluyendo el botón de sabores si existe
+        const elementosInteractivos = card.querySelectorAll('button, input, .btn-sabores');
         
         if (modoEntregaGlobal === 'Delivery') {
-            // En lugar de ocultar, deshabilitamos visualmente
+            // Deshabilitamos la tarjeta visualmente
             card.style.opacity = "0.5";
             card.style.filter = "grayscale(80%)";
-            card.style.pointerEvents = "none"; // Bloquea clicks en toda la card
+            card.style.pointerEvents = "none"; // Esto bloquea clicks en el botón de sabores también
             
-            // Opcional: poner en 0 si ya tenía algo
+            // Si el botón de sabores ya existe, nos aseguramos de que se vea desactivado
+            const btnSabores = card.querySelector('.btn-sabores');
+            if (btnSabores) {
+                btnSabores.style.background = "#ccc";
+                btnSabores.style.cursor = "not-allowed";
+            }
+
+            // Opcional: Resetear cantidad a 0 para evitar errores en el carrito
             const input = card.querySelector('.cantidad');
-            if (input) input.value = 0;
+            if (input) {
+                input.value = 0;
+                // También limpiamos el contenedor de sabores visualmente si estaba abierto
+                const boxId = "box-" + input.id;
+                const contenedorSabores = document.getElementById(boxId);
+                if (contenedorSabores) contenedorSabores.innerHTML = "";
+                // Y borramos la selección del usuario para ese ID
+                delete seleccionesUsuario[input.id];
+            }
         } else {
             // Restauramos estado normal para Take Away
             card.style.opacity = "1";
             card.style.filter = "none";
             card.style.pointerEvents = "auto";
+            
+            const btnSabores = card.querySelector('.btn-sabores');
+            if (btnSabores) {
+                btnSabores.style.background = "#ff9800"; // Color original
+                btnSabores.style.cursor = "pointer";
+            }
         }
     });
 
-    // Actualizamos el carrito por si se resetearon valores
     actualizar();
 }
 function abrirAdmin() {
