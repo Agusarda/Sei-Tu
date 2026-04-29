@@ -1932,21 +1932,85 @@ function gestionarOpciones(catKey, idx, campo) {
     if (!prod[campo]) prod[campo] = [];
 
     const nombreCampo = campo === 'opt' ? 'Gusto/Opción' : 'Salsa';
-    let accion = confirm(`GESTIONAR ${nombreCampo.toUpperCase()}S\n\n¿Aceptar para AÑADIR, Cancelar para ELIMINAR?`);
+    
+    // Si ya existe un cuadro abierto, lo borramos para no duplicar
+    const viejo = document.getElementById('selector-gestion-temp');
+    if(viejo) viejo.remove();
 
-    if (accion) {
-        let nueva = prompt(`Escribí el nuevo ${nombreCampo}:`);
-        if (nueva) {
-            prod[campo].push(nueva);
+    // Generamos el HTML del panel unificado
+    const htmlGestion = `
+        <div id="selector-gestion-temp" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:25px; border-radius:20px; box-shadow:0 0 50px rgba(0,0,0,0.6); z-index:20000; width:320px; border: 1px solid #ddd;">
+            <h3 style="margin-top:0; color:var(--primary); font-size:18px;">Gestionar ${nombreCampo}s</h3>
+            
+            <!-- SECCIÓN AGREGAR -->
+            <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <label style="font-size:12px; font-weight:600; display:block; margin-bottom:5px;">Nuevo ${nombreCampo}:</label>
+                <div style="display:flex; gap:5px;">
+                    <input type="text" id="nuevo-nombre-admin" placeholder="Ej: Vainilla" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:8px;">
+                    <button onclick="ejecutarAltaAdmin('${catKey}', ${idx}, '${campo}')" style="background:var(--accent); color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer;">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SECCIÓN ELIMINAR -->
+            <div>
+                <label style="font-size:12px; font-weight:600; display:block; margin-bottom:5px;">Lista actual (Seleccioná para borrar):</label>
+                <select id="lista-gestion-admin" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px; height:180px; border:1px solid #eee;" size="10">
+                    ${prod[campo].map((o, i) => `<option value="${i}">${o}</option>`).join('')}
+                </select>
+                
+                <div style="display:flex; gap:10px;">
+                    <button onclick="ejecutarBajaAdmin('${catKey}', ${idx}, '${campo}')" style="flex:1; background:#f5f5f5; color:#e74c3c; border:1px solid #e74c3c; padding:10px; border-radius:10px; cursor:pointer; font-weight:600;">Eliminar</button>
+                    <button onclick="document.getElementById('selector-gestion-temp').remove()" style="flex:1; background:#eee; border:none; padding:10px; border-radius:10px; cursor:pointer;">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    const divTemp = document.createElement('div');
+    divTemp.innerHTML = htmlGestion;
+    document.body.appendChild(divTemp.firstElementChild);
+}
+
+// Función para AGREGAR desde la nueva pantalla
+function ejecutarAltaAdmin(catKey, idx, campo) {
+    const input = document.getElementById('nuevo-nombre-admin');
+    const valor = input.value.trim();
+    
+    if (valor) {
+        completo[catKey].i[idx][campo].push(valor);
+        input.value = ""; // Limpiamos el input
+        
+        // Refrescamos la lista interna del cuadro sin cerrarlo
+        const select = document.getElementById('lista-gestion-admin');
+        const nuevaOpcion = document.createElement('option');
+        nuevaOpcion.value = completo[catKey].i[idx][campo].length - 1;
+        nuevaOpcion.text = valor;
+        select.add(nuevaOpcion);
+        
+        renderAdminDashboard(); // Actualizamos el panel de fondo
+    } else {
+        alert("Escribí un nombre válido.");
+    }
+}
+
+// Función para ELIMINAR desde la nueva pantalla
+function ejecutarBajaAdmin(catKey, idx, campo) {
+    const select = document.getElementById('lista-gestion-admin');
+    const elIdx = select.value;
+    
+    if (elIdx !== "") {
+        const nombreEliminar = completo[catKey].i[idx][campo][elIdx];
+        if(confirm(`¿Eliminar "${nombreEliminar}"?`)) {
+            completo[catKey].i[idx][campo].splice(parseInt(elIdx), 1);
+            
+            // Refrescamos el cuadro de gestión (re-llamamos a la función para que se actualice el select)
+            gestionarOpciones(catKey, idx, campo);
             renderAdminDashboard();
         }
-    } else if (prod[campo].length > 0) {
-        let lista = prod[campo].map((o, i) => `${i}: ${o}`).join("\n");
-        let elIdx = prompt(`Ingresá el número de ${nombreCampo} a borrar:\n` + lista);
-        if (elIdx !== null && prod[campo][parseInt(elIdx)]) {
-            prod[campo].splice(parseInt(elIdx), 1);
-            renderAdminDashboard();
-        }
+    } else {
+        alert("Seleccioná qué querés borrar de la lista.");
     }
 }
 </script>
