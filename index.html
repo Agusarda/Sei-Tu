@@ -1139,9 +1139,27 @@ function toggleDireccion() {
     
     const grupoDireccion = document.getElementById("group-direccion");
     const aviso = document.getElementById("aviso-delivery-texto");
+    const selectPago = document.getElementById("pago");
 
     if (grupoDireccion) {
         grupoDireccion.style.display = esDelivery ? "block" : "none";
+    }
+    if (selectPago) {
+        const opcionTarjeta = selectPago.querySelector('option[value="Tarjeta"]');
+        
+        if (esDelivery) {
+            // Si es delivery, ocultamos la opción de tarjeta
+            if (opcionTarjeta) opcionTarjeta.style.display = "none";
+            
+            // Si justo estaba seleccionada la tarjeta, reseteamos a Efectivo
+            if (selectPago.value === "Tarjeta") {
+                selectPago.value = "Efectivo";
+                toggleEfectivo(); // Para que aparezca el campo de "vuelto"
+            }
+        } else {
+            // Si es Take Away, volvemos a mostrar la tarjeta
+            if (opcionTarjeta) opcionTarjeta.style.display = "block";
+        }
     }
 
     if (aviso) {
