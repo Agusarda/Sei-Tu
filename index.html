@@ -707,6 +707,23 @@
             background: #ffccc7;
             transform: translateY(-1px);
         }
+        /* Botón para añadir selectores dinámicamente */
+        .btn-add-selector {
+            background: #f0f7ff;
+            color: var(--primary);
+            border: 2px dashed var(--primary);
+            padding: 10px;
+            border-radius: 12px;
+            width: 100%;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+        .btn-add-selector:hover {
+            background: var(--primary);
+            color: white;
+        }
         /* Estilos generales para los iconos de redes (reutilizables) */
         .red-item {
             width: 45px;
@@ -742,6 +759,31 @@
             justify-content: center;
             gap: 25px;
             margin-top: 30px;
+        }
+        .wrapper-gusto {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .btn-eliminar-gusto {
+            background: #fff1f0;
+            color: #e74c3c;
+            border: 1px solid #ffa39e;
+            border-radius: 8px;
+            width: 40px;
+            height: 48px; /* Misma altura que el select */
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-eliminar-gusto:hover {
+            background: #e74c3c;
+            color: white;
         }
     
     </style>
@@ -1056,12 +1098,10 @@ function toggleMenu() {
     // Si el menú se activa, ocultamos los botones para que no se pisen
     if(sidebar.classList.contains("active")) {
         btnsNav.classList.add("hidden-btn");
-        btnHorarios.classList.add("hidden-btn");
         // Eliminamos la activación del overlay aquí para que no se oscurezca
     } else {
         // Si se cierra, restauramos los botones
         btnsNav.classList.remove("hidden-btn");
-        btnHorarios.classList.remove("hidden-btn");
     }
 }
 
@@ -1078,7 +1118,6 @@ function toggleHorarios() {
     if(modal.classList.contains("active")) {
         btnsNav.classList.add("hidden-btn");
         btnHorarios.classList.add("hidden-btn");
-        redes.classList.add("hidden-btn"); // Agregamos esto
     } else {
         cerrarTodo();
     }
@@ -1309,7 +1348,7 @@ function guardarSabores() {
         let unidadData = { gustos: [], salsa: "", opcion: "" };
         bloque.querySelectorAll(".m-gusto").forEach(sel => {
             if(!sel.value) incompleto = true;
-            unidadData.gustos.push(sel.value);
+            else unidadData.gustos.push(sel.value);
         });
         let salsaSel = bloque.querySelector(".m-salsa");
         if(salsaSel) {
@@ -1731,7 +1770,7 @@ function eliminarCategoria(catKey) {
 
 function abrirModalSabores(idInput, catKey, itemIdx) {
     const item = completo[catKey].i[itemIdx];
-    const cantidad = parseInt(document.getElementById(idInput).value) || 0;
+    const cantidadItems = parseInt(document.getElementById(idInput).value) || 0;
     const modal = document.getElementById("modal-sabores");
     const body = document.getElementById("modal-sabores-body");
     
@@ -1739,40 +1778,37 @@ function abrirModalSabores(idInput, catKey, itemIdx) {
     body.innerHTML = "";
     const previas = seleccionesUsuario[idInput] || [];
 
-    for (let i = 1; i <= cantidad; i++) {
+    for (let i = 1; i <= cantidadItems; i++) {
         const datosUnidad = previas[i - 1] || { gustos: [], salsa: "", opcion: "" };
-        let htmlUnidad = `<div class="unidad-bloque"><p>Unidad ${i}</p>`;
+        let htmlUnidad = `<div class="unidad-bloque" id="bloque-${idInput}-${i}"><p>Unidad ${i}</p>`;
         
-        // Uso de la variable G específica del producto
         if (item.g && item.g > 0) {
-            for (let g = 1; g <= item.g; g++) {
-                const gustoGuardado = datosUnidad.gustos[g - 1] || "";
-                htmlUnidad += `
-                    <select class="opcion-sel m-gusto">
-                        <option value="">-- Elegir Gusto ${g} --</option>
-                        ${item.opt.map(o => `<option value="${o}" ${o === gustoGuardado ? 'selected' : ''}>${o}</option>`).join('')}
-                    </select>`;
-            }
-        } else if (item.opt && item.opt.length > 0) {
+            htmlUnidad += `<div class="contenedor-gustos">`;
+            
+            // Si ya tenía gustos guardados, los cargamos. Si no, cargamos solo 1.
+            const gustosAMostrar = datosUnidad.gustos.length > 0 ? datosUnidad.gustos : [""];
+            
+            gustosAMostrar.forEach((gustoGuardado, index) => {
+                // El primer gusto (index 0) no se puede borrar
+                htmlUnidad += renderizarSelectGusto(item.opt, gustoGuardado, index > 0);
+            });
+
+            htmlUnidad += `</div>`;
+            
+            // Botón para agregar más gustos (solo si no alcanzó el máximo g)
+            htmlUnidad += `
+                <button class="btn-add-selector" onclick="agregarGustoSelector(this, ${item.g}, '${catKey}', ${itemIdx})">
+                    <i class="fas fa-plus"></i> Agregar otro gusto
+                </button>`;
+        } 
+        // ... (resto de lógica para opciones fijas o salsas se mantiene igual)
+        else if (item.opt && item.opt.length > 0) {
             const opcionGuardada = datosUnidad.opcion || "";
             htmlUnidad += `
                 <select class="opcion-sel m-opt">
                     <option value="">-- Seleccionar opción --</option>
                     ${item.opt.map(o => `<option value="${o}" ${o === opcionGuardada ? 'selected' : ''}>${o}</option>`).join('')}
                 </select>`;
-        }
-
-        // Lógica de Salsas en el Modal de Usuario
-        if (item.llevaSalsa && item.salsas && item.salsas.length > 0) {
-            const salsaGuardada = datosUnidad.salsa || "";
-            htmlUnidad += `
-                <div style="margin-top:10px; border-top: 1px dashed #ccc; padding-top:10px;">
-                    <label style="font-size:11px; color:#e67e22; font-weight:bold; display:block; margin-bottom:5px;">¿Lleva salsa?</label>
-                    <select class="opcion-sel m-salsa" style="border-color:#e67e22">
-                        <option value="Sin salsa">Sin salsa</option>
-                        ${item.salsas.map(s => `<option value="${s}" ${s === salsaGuardada ? 'selected' : ''}>${s}</option>`).join('')}
-                    </select>
-                </div>`;
         }
 
         htmlUnidad += `</div>`;
@@ -1783,6 +1819,53 @@ function abrirModalSabores(idInput, catKey, itemIdx) {
     document.getElementById("overlay").classList.add("active");
 }
 
+// Función auxiliar para renderizar el HTML del select
+function renderizarSelectGusto(opciones, seleccionado = "", puedeBorrar = false) {
+    const selectHtml = `
+        <select class="opcion-sel m-gusto" style="margin-bottom: 0; flex: 1;">
+            <option value="">-- Elegir Gusto --</option>
+            ${opciones.map(o => `<option value="${o}" ${o === seleccionado ? 'selected' : ''}>${o}</option>`).join('')}
+        </select>`;
+
+    if (!puedeBorrar) {
+        return `<div class="wrapper-gusto">${selectHtml}</div>`;
+    }
+
+    return `
+        <div class="wrapper-gusto">
+            ${selectHtml}
+            <button class="btn-eliminar-gusto" onclick="eliminarGustoSelector(this)">
+                <i class="fas fa-trash-can"></i>
+            </button>
+        </div>`;
+}
+
+// Lógica para añadir el nuevo listbox al hacer click
+function agregarGustoSelector(btn, maxG, catKey, itemIdx) {
+    const contenedor = btn.parentElement.querySelector(".contenedor-gustos");
+    const opciones = completo[catKey].i[itemIdx].opt;
+    
+    const nuevoGustoHtml = renderizarSelectGusto(opciones, "", true); // Siempre puede borrar los nuevos
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = nuevoGustoHtml;
+    contenedor.appendChild(tempDiv.firstElementChild);
+
+    if (contenedor.querySelectorAll(".m-gusto").length >= maxG) {
+        btn.style.display = "none";
+    }
+}
+function eliminarGustoSelector(btnEliminar) {
+    const wrapper = btnEliminar.parentElement;
+    const unidadBloque = wrapper.closest(".unidad-bloque");
+    const btnAdd = unidadBloque.querySelector(".btn-add-selector");
+    
+    wrapper.remove();
+
+    // Al borrar uno, siempre nos aseguramos de que el botón "Agregar" vuelva a aparecer
+    if (btnAdd) {
+        btnAdd.style.display = "block";
+    }
+}
 function gestionarOpciones(catKey, idx, campo) {
     const prod = completo[catKey].i[idx];
     if (!prod[campo]) prod[campo] = [];
