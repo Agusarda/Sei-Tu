@@ -980,14 +980,6 @@
 
 <script>
     // Productos que NO se pueden pedir online (solo consumo en local)
-const productosSoloLocal = [
-    "Cucurucho 1 bocha", 
-    "Cucurucho 2 bochas", 
-    "Cucurucho 3 bochas", 
-    "Vasito 1 bocha", 
-    "Vasito 2 bochas"
-]
-
 // --- CONFIGURACIÓN JSONBIN ---
 const BIN_ID = '69ee89a1aaba8821973e6cfb';
 const API_KEY = '$2a$10$fJiPGkrz/fa4Ow2tyjqLiO/6bGQAiR5SqeToPjraAi0NFaoDOaXZ6'; 
@@ -1580,55 +1572,53 @@ function renderAdminDashboard() {
     container.innerHTML = "";
     const keys = Object.keys(completo);
 
-    keys.forEach((catKey, index) => {
+    keys.forEach((catKey) => {
         const cat = completo[catKey];
         let catHtml = `
-            <div style="border: 1px solid #ddd; border-left: 5px solid var(--primary); padding: 20px; border-radius: 12px; margin-bottom: 30px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+            <div style="border: 1px solid #ddd; border-left: 5px solid var(--primary); padding: 20px; border-radius: 12px; margin-bottom: 30px; background: #fff;">
                 <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
-                    <input type="text" value="${cat.t}" onchange="completo['${catKey}'].t = this.value" style="font-weight: bold; font-size: 18px; flex-grow: 1; color: var(--primary);">
-                    
-                    <div style="display: flex; gap: 5px;">
-                        <button class="btn-qty" onclick="moverCat('${catKey}', -1)" ${index === 0 ? 'disabled' : ''}>▲</button>
-                        <button class="btn-qty" onclick="moverCat('${catKey}', 1)" ${index === keys.length - 1 ? 'disabled' : ''}>▼</button>
-                    </div>
-                    <button onclick="eliminarCategoria('${catKey}')" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 20px;"><i class="fas fa-trash"></i></button>
+                    <input type="text" value="${cat.t}" onchange="completo['${catKey}'].t = this.value" style="font-weight: bold; flex-grow: 1; font-size: 18px;">
+                    <button onclick="eliminarCategoria('${catKey}')" style="color: #e74c3c; border: none; background: none; cursor:pointer;"><i class="fas fa-trash"></i></button>
                 </div>
                 
                 <div id="productos-${catKey}">
-                    <div style="display: grid; grid-template-columns: 2fr 100px 1.5fr 100px 90px 120px 40px; gap: 8px; margin-bottom: 10px; padding: 0 10px; font-size: 11px; font-weight: bold; color: #888; text-align: center;">
-                        <div style="text-align: left;">PRODUCTO</div>
-                        <div>PRECIO ($)</div>
-                        <div>LINK IMAGEN</div>
-                        <div>SOLO LOCAL</div>
-                        <div>ORDEN</div>
-                        <div>OPCIONES</div>
-                        <div></div>
+                    <!-- Cabecera de tabla adaptada -->
+                    <div style="display: grid; grid-template-columns: 2fr 80px 1fr 60px 60px 180px 40px; gap: 10px; font-size: 10px; font-weight: bold; color: #888; text-align: center; margin-bottom: 10px;">
+                        <div style="text-align:left">PRODUCTO</div><div>PRECIO</div><div>LINK IMG</div><div>SOLO L.</div><div>SALSAS?</div><div>OPCIONES</div><div></div>
                     </div>
 
                     ${cat.i.map((prod, idx) => `
-                        <div class="admin-row-producto" style="grid-template-columns: 2fr 100px 1.5fr 100px 90px 120px 40px; gap: 8px;">
+                        <div class="admin-row-producto" style="grid-template-columns: 2fr 80px 1fr 60px 60px 180px 40px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
                             <input type="text" value="${prod.n}" onchange="completo['${catKey}'].i[${idx}].n = this.value">
                             <input type="number" value="${prod.p}" onchange="completo['${catKey}'].i[${idx}].p = parseInt(this.value)">
-                            <input type="text" value="${prod.img || ''}" onchange="completo['${catKey}'].i[${idx}].img = this.value" placeholder="Link imagen">
-        
-                            <label style="display: flex; justify-content: center;"><input type="checkbox" ${prod.sl ? 'checked' : ''} onchange="completo['${catKey}'].i[${idx}].sl = this.checked"></label>
+                            <input type="text" value="${prod.img || ''}" onchange="completo['${catKey}'].i[${idx}].img = this.value">
+                            
+                            <input type="checkbox" ${prod.sl ? 'checked' : ''} onchange="completo['${catKey}'].i[${idx}].sl = this.checked">
+                            
+                            <!-- Checkbox para habilitar salsas -->
+                            <input type="checkbox" ${prod.llevaSalsa ? 'checked' : ''} onchange="completo['${catKey}'].i[${idx}].llevaSalsa = this.checked; renderAdminDashboard()">
 
-                            <div style="display: flex; gap: 2px;">
-                                <button class="btn-qty" onclick="moverProd('${catKey}', ${idx}, -1)" ${idx === 0 ? 'disabled' : ''}>↑</button>
-                                <button class="btn-qty" onclick="moverProd('${catKey}', ${idx}, 1)" ${idx === cat.i.length - 1 ? 'disabled' : ''}>↓</button>
+                            <div style="display: flex; flex-direction: column; gap: 5px;">
+                                <!-- Control de variable G (Max Gustos) -->
+                                <div style="display:flex; align-items:center; gap:5px; background:#f0f0f0; padding:3px; border-radius:5px;">
+                                    <span style="font-size:10px; font-weight:bold">Max:</span>
+                                    <input type="number" value="${prod.g || 0}" style="width:35px; font-size:11px;" onchange="completo['${catKey}'].i[${idx}].g = parseInt(this.value)">
+                                    <button class="btn-admin-opt" onclick="gestionarOpciones('${catKey}', ${idx}, 'opt')">Gustos (${prod.opt ? prod.opt.length : 0})</button>
+                                </div>
+                                
+                                <!-- Botón de Salsas (Solo aparece si el checkbox está tildado) -->
+                                ${prod.llevaSalsa ? `
+                                    <button class="btn-admin-opt" style="background:#e67e22" onclick="gestionarOpciones('${catKey}', ${idx}, 'salsas')">
+                                        Salsas (${prod.salsas ? prod.salsas.length : 0})
+                                    </button>
+                                ` : ''}
                             </div>
 
-                            <div style="text-align: center;">
-                                <button class="btn-admin-opt" onclick="gestionarOpciones('${catKey}', ${idx})">
-                                    <i class="fas fa-list"></i> (${prod.opt ? prod.opt.length : 0})
-                                </button>
-                            </div>
-
-                            <button onclick="eliminarProducto('${catKey}', ${idx})" style="color: #e74c3c; border: none; background: none; cursor: pointer;">×</button>
+                            <button onclick="eliminarProducto('${catKey}', ${idx})" style="color: #e74c3c; border: none; background: none; cursor:pointer;">×</button>
                         </div>
-                `).join('')}
+                    `).join('')}
                 </div>
-                <button class="btn-principal" onclick="nuevoProducto('${catKey}')" style="margin-top: 15px; background: #eee; color: #333; font-size: 13px; padding: 8px 15px;">+ Agregar Producto a ${cat.t}</button>
+                <button class="btn-principal" onclick="nuevoProducto('${catKey}')" style="margin-top: 15px; background: #eee; color: #333; font-size: 12px;">+ Agregar Producto</button>
             </div>
         `;
         container.innerHTML += catHtml;
@@ -1701,45 +1691,45 @@ function abrirModalSabores(idInput, catKey, itemIdx) {
     const cantidad = parseInt(document.getElementById(idInput).value) || 0;
     const modal = document.getElementById("modal-sabores");
     const body = document.getElementById("modal-sabores-body");
-    const titulo = document.getElementById("modal-sabores-titulo");
-
+    
     idActualModal = idInput; 
-    titulo.innerText = `Opciones para ${item.n}`;
     body.innerHTML = "";
-
-    // Obtenemos lo que el usuario ya eligió anteriormente (si existe)
     const previas = seleccionesUsuario[idInput] || [];
 
     for (let i = 1; i <= cantidad; i++) {
-        // Obtenemos los datos guardados para esta unidad específica (si existen)
         const datosUnidad = previas[i - 1] || { gustos: [], salsa: "", opcion: "" };
+        let htmlUnidad = `<div class="unidad-bloque"><p>Unidad ${i}</p>`;
         
-        let htmlUnidad = `<div class="unidad-bloque">
-                            <p>Unidad ${i}</p>`;
-        
-        // Caso: Helados con múltiples gustos (g > 0)
+        // Uso de la variable G específica del producto
         if (item.g && item.g > 0) {
             for (let g = 1; g <= item.g; g++) {
                 const gustoGuardado = datosUnidad.gustos[g - 1] || "";
                 htmlUnidad += `
                     <select class="opcion-sel m-gusto">
                         <option value="">-- Elegir Gusto ${g} --</option>
-                        ${item.opt.map(o => `
-                            <option value="${o}" ${o === gustoGuardado ? 'selected' : ''}>${o}</option>
-                        `).join('')}
+                        ${item.opt.map(o => `<option value="${o}" ${o === gustoGuardado ? 'selected' : ''}>${o}</option>`).join('')}
                     </select>`;
             }
-        } 
-        // Caso: Productos con una sola opción (alfajores, salsas, etc.)
-        else if (item.opt && item.opt.length > 0) {
+        } else if (item.opt && item.opt.length > 0) {
             const opcionGuardada = datosUnidad.opcion || "";
             htmlUnidad += `
                 <select class="opcion-sel m-opt">
                     <option value="">-- Seleccionar opción --</option>
-                    ${item.opt.map(o => `
-                        <option value="${o}" ${o === opcionGuardada ? 'selected' : ''}>${o}</option>
-                    `).join('')}
+                    ${item.opt.map(o => `<option value="${o}" ${o === opcionGuardada ? 'selected' : ''}>${o}</option>`).join('')}
                 </select>`;
+        }
+
+        // Lógica de Salsas en el Modal de Usuario
+        if (item.llevaSalsa && item.salsas && item.salsas.length > 0) {
+            const salsaGuardada = datosUnidad.salsa || "";
+            htmlUnidad += `
+                <div style="margin-top:10px; border-top: 1px dashed #ccc; padding-top:10px;">
+                    <label style="font-size:11px; color:#e67e22; font-weight:bold; display:block; margin-bottom:5px;">¿Lleva salsa?</label>
+                    <select class="opcion-sel m-salsa" style="border-color:#e67e22">
+                        <option value="Sin salsa">Sin salsa</option>
+                        ${item.salsas.map(s => `<option value="${s}" ${s === salsaGuardada ? 'selected' : ''}>${s}</option>`).join('')}
+                    </select>
+                </div>`;
         }
 
         htmlUnidad += `</div>`;
@@ -1750,24 +1740,24 @@ function abrirModalSabores(idInput, catKey, itemIdx) {
     document.getElementById("overlay").classList.add("active");
 }
 
-function gestionarOpciones(catKey, idx) {
+function gestionarOpciones(catKey, idx, campo) {
     const prod = completo[catKey].i[idx];
-    if (!prod.opt) prod.opt = [];
+    if (!prod[campo]) prod[campo] = [];
 
-    let mensaje = `Producto: ${prod.n}\nOpciones: ${prod.opt.join(", ")}`;
-    let accion = confirm(`${mensaje}\n\n¿Aceptar para AGREGAR, Cancelar para ELIMINAR?`);
+    const nombreCampo = campo === 'opt' ? 'Gusto/Opción' : 'Salsa';
+    let accion = confirm(`GESTIONAR ${nombreCampo.toUpperCase()}S\n\n¿Aceptar para AÑADIR, Cancelar para ELIMINAR?`);
 
     if (accion) {
-        let nueva = prompt("Escribí el nuevo sabor u opción:");
+        let nueva = prompt(`Escribí el nuevo ${nombreCampo}:`);
         if (nueva) {
-            prod.opt.push(nueva);
+            prod[campo].push(nueva);
             renderAdminDashboard();
         }
-    } else if (prod.opt.length > 0) {
-        let lista = prod.opt.map((o, i) => `${i}: ${o}`).join("\n");
-        let elIdx = prompt("Número a borrar:\n" + lista);
-        if (elIdx !== null && prod.opt[parseInt(elIdx)]) {
-            prod.opt.splice(parseInt(elIdx), 1);
+    } else if (prod[campo].length > 0) {
+        let lista = prod[campo].map((o, i) => `${i}: ${o}`).join("\n");
+        let elIdx = prompt(`Ingresá el número de ${nombreCampo} a borrar:\n` + lista);
+        if (elIdx !== null && prod[campo][parseInt(elIdx)]) {
+            prod[campo].splice(parseInt(elIdx), 1);
             renderAdminDashboard();
         }
     }
