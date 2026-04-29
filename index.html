@@ -1638,30 +1638,42 @@ function abrirModalSabores(idInput, catKey, itemIdx) {
     const body = document.getElementById("modal-sabores-body");
     const titulo = document.getElementById("modal-sabores-titulo");
 
-    idActualModal = idInput; // Seteamos la variable global para el guardado
+    idActualModal = idInput; 
     titulo.innerText = `Opciones para ${item.n}`;
     body.innerHTML = "";
 
+    // Obtenemos lo que el usuario ya eligió anteriormente (si existe)
+    const previas = seleccionesUsuario[idInput] || [];
+
     for (let i = 1; i <= cantidad; i++) {
+        // Obtenemos los datos guardados para esta unidad específica (si existen)
+        const datosUnidad = previas[i - 1] || { gustos: [], salsa: "", opcion: "" };
+        
         let htmlUnidad = `<div class="unidad-bloque">
                             <p>Unidad ${i}</p>`;
         
-        // Si el producto permite "g" cantidad de gustos (ej: helado por kilo)
+        // Caso: Helados con múltiples gustos (g > 0)
         if (item.g && item.g > 0) {
             for (let g = 1; g <= item.g; g++) {
+                const gustoGuardado = datosUnidad.gustos[g - 1] || "";
                 htmlUnidad += `
                     <select class="opcion-sel m-gusto">
                         <option value="">-- Elegir Gusto ${g} --</option>
-                        ${item.opt.map(o => `<option value="${o}">${o}</option>`).join('')}
+                        ${item.opt.map(o => `
+                            <option value="${o}" ${o === gustoGuardado ? 'selected' : ''}>${o}</option>
+                        `).join('')}
                     </select>`;
             }
         } 
-        // Si es un producto con una sola opción (ej: salsas o tipos de postre)
+        // Caso: Productos con una sola opción (alfajores, salsas, etc.)
         else if (item.opt && item.opt.length > 0) {
+            const opcionGuardada = datosUnidad.opcion || "";
             htmlUnidad += `
                 <select class="opcion-sel m-opt">
                     <option value="">-- Seleccionar opción --</option>
-                    ${item.opt.map(o => `<option value="${o}">${o}</option>`).join('')}
+                    ${item.opt.map(o => `
+                        <option value="${o}" ${o === opcionGuardada ? 'selected' : ''}>${o}</option>
+                    `).join('')}
                 </select>`;
         }
 
