@@ -874,6 +874,15 @@
 <div class="nav-buttons" id="nav-btns">
     <button class="menu-toggle" onclick="toggleMenu()">☰ Menú</button>
 </div>
+<!-- Botones de intercambio rápido (Arriba a la derecha) -->
+<div id="quick-switch" style="position: fixed; top: 15px; right: 15px; z-index: 8500; display: none; gap: 10px;">
+    <button id="switch-to-takeaway" onclick="comenzarPedido('Retiro')" style="background: #0072ff; color: white; border: none; padding: 10px 18px; border-radius: 50px; font-weight: 600; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: none;">
+        🛍️ Ir a Take Away
+    </button>
+    <button id="switch-to-delivery" onclick="comenzarPedido('Delivery')" style="background: #e67e22; color: white; border: none; padding: 10px 18px; border-radius: 50px; font-weight: 600; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: none;">
+        🛵 Ir a Delivery
+    </button>
+</div>
 
 <div class="overlay" id="overlay" onclick="cerrarTodo()"></div>
 
@@ -1438,6 +1447,7 @@ function cambiarPaso(paso) {
     const btnAccion = document.getElementById("btn-accion");
 
     if (paso === 2) {
+        document.getElementById('quick-switch').style.display = "none";
         // 1. VALIDACIÓN DE CARRITO VACÍO
         // Usamos window.totalGlobalNumerico que se setea en actualizar()
         if (!window.totalGlobalNumerico || window.totalGlobalNumerico <= 0) {
@@ -1488,6 +1498,7 @@ function cambiarPaso(paso) {
         window.scrollTo(0, 0);
 
     } else {
+        document.getElementById('quick-switch').style.display = "flex";
         // VOLVER AL PASO 1
         pasoProductos.style.display = "block";
         pasoDatos.style.display = "none";
@@ -1594,6 +1605,9 @@ function comenzarPedido(tipo) {
     modoEntregaGlobal = tipo;
     const inicio = document.getElementById('pantalla-inicio');
     const carrito = document.getElementById('carrito'); // Referencia al carrito
+    const quickSwitch = document.getElementById('quick-switch');
+    const btnToTakeAway = document.getElementById('switch-to-takeaway');
+    const btnToDelivery = document.getElementById('switch-to-delivery');
 
     const selectEntrega = document.getElementById("entrega");
     if(selectEntrega) {
@@ -1602,15 +1616,30 @@ function comenzarPedido(tipo) {
     filtrarProductosPorEntrega();
     toggleDireccion()
 
-    inicio.style.transition = "all 0.6s ease";
-    inicio.style.opacity = "0";
-    inicio.style.transform = "scale(1.1)";
-    
-    setTimeout(() => {
-        inicio.style.display = "none";
-        carrito.style.display = "block"; // MOSTRAMOS el carrito recién acá
-        window.scrollTo(0, 0);
-    }, 600);
+    // 2. Lógica de los botones superiores (Intercambio)
+    quickSwitch.style.display = "flex";
+    if (tipo === 'Delivery') {
+        btnToTakeAway.style.display = "block";  // Si elijo Delivery, muestro botón Take Away
+        btnToDelivery.style.display = "none";
+    } else {
+        btnToDelivery.style.display = "block";  // Si elijo Take Away, muestro botón Delivery
+        btnToTakeAway.style.display = "none";
+    }
+
+    if (inicio.style.display !== "none") {
+        inicio.style.transition = "all 0.6s ease";
+        inicio.style.opacity = "0";
+        inicio.style.transform = "scale(1.1)";
+        
+        setTimeout(() => {
+            inicio.style.display = "none";
+            carrito.style.display = "block";
+            window.scrollTo(0, 0);
+        }, 600);
+    } else {
+        // Si el usuario ya estaba en el menú y cambió de modo, cerramos el sidebar por si estaba abierto
+        cerrarTodo();
+    }
 }
 function filtrarProductosPorEntrega() {
     // Si todavía no se eligió modo (está en la pantalla de inicio), no hacemos nada
