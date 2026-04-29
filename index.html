@@ -1631,19 +1631,32 @@ function comenzarPedido(tipo) {
     }
 }
 function filtrarProductosPorEntrega() {
-    // Eliminamos la lógica de ocultar (display: none) para que siempre se vean
-    // pero puedes añadir un estilo opaco para indicar que no son para delivery
+    if (!modoEntregaGlobal) return;
+
     const cardsSoloLocal = document.querySelectorAll('.solo-local-card');
     
     cardsSoloLocal.forEach(card => {
+        const inputsYBotones = card.querySelectorAll('button, input');
+        
         if (modoEntregaGlobal === 'Delivery') {
-            card.style.opacity = "0.6"; // Efecto visual de deshabilitado
-            card.style.border = "1px solid #ffccc7";
+            // En lugar de ocultar, deshabilitamos visualmente
+            card.style.opacity = "0.5";
+            card.style.filter = "grayscale(80%)";
+            card.style.pointerEvents = "none"; // Bloquea clicks en toda la card
+            
+            // Opcional: poner en 0 si ya tenía algo
+            const input = card.querySelector('.cantidad');
+            if (input) input.value = 0;
         } else {
+            // Restauramos estado normal para Take Away
             card.style.opacity = "1";
-            card.style.border = "none";
+            card.style.filter = "none";
+            card.style.pointerEvents = "auto";
         }
     });
+
+    // Actualizamos el carrito por si se resetearon valores
+    actualizar();
 }
 function abrirAdmin() {
     document.getElementById('modal-admin').classList.add('active');
