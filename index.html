@@ -1064,40 +1064,28 @@
 </div>
 
 <script>
-    // Productos que NO se pueden pedir online (solo consumo en local)
-// --- CONFIGURACIÓN JSONBIN ---
-const BIN_ID = '69ee89a1aaba8821973e6cfb';
-const API_KEY = '$2a$10$fJiPGkrz/fa4Ow2tyjqLiO/6bGQAiR5SqeToPjraAi0NFaoDOaXZ6'; 
-const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
+const URL = "https://cdn.jsdelivr.net/gh/Agusarda/heladeria-base/base.json";
 let completo = {}; // Se cargará desde la nube
 let seleccionesUsuario = {};
 let passwordBuffer = "";
 const ADMIN_PASS = "admin123"; // Cambiá esto
-
 const btnVaciar = document.getElementById("btn-vaciar");
 
 // --- CARGA DE DATOS ---
 async function cargarDatos() {
     try {
-        // Agregamos el parámetro de velocidad directamente aquí
-        const res = await fetch(`${URL}?meta=false`, {
-            method: 'GET',
-            headers: { 
-                "X-Master-Key": API_KEY,
-                "X-Bin-Meta": false 
-            }
-        });
-
+        const res = await fetch(URL); // Carga directa y ultra rápida
+        
         if (!res.ok) {
-            throw new Error(`Error HTTP: ${res.status}`);
+            throw new Error('Error al cargar desde GitHub');
         }
 
         completo = await res.json();
-        console.log("Datos cargados:", completo);
+        console.log("Datos cargados desde el nodo local de jsDelivr");
         init(); 
     } catch (err) {
-        console.error("Error detallado:", err);
+        console.error("Error crítico:", err);
         alert("Error al conectar con la base de datos.");
     }
 }
