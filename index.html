@@ -554,13 +554,50 @@
             display: none; 
         }
         #resumen-mini { 
-            display: flex; 
-            flex-direction: column; /* Cambiado a columna para que los items bajen */
-            gap: 8px; 
-            max-height: 120px;      /* Altura máxima antes de activar el scroll */
-            overflow-y: auto;       /* Activa el scroll vertical */
-            padding-right: 10px; 
-            margin-bottom: 10px; 
+            max-height: 0; /* Cerrado por defecto */
+            overflow: hidden;
+            transition: max-height 0.3s ease-out; /* Animación suave */
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        #resumen-mini.abierto {
+            max-height: 200px; /* Altura máxima cuando está expandido */
+            margin-bottom: 15px;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        /* Estilo para el nuevo botón de Ver Detalles */
+        .btn-ver-detalle {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-ver-detalle i {
+            transition: transform 0.3s;
+        }
+
+        /* Rota la flecha cuando está abierto */
+        .btn-ver-detalle.activo i {
+            transform: rotate(180deg);
+        }
+
+        .carrito-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
         }
 
         /* Opcional: Estilo para la barrita de scroll para que no sea fea */
@@ -704,27 +741,20 @@
         }
 
         #btn-vaciar {
-            background: #fff1f0;
+            background: none;
             color: #e74c3c;
-            border: 1px solid #ffa39e;
-            padding: 8px 15px;
-            border-radius: 10px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 12px;
-            font-weight: 600;
+            border: none;
+            padding: 5px;
             cursor: pointer;
-            margin-bottom: 15px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s;
+            font-size: 18px; /* Tamaño del tacho */
+            transition: transform 0.2s;
+            display: none; /* Se controla por JS */
+            margin: 0;
         }
 
         #btn-vaciar:hover {
-            background: #ffccc7;
-            transform: translateY(-1px);
+            background: none;
+            transform: scale(1.2);
         }
         /* Botón para añadir selectores dinámicamente */
         .btn-add-selector {
@@ -1032,13 +1062,21 @@
 
     </div>
     <div id="carrito">
-        <div id="resumen-mini">Tu carrito está vacío</div>
+        <div class="carrito-header">
+            <!-- Botón que controla la expansión -->
+            <button class="btn-ver-detalle" onclick="toggleDetalle()">
+                <i class="fas fa-chevron-up"></i> Ver detalle del pedido
+            </button>
+        
+            <button id="btn-vaciar" onclick="vaciarCarrito()">
+                <i class="fas fa-trash-can"></i>
+            </button>
+        </div>
 
-        <button id="btn-vaciar" onclick="vaciarCarrito()" style="display: none;">
-            <i class="fas fa-trash-can"></i> Vaciar carrito
-        </button>
+        <!-- El resumen ahora empieza vacío y oculto -->
+        <div id="resumen-mini"></div>
 
-        <div class="footer-total" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <div class="footer-total" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; margin-top: 10px;">
             <span style="font-weight: 600; font-size: 18px;">Total:</span> 
             <span id="monto">$0</span>
         </div>
@@ -1703,6 +1741,13 @@ function comenzarPedido(tipo) {
         // Si el usuario ya estaba en el menú y cambió de modo, cerramos el sidebar por si estaba abierto
         cerrarTodo();
     }
+}
+function toggleDetalle() {
+    const resumen = document.getElementById('resumen-mini');
+    const btn = document.querySelector('.btn-ver-detalle');
+    
+    resumen.classList.toggle('abierto');
+    btn.classList.toggle('activo');
 }
 function filtrarProductosPorEntrega() {
     if (!modoEntregaGlobal) return;
