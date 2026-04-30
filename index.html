@@ -1466,6 +1466,19 @@ function actualizar() {
         const textoFinal = t > 0 ? resumenConSabores + `\n💰 TOTAL: $${t}` : "No hay productos seleccionados.";
         contenedorResumen.innerText = textoFinal;
     }
+    // Buscamos el botón de acción
+    const btnAccion = document.getElementById("btn-accion");
+    if (btnAccion) {
+        if (window.totalGlobalNumerico <= 0) {
+            btnAccion.disabled = true; // Bloqueo nativo de HTML
+            btnAccion.style.opacity = "0.5";
+            btnAccion.style.cursor = "not-allowed";
+        } else {
+            btnAccion.disabled = false;
+            btnAccion.style.opacity = "1";
+            btnAccion.style.cursor = "pointer";
+        }
+    }
 }
 function cambiarPaso(paso) {
     actualizar();
@@ -1562,6 +1575,10 @@ function vaciarCarrito() {
 }
 
 function enviar() {
+    if (!window.totalGlobalNumerico || window.totalGlobalNumerico <= 0) {
+        alert("El carrito está vacío. No se puede enviar el pedido.");
+        return; // Detiene la ejecución por completo
+    }
     const n = document.getElementById("nombre").value.trim();
     const d = document.getElementById("direccion").value.trim();
     const entrega = modoEntregaGlobal;
