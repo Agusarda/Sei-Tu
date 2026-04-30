@@ -1080,10 +1080,11 @@ const btnVaciar = document.getElementById("btn-vaciar");
 // --- CARGA DE DATOS ---
 async function cargarDatos() {
     try {
-        const res = await fetch(`${URL}/latest`, {
-            method: 'GET', // Aseguramos el método
+        // Agregamos el parámetro de velocidad directamente aquí
+        const res = await fetch(`${URL}?meta=false`, {
+            method: 'GET',
             headers: { 
-                "X-Master-Key": API_KEY, // Verificá que esta variable tenga la Key
+                "X-Master-Key": API_KEY,
                 "X-Bin-Meta": false 
             }
         });
@@ -1093,11 +1094,11 @@ async function cargarDatos() {
         }
 
         completo = await res.json();
-        console.log("Datos cargados:", completo); // Para debug
+        console.log("Datos cargados:", completo);
         init(); 
     } catch (err) {
         console.error("Error detallado:", err);
-        alert("Error al conectar con la base de datos. Revisá la consola (F12).");
+        alert("Error al conectar con la base de datos.");
     }
 }
 
