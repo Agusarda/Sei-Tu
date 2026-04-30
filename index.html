@@ -1094,33 +1094,47 @@ const database = firebase.database();
 // --- CARGA DE DATOS ---
 async function cargarDatos() {
     try {
-        // Obtenemos la referencia a la raíz de tu base de datos
         const snapshot = await database.ref('/').once('value');
-        completo = snapshot.val();
+        const data = snapshot.val();
         
-        if (completo) {
-            console.log("Datos cargados desde Firebase");
+        if (data) {
+            // Convertimos a array, ordenamos por 'o' y volvemos a objeto
+            const ordenado = Object.entries(data)
+                .sort(([, a], [, b]) => (a.o || 0) - (b.o || 0));
+            
+            completo = {};
+            ordenado.forEach(([k, v]) => completo[k] = v);
+            
+            console.log("Datos cargados y ordenados");
             init(); 
-        } else {
-            console.error("La base de datos está vacía");
         }
     } catch (err) {
-        console.error("Error al conectar con Firebase:", err);
-        alert("Error de conexión con la nube.");
+        console.error("Error:", err);
     }
 }
-async function guardarEnNube() {
-    try {
-        // Guardamos todo el objeto 'completo' en la raíz de la base de datos
-        await database.ref('/').set(completo);
-        
-        alert("¡Cambios sincronizados en la nube!");
-        cerrarAdmin();
-        init(); 
-    } catch (err) {
-        console.error(err);
-        alert("Error al guardar en Firebase: " + err.message);
-    }
+function guardarEnNube() {
+    // 1. Referencia a la base de datos
+    const dbRef = database.ref('/');
+
+    // 2. Intentar guardar
+    dbRef.set(completo)
+        .then(() => {
+            // Si entra acá, Firebase confirmó la recepción
+            console.log("Confirmado por Firebase");
+            alert("¡Cambios guardados con éxito!");
+            
+            // Cerramos el panel antes de recargar para evitar bugs visuales
+            const panel = document.getElementById('modal-admin');
+            if(panel) panel.style.display = 'none';
+
+            // Recargamos para limpiar la memoria y ver el nuevo orden
+            location.reload(); 
+        })
+        .catch((error) => {
+            // Solo si falla la conexión o los permisos
+            console.error("Error real de Firebase:", error);
+            alert("Error al guardar: " + error.message);
+        });
 }
 
 // --- DETECTOR DE CONTRASEÑA ---
@@ -1817,21 +1831,39 @@ function renderAdminDashboard() {
 function moverProd(catKey, index, direccion) {
     const arr = completo[catKey].i;
     const nuevoIndex = index + direccion;
-    // Intercambio de posición (Swap)
-    [arr[index], arr[nuevoIndex]] = [arr[nuevoIndex], arr[index]];
+
+    if (nuevoIndex < 0 || nuevoIndex >= arr.length) return;
+
+    // Intercambio de posición
+    const temp = arr[index];
+    arr[index] = arr[nuevoIndex];
+    arr[nuevoIndex] = temp;
+
+    // IMPORTANTE: Refrescar el dashboard para que los inputs 
+    // reflejen el nuevo orden antes de guardar
     renderAdminDashboard();
 }
 
 function moverCat(catKey, direccion) {
-    const keys = Object.keys(completo);
-    const index = keys.indexOf(catKey);
-    const nuevoIndex = index + direccion;
-    
-    const entries = Object.entries(completo);
-    [entries[index], entries[nuevoIndex]] = [entries[nuevoIndex], entries[index]];
-    
-    // Reconstruimos el objeto 'completo' con el nuevo orden de las keys
-    completo = Object.fromEntries(entries);
+    let entries = Object.entries(completo);
+    let index = entries.findIndex(([key]) => key === catKey);
+    let nuevoIndex = index + direccion;
+
+    if (nuevoIndex < 0 || nuevoIndex >= entries.length) return;
+
+    // Intercambio de posición en el array temporal
+    let temp = entries[index];
+    entries[index] = entries[nuevoIndex];
+    entries[nuevoIndex] = temp;
+
+    // Reconstrucción del objeto y ASIGNACIÓN DE ORDEN
+    let nuevoCompleto = {};
+    entries.forEach(([key, value], i) => {
+        value.o = i; // Asignamos la propiedad 'o' (orden)
+        nuevoCompleto[key] = value;
+    });
+
+    completo = nuevoCompleto;
     renderAdminDashboard();
 }
 // Funciones Auxiliares ABM
