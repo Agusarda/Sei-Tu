@@ -1065,7 +1065,7 @@
 
 <script>
 
-const URL = "https://cdn.jsdelivr.net/gh/Agusarda/Sei-Tu/base.json";
+const URL = "base.json";
 let completo = {}; // Se cargará desde la nube
 let seleccionesUsuario = {};
 let passwordBuffer = "";
@@ -1075,18 +1075,19 @@ const btnVaciar = document.getElementById("btn-vaciar");
 // --- CARGA DE DATOS ---
 async function cargarDatos() {
     try {
-        const res = await fetch(URL); // Carga directa y ultra rápida
+        // Ahora es una llamada simple, sin headers ni API keys
+        const res = await fetch(URL); 
         
         if (!res.ok) {
-            throw new Error('Error al cargar desde GitHub');
+            throw new Error(`Error al cargar: ${res.status}`);
         }
 
         completo = await res.json();
-        console.log("Datos cargados desde el nodo local de jsDelivr");
+        console.log("Datos cargados localmente con éxito");
         init(); 
     } catch (err) {
-        console.error("Error crítico:", err);
-        alert("Error al conectar con la base de datos.");
+        console.error("Error detallado:", err);
+        alert("Error al cargar la base de datos local.");
     }
 }
 
