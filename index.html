@@ -1392,18 +1392,15 @@ function init() {
                     // --- Lógica de Etiquetas Automáticas ---
                     const esSinTacc = nombreOriginal.includes("SIN TACC");
                     const esVegano = nombreOriginal.includes("VEGANO");
-                    const esSinAzucar = nombreOriginal.includes("SIN AZUCAR");
 
                     let logosHtml = '';
                     if (esSinTacc) logosHtml += `<img src="./sintacc.webp" class="logo-tacc" alt="Sin TACC">`;
                     if (esVegano) logosHtml += `<img src="./vegano.webp" class="logo-tacc" alt="Vegano">`;
-                    if (esSinAzucar) logosHtml += `<img src="./sinazucar.webp" class="logo-tacc" alt="Sin Azúcar">`;
 
                     // Limpiamos el nombre para que no se vea el texto técnico en la card
                     const nombreAMostrar = nombreOriginal
                         .replace(/SIN TACC/g, "")
                         .replace(/VEGANO/g, "")
-                        .replace(/SIN AZUCAR/g, "")
                         .trim();
                     
                     return `
