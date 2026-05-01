@@ -401,9 +401,13 @@
 
         .card h4 {
             margin: 3px 0;
-            font-size: 0.75rem; /* Texto más pequeño para que no se corte */
-            height: 32px; /* Altura fija para alinear los nombres */
-            overflow: hidden;
+            font-size: 0.85rem; /* Aumentamos un poquito el tamaño */
+            height: auto;       /* Cambiado de 32px a auto */
+            min-height: 40px;   /* Asegura que las cards sigan alineadas */
+            overflow: visible;  /* Para que no corte el texto */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .price { 
