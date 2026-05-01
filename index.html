@@ -1384,17 +1384,31 @@ function init() {
                 ${cat.i.map((p, idx) => {
                     const esSoloLocal = p.sl === true;
                     const nombreOriginal = p.n ? p.n.trim().toUpperCase() : "";
+                    
+                    // --- Lógica de Etiquetas Automáticas ---
                     const esSinTacc = nombreOriginal.includes("SIN TACC");
-                    const logoTaccHtml = esSinTacc ? `<img src="./sintacc.webp" class="logo-tacc" alt="Sin TACC">` : '';
-                    const nombreAMostrar = nombreOriginal.replace(/SIN TACC/g, "").trim();
+                    const esVegano = nombreOriginal.includes("VEGANO");
+                    const esSinAzucar = nombreOriginal.includes("SIN AZUCAR");
+
+                    let logosHtml = '';
+                    if (esSinTacc) logosHtml += `<img src="./sintacc.webp" class="logo-tacc" alt="Sin TACC">`;
+                    if (esVegano) logosHtml += `<img src="./vegano.webp" class="logo-tacc" style="right: 45px;" alt="Vegano">`;
+                    if (esSinAzucar) logosHtml += `<img src="./sinazucar.webp" class="logo-tacc" style="right: 85px;" alt="Sin Azúcar">`;
+
+                    // Limpiamos el nombre para que no se vea el texto técnico en la card
+                    const nombreAMostrar = nombreOriginal
+                        .replace(/SIN TACC/g, "")
+                        .replace(/VEGANO/g, "")
+                        .replace(/SIN AZUCAR/g, "")
+                        .trim();
                     
                     return `
                         <div class="card ${esSoloLocal ? 'solo-local-card' : ''}"> 
-                            ${logoTaccHtml} <!-- Logo de la esquina -->
+                            ${logosHtml} 
         
-                            ${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''} <!-- Única foto -->
+                            ${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''}
         
-                            <h4>${nombreAMostrar}</h4> <!-- Nombre sin el texto "SIN TACC" -->
+                            <h4>${nombreAMostrar}</h4>
                             <p class="price">$${p.p}</p>
 
                             <div class="control-cantidad">
@@ -1405,7 +1419,7 @@ function init() {
                             </div>
                             <div id="box-${key}-${idx}"></div> 
                         </div>
-                    `;;}).join('')}
+                    `;}).join('')}
             </div>
         `;
         container.appendChild(section);
