@@ -1386,12 +1386,14 @@ function init() {
                     const nombreLimpio = p.n ? p.n.trim().toUpperCase() : "";
                     const esSinTacc = nombreLimpio.includes("SIN TACC");
                     const logoTaccHtml = esSinTacc ? `<img src="./sintacc.webp" class="logo-tacc" alt="Sin TACC">` : '';
+                    const nombreAMostrar = nombreOriginal.replace(/SIN TACC/g, "").trim();[cite: 1]
                     
                     return `
                         <div class="card ${esSoloLocal ? 'solo-local-card' : ''}"> 
                             ${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''}
                             ${logoTaccHtml}
-                            <h4>${p.n}</h4>
+                            ${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''}
+                            <h4>${nombreAMostrar}</h4> <!-- Usamos el nombre limpio aquí -->
                             <p class="price">$${p.p}</p>
 
                             <div class="control-cantidad">
