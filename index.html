@@ -384,6 +384,19 @@
             flex-direction: column; 
             align-items: center; 
             justify-content: space-between; 
+            position: relative;
+        }
+        .logo-tacc {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 35px; /* Tamaño del simbolito */
+            height: auto;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            padding: 2px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 10;
         }
 
         .card h4 {
@@ -1370,6 +1383,10 @@ function init() {
             <div class="grid">
                 ${cat.i.map((p, idx) => {
                     const esSoloLocal = p.sl === true;
+                    // LÓGICA NUEVA: Detectar etiqueta Sin TACC
+                    // Buscamos "sin tacc" ignorando mayúsculas y minúsculas
+                    const esSinTacc = p.n.toLowerCase().includes("sin tacc");
+                    const logoTaccHtml = esSinTacc ? `<img src="sintacc.webp" class="logo-tacc" alt="Sin TACC">` : '';
                     
                     return `
                         <div class="card ${esSoloLocal ? 'solo-local-card' : ''}"> 
