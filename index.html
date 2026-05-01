@@ -1305,7 +1305,7 @@ let mapa;
 let marcador;
 
 function iniciarAutocomplete() {
-    const inputDireccion = document.getElementById('direccion-delivery');
+    const inputDireccion = document.getElementById('direccion');
     
     // 1. Crear el mapa centrado inicialmente en Ituzaingó
     const centroItuzaingo = { lat: -34.658, lng: -58.668 };
@@ -1346,8 +1346,6 @@ function iniciarAutocomplete() {
     });
 }
 
-// Llama a la función al cargar la página
-window.onload = iniciarAutocomplete;
 function esHorarioLocalAbierto() {
     const ahora = new Date();
     const dia = ahora.getDay(); // 0: Domingo, 1: Lunes...
@@ -1824,7 +1822,10 @@ function enviar() {
     
     window.open(url, "_blank");
 }
-window.onload = cargarDatos;
+window.onload = () => {
+    cargarDatos();
+    iniciarAutocomplete();
+};
 let modoEntregaGlobal = "";
 function comenzarPedido(tipo) {
     modoEntregaGlobal = tipo;
