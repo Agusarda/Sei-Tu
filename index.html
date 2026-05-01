@@ -1390,10 +1390,11 @@ function init() {
                     
                     return `
                         <div class="card ${esSoloLocal ? 'solo-local-card' : ''}"> 
-                            ${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''}
-                            ${logoTaccHtml}
-                            ${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''}
-                            <h4>${nombreAMostrar}</h4> <!-- Usamos el nombre limpio aquí -->
+                            ${logoTaccHtml} <!-- Logo de la esquina -->
+        
+                            ${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''} <!-- Única foto -->
+        
+                            <h4>${nombreAMostrar}</h4> <!-- Nombre sin el texto "SIN TACC" -->
                             <p class="price">$${p.p}</p>
 
                             <div class="control-cantidad">
@@ -1404,7 +1405,7 @@ function init() {
                             </div>
                             <div id="box-${key}-${idx}"></div> 
                         </div>
-                    `;}).join('')}
+                    `;;}).join('')}
             </div>
         `;
         container.appendChild(section);
