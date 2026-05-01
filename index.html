@@ -1301,27 +1301,48 @@ function esHorarioDelivery() {
 
     return { abierto: true };
 }
+let mapa;
+let marcador;
+
 function iniciarAutocomplete() {
-    const inputDireccion = document.getElementById('direccion-delivery'); // Asegúrate que este sea el ID de tu input
+    const inputDireccion = document.getElementById('direccion-delivery');
     
-    // Restringimos la búsqueda a Argentina y preferentemente a Ituzaingó
-    const opciones = {
+    // 1. Crear el mapa centrado inicialmente en Ituzaingó
+    const centroItuzaingo = { lat: -34.658, lng: -58.668 };
+    mapa = new google.maps.Map(document.getElementById("mapa-confirmacion"), {
+        zoom: 14,
+        center: centroItuzaingo,
+        streetViewControl: false,
+        mapTypeControl: false
+    });
+
+    // 2. Crear un marcador (pin) que empiece invisible o en el centro
+    marcador = new google.maps.Marker({
+        map: mapa,
+        draggable: false, // El usuario solo elige por texto para evitar errores
+        position: centroItuzaingo
+    });
+
+    // 3. Vincular el Autocomplete
+    const autocomplete = new google.maps.places.Autocomplete(inputDireccion, {
         componentRestrictions: { country: "ar" },
-        fields: ["address_components", "geometry", "formatted_address"],
-        strictBounds: false,
-    };
+        fields: ["geometry", "formatted_address"]
+    });
 
-    const autocomplete = new google.maps.places.Autocomplete(inputDireccion, opciones);
-
-    // Cuando el usuario elige una dirección de la lista
+    // 4. Escuchar cuando el usuario selecciona una sugerencia
     autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
-        if (!place.geometry) {
-            console.error("No se encontró la dirección: " + place.name);
+
+        if (!place.geometry || !place.geometry.location) {
             return;
         }
-        // Aquí podrías guardar la dirección formateada para el mensaje de WhatsApp
-        console.log("Dirección seleccionada:", place.formatted_address);
+
+        // Mover el mapa y el marcador a la nueva ubicación
+        mapa.setCenter(place.geometry.location);
+        mapa.setZoom(17); // Zoom más cerca para ver la casa/local
+        marcador.setPosition(place.geometry.location);
+        
+        console.log("Dirección validada:", place.formatted_address);
     });
 }
 
