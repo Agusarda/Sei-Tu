@@ -1385,7 +1385,11 @@ function init() {
                     const esSoloLocal = p.sl === true;
                     // LÓGICA NUEVA: Detectar etiqueta Sin TACC
                     // Buscamos "sin tacc" ignorando mayúsculas y minúsculas
+                    // LÓGICA DE DETECCIÓN:
+                    // Convertimos el nombre a minúsculas para que detecte "Sin Tacc", "SIN TACC", etc.
                     const esSinTacc = p.n.toLowerCase().includes("sin tacc");
+            
+                    // Si es Sin TACC, generamos el HTML de la imagen
                     const logoTaccHtml = esSinTacc ? `<img src="sintacc.webp" class="logo-tacc" alt="Sin TACC">` : '';
                     
                     return `
