@@ -708,6 +708,21 @@
         .btn-qty:active {
             transform: scale(0.9);
         }
+        .btn-borrar-item {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0 5px;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-borrar-item:hover {
+            transform: scale(1.2);
+        }
 
         /* Para que el input no se vea como un cuadro de texto editable */
         input[type="number"].cantidad {
@@ -1532,8 +1547,14 @@ function actualizar() {
             }
             
             t += (precio * cant);
-            miniResumen += `<div style="display:flex; justify-content:space-between; font-size:13px; border-bottom:1px solid #f0f0f0; padding:4px 0;">
-                    <span>${cant} x ${nombre}</span>
+            miniResumen += `
+                <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; border-bottom:1px solid #f0f0f0; padding:6px 0;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <button class="btn-borrar-item" onclick="eliminarGrupoProductos('${id}')" title="Eliminar todos">
+                            <i class="fas fa-trash-can"></i>
+                        </button>
+                        <span>${cant} x ${nombre}</span>
+                    </div>
                     <span style="font-weight:600;">$${precio * cant}</span>
                 </div>`;
         }
@@ -1663,6 +1684,26 @@ function vaciarCarrito() {
         seleccionesUsuario = {};
         
         // Actualizamos la vista
+        actualizar();
+    }
+}
+function eliminarGrupoProductos(id) {
+    const input = document.getElementById(id);
+    if (input) {
+        // Ponemos la cantidad en 0
+        input.value = 0;
+        input.setAttribute('value', 0);
+
+        // Limpiamos los selectores de sabores visuales (el botón naranja/verde)
+        const contenedorSabores = document.getElementById("box-" + id);
+        if (contenedorSabores) {
+            contenedorSabores.innerHTML = "";
+        }
+
+        // Borramos las selecciones guardadas del usuario para este producto
+        delete seleccionesUsuario[id];
+
+        // Refrescamos todo el carrito y el total
         actualizar();
     }
 }
