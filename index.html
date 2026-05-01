@@ -1384,7 +1384,7 @@ function init() {
                 ${cat.i.map((p, idx) => {
                     const esSoloLocal = p.sl === true;
                     const nombreLimpio = p.n ? p.n.trim().toUpperCase() : "";
-                    const esSinTacc = /SIN\s*TACC/.test(nombreLimpio);
+                    const esSinTacc = nombreLimpio.includes("SIN TACC");
                     const logoTaccHtml = esSinTacc ? `<img src="./sintacc.webp" class="logo-tacc" alt="Sin TACC">` : '';
                     
                     return `
