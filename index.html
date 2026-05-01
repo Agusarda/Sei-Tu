@@ -1136,7 +1136,7 @@
         </button>
     </div>
 </div>
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsb2xiklXhD2zAaHIQcRcdM1qTGgg63s4&libraries=places"></script>
 <!-- Firebase App (el núcleo) -->
 <script src="https://www.gstatic.com/firebasejs/9.1.1/firebase-app-compat.js"></script>
 <!-- Firebase Realtime Database -->
@@ -1300,6 +1300,32 @@ function esHorarioDelivery() {
 
     return { abierto: true };
 }
+function iniciarAutocomplete() {
+    const inputDireccion = document.getElementById('direccion-delivery'); // Asegúrate que este sea el ID de tu input
+    
+    // Restringimos la búsqueda a Argentina y preferentemente a Ituzaingó
+    const opciones = {
+        componentRestrictions: { country: "ar" },
+        fields: ["address_components", "geometry", "formatted_address"],
+        strictBounds: false,
+    };
+
+    const autocomplete = new google.maps.places.Autocomplete(inputDireccion, opciones);
+
+    // Cuando el usuario elige una dirección de la lista
+    autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) {
+            console.error("No se encontró la dirección: " + place.name);
+            return;
+        }
+        // Aquí podrías guardar la dirección formateada para el mensaje de WhatsApp
+        console.log("Dirección seleccionada:", place.formatted_address);
+    });
+}
+
+// Llama a la función al cargar la página
+window.onload = iniciarAutocomplete;
 function esHorarioLocalAbierto() {
     const ahora = new Date();
     const dia = ahora.getDay(); // 0: Domingo, 1: Lunes...
