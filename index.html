@@ -841,7 +841,7 @@
         .logo-dietetico {
             width: 60px; /* Ajustá el tamaño según prefieras */
             height: auto;
-            margin-top: -5px; /* Sube un poquito para pegarse a la imagen */
+            margin-top: 5px auto; /* Sube un poquito para pegarse a la imagen */
             margin-bottom: 5px;
             display: block;
             z-index: 5;
@@ -1503,7 +1503,7 @@ function init() {
                     const nombreAMostrar = nombreOriginal
                         .replace(/SIN TACC/g, "")
                         .replace(/VEGANO/g, "")
-                        .replace(/DIETETICO/g, "")
+                        .replace(/DIET[EÉ]TICO/gi, "")
                         .trim();
                     
                     return `
