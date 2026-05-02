@@ -2307,12 +2307,12 @@ document.getElementById('btn-geoloc').addEventListener('click', () => {
 
                     // 3. MOVER EL PIN (Marcador)
                     // Si ya tenés un marcador creado (ej: marker), le cambiamos la posición
-                    if (marker) {
-                        marker.setPosition(pos);
-                        marker.setVisible(true);
+                    if (marcador) {
+                        marcador.setPosition(pos);
+                        marcador.setVisible(true);
                     } else {
                         // Si por alguna razón no existe, creamos uno nuevo
-                        marker = new google.maps.Marker({
+                        marcador = new google.maps.Marker({
                             position: pos,
                             map: map
                         });
