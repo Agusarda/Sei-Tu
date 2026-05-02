@@ -1489,7 +1489,7 @@ function init() {
                     // --- Lógica de Etiquetas Automáticas ---
                     const esSinTacc = /SIN TACC/i.test(nombreOriginal);
                     const esVegano = /VEGANO/i.test(nombreOriginal);
-                    const esDietetico = /DIET[EÉ]TICO/i.test(nombreOriginal);
+                    const esDietetico = /CORMILLOT/i.test(nombreOriginal);
 
                     let logosHtml = '';
                     if (esSinTacc) logosHtml += `<img src="./sintacc.webp" class="logo-tacc" alt="Sin TACC">`;
@@ -1503,7 +1503,7 @@ function init() {
                     const nombreAMostrar = nombreOriginal
                         .replace(/SIN TACC/g, "")
                         .replace(/VEGANO/g, "")
-                        .replace(/DIET[EÉ]TICO/gi, "")
+                        .replace(/CORMILLOT/gi, "")
                         .trim();
                     
                     return `
