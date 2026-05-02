@@ -1311,7 +1311,6 @@ let marcador;
 function iniciarAutocomplete() {
     const inputDireccion = document.getElementById('direccion');
     
-    // 1. Crear el mapa centrado inicialmente en Ituzaingó
     const centroItuzaingo = { lat: -34.658, lng: -58.668 };
     mapa = new google.maps.Map(document.getElementById("mapa-confirmacion"), {
         zoom: 14,
@@ -1321,46 +1320,55 @@ function iniciarAutocomplete() {
         mapId: "98705296ce62d16bd8d3b4d1"
     });
 
-    // 2. Crear un marcador (pin) que empiece invisible o en el centro
     marcador = new google.maps.Marker({
         map: mapa,
-        draggable: false, // El usuario solo elige por texto para evitar errores
+        draggable: false,
         position: centroItuzaingo
     });
 
-    // 3. Vincular el Autocomplete
+    // Filtramos para que solo busque en Argentina
     const autocomplete = new google.maps.places.Autocomplete(inputDireccion, {
         componentRestrictions: { country: "ar" },
-        fields: ["geometry", "formatted_address"]
+        fields: ["geometry", "address_components"] // Pedimos los componentes por separado
     });
 
-    // 4. Escuchar cuando el usuario selecciona una sugerencia
     autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
 
         if (!place.geometry || !place.geometry.location) {
             return;
         }
-        let direccionCorta = "";
-        const componentes = place.address_components;
-        if (componentes) {
-            // Tomamos solo calle (route), número (street_number) y localidad/partido (locality/administrative_area_level_2)
-            const partesPermitidas = ['street_number', 'route', 'locality', 'administrative_area_level_2'];
-            const filtrados = componentes
-                .filter(c => c.types.some(t => partesPermitidas.includes(t)))
-                .map(c => c.long_name);
-        
-            // Unimos los componentes (ej: "Av. Rivadavia 1234, Ituzaingó")
-            direccionCorta = filtrados.join(' '); 
-        }
-        inputDireccion.value = direccionCorta || place.formatted_address;
 
-        // Mover el mapa y el marcador a la nueva ubicación
-        mapa.setCenter(place.geometry.location);
-        mapa.setZoom(17); // Zoom más cerca para ver la casa/local
-        marcador.setPosition(place.geometry.location);
+        // --- LÓGICA DE FILTRADO DE DIRECCIÓN ---
+        let calle = "";
+        let altura = "";
+        let partido = "";
+
+        if (place.address_components) {
+            place.address_components.forEach(component => {
+                const types = component.types;
+                
+                if (types.includes("route")) {
+                    calle = component.long_name;
+                } else if (types.includes("street_number")) {
+                    altura = component.long_name;
+                } else if (types.includes("locality") || types.includes("administrative_area_level_2")) {
+                    // Solo tomamos el primero que encuentre (usualmente el partido/localidad)
+                    if (!partido) partido = component.long_name;
+                }
+            });
+        }
+
+        // Construimos la dirección limpia: "Calle Altura, Partido"
+        const direccionLimpia = `${calle} ${altura}${partido ? ', ' + partido : ''}`.trim();
         
-        console.log("Dirección validada:", place.formatted_address);
+        // Asignamos solo el texto limpio al input
+        inputDireccion.value = direccionLimpia;
+
+        // Actualizamos el mapa visualmente
+        mapa.setCenter(place.geometry.location);
+        mapa.setZoom(17);
+        marcador.setPosition(place.geometry.location);
     });
 }
 
