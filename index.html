@@ -1223,13 +1223,25 @@ function guardarEnNube() {
 }
 
 // --- DETECTOR DE CONTRASEÑA ---
+let adminTimeout; // Variable para limpiar el buffer por tiempo
+
 window.addEventListener('keydown', (e) => {
+    // Ignorar teclas que no sean letras o números (Shift, Control, etc)
+    if (e.key.length > 1) return;
+
     passwordBuffer += e.key;
+
+    // Si pasan 2 segundos sin escribir, se limpia lo acumulado
+    clearTimeout(adminTimeout);
+    adminTimeout = setTimeout(() => {
+        passwordBuffer = "";
+    }, 2000);
+
     if (passwordBuffer.includes(ADMIN_PASS)) {
         abrirAdmin();
         passwordBuffer = "";
+        clearTimeout(adminTimeout);
     }
-    if (passwordBuffer.length > 20) passwordBuffer = "";
 });
 
 let totalGlobalNumerico = 0;
