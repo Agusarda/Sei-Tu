@@ -2294,31 +2294,37 @@ document.getElementById('btn-geoloc').addEventListener('click', () => {
                 lng: position.coords.longitude,
             };
 
-            // Usamos Geocoding para traducir coordenadas a dirección
             const geocoder = new google.maps.Geocoder();
             geocoder.geocode({ location: pos }, (results, status) => {
-                if (status === "OK") {
-                    if (results[0]) {
-                        // Completamos el input de dirección
-                        document.getElementById('direccion').value = results[0].formatted_address;
-                        
-                        // Opcional: Centrar el mapa en esa posición
-                        map.setCenter(pos);
-                        map.setZoom(17);
-                        new google.maps.Marker({
+                if (status === "OK" && results[0]) {
+                    // 1. Completar el texto de la dirección
+                    const inputDireccion = document.getElementById('direccion'); // Asegurate que este ID sea el correcto
+                    inputDireccion.value = results[0].formatted_address;
+                    
+                    // 2. Mover el Mapa
+                    map.setCenter(pos);
+                    map.setZoom(17);
+
+                    // 3. MOVER EL PIN (Marcador)
+                    // Si ya tenés un marcador creado (ej: marker), le cambiamos la posición
+                    if (marker) {
+                        marker.setPosition(pos);
+                        marker.setVisible(true);
+                    } else {
+                        // Si por alguna razón no existe, creamos uno nuevo
+                        marker = new google.maps.Marker({
                             position: pos,
-                            map: map,
+                            map: map
                         });
                     }
-                } else {
-                    console.error("Geocode falló: " + status);
+                    
+                    // 4. Disparar evento de cambio (por si tenés lógica que dependa de esto)
+                    inputDireccion.dispatchEvent(new Event('change'));
                 }
             });
         }, () => {
-            alert("No se pudo obtener la ubicación. Por favor, asegúrate de dar permisos.");
+            alert("No se pudo obtener la ubicación.");
         });
-    } else {
-        alert("Tu navegador no soporta geolocalización.");
     }
 });
 </script>
