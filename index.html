@@ -2288,6 +2288,9 @@ function ordenarOpcionesAlfabeticamente(catKey, idx, campo) {
 }
 document.getElementById('btn-geoloc').addEventListener('click', () => {
     if (navigator.geolocation) {
+        // Mostramos un mensaje opcional de carga para que el usuario sepa que está trabajando
+        console.log("Obteniendo ubicación...");
+
         navigator.geolocation.getCurrentPosition((position) => {
             const pos = {
                 lat: position.coords.latitude,
@@ -2297,34 +2300,59 @@ document.getElementById('btn-geoloc').addEventListener('click', () => {
             const geocoder = new google.maps.Geocoder();
             geocoder.geocode({ location: pos }, (results, status) => {
                 if (status === "OK" && results[0]) {
-                    // 1. Completar el texto de la dirección
-                    const inputDireccion = document.getElementById('direccion'); // Asegurate que este ID sea el correcto
+                    // 1. Buscamos tu input de dirección (asegurando el ID correcto)
+                    const inputDireccion = document.getElementById('direccion'); 
                     inputDireccion.value = results[0].formatted_address;
                     
-                    // 2. Mover el Mapa
+                    // 2. Centramos el mapa en las coordenadas obtenidas
                     map.setCenter(pos);
                     map.setZoom(17);
 
-                    // 3. MOVER EL PIN (Marcador)
-                    // Si ya tenés un marcador creado (ej: marker), le cambiamos la posición
-                    if (marcador) {
+                    // 3. MOVEMOS TU MARCADOR
+                    // Verificamos si la variable 'marcador' existe antes de moverla
+                    if (typeof marcador !== 'undefined' && marcador !== null) {
                         marcador.setPosition(pos);
                         marcador.setVisible(true);
                     } else {
-                        // Si por alguna razón no existe, creamos uno nuevo
+                        // Si por alguna razón no estaba inicializado, lo creamos
                         marcador = new google.maps.Marker({
                             position: pos,
                             map: map
                         });
                     }
                     
-                    // 4. Disparar evento de cambio (por si tenés lógica que dependa de esto)
+                    // 4. Forzamos a que el sistema reconozca que el texto cambió
+                    // Útil si tenés validaciones de "campo vacío" o costos de envío
+                    inputDireccion.dispatchEvent(new Event('input'));
                     inputDireccion.dispatchEvent(new Event('change'));
+                    
+                    console.log("Ubicación completada con éxito");
+                } else {
+                    alert("Google no pudo encontrar la dirección de este punto.");
                 }
             });
-        }, () => {
-            alert("No se pudo obtener la ubicación.");
+        }, (error) => {
+            // Manejo de errores específicos
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("Debes permitir el acceso a la ubicación en tu navegador.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("La información de ubicación no está disponible.");
+                    break;
+                case error.TIMEOUT:
+                    alert("Se agotó el tiempo de espera para obtener la ubicación.");
+                    break;
+                default:
+                    alert("Ocurrió un error desconocido al obtener la ubicación.");
+            }
+        }, {
+            enableHighAccuracy: true, // Esto intenta usar el GPS del celular para más precisión
+            timeout: 5000,
+            maximumAge: 0
         });
+    } else {
+        alert("Tu navegador no soporta geolocalización.");
     }
 });
 </script>
