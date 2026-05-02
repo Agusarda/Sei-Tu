@@ -1487,9 +1487,9 @@ function init() {
                     const nombreOriginal = p.n ? p.n.trim().toUpperCase() : "";
                     
                     // --- Lógica de Etiquetas Automáticas ---
-                    const esSinTacc = nombreOriginal.includes("SIN TACC");
-                    const esVegano = nombreOriginal.includes("VEGANO");
-                    const esDietetico = nombreOriginal.includes("DIETETICO");
+                    const esSinTacc = /SIN TACC/i.test(nombreOriginal);
+                    const esVegano = /VEGANO/i.test(nombreOriginal);
+                    const esDietetico = /DIET[EÉ]TICO/i.test(nombreOriginal);
 
                     let logosHtml = '';
                     if (esSinTacc) logosHtml += `<img src="./sintacc.webp" class="logo-tacc" alt="Sin TACC">`;
@@ -1510,8 +1510,10 @@ function init() {
                         <div class="card ${esSoloLocal ? 'solo-local-card' : ''}"> 
                             ${logosHtml} 
         
-                            ${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''}
-                            ${logoCormillotHtml}
+                            <div style="position: relative; width: 100%;">
+                                ${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''}
+                                ${esDietetico ? `<img src="./cormillot.webp" class="logo-dietetico" alt="Dietético" style="position: absolute; bottom: 0; right: 0; width: 50px;">` : ''}
+                            </div>
         
                             <h4>${nombreAMostrar}</h4>
                             <p class="price">$${p.p}</p>
