@@ -1341,6 +1341,19 @@ function iniciarAutocomplete() {
         if (!place.geometry || !place.geometry.location) {
             return;
         }
+        let direccionCorta = "";
+        const componentes = place.address_components;
+        if (componentes) {
+            // Tomamos solo calle (route), número (street_number) y localidad/partido (locality/administrative_area_level_2)
+            const partesPermitidas = ['street_number', 'route', 'locality', 'administrative_area_level_2'];
+            const filtrados = componentes
+                .filter(c => c.types.some(t => partesPermitidas.includes(t)))
+                .map(c => c.long_name);
+        
+            // Unimos los componentes (ej: "Av. Rivadavia 1234, Ituzaingó")
+            direccionCorta = filtrados.join(' '); 
+        }
+        inputDireccion.value = direccionCorta || place.formatted_address;
 
         // Mover el mapa y el marcador a la nueva ubicación
         mapa.setCenter(place.geometry.location);
@@ -2297,24 +2310,31 @@ document.getElementById('btn-geoloc').addEventListener('click', () => {
             const geocoder = new google.maps.Geocoder();
             geocoder.geocode({ location: pos }, (results, status) => {
                 if (status === "OK" && results[0]) {
-                    const inputDireccion = document.getElementById('direccion'); 
-                    inputDireccion.value = results[0].formatted_address;
-                    
-                    // CORRECCIÓN: Usamos 'mapa' (como se definió globalmente)
+                    const components = results[0].address_components;
+        
+                    // Filtramos para obtener: Calle + Altura + Localidad
+                    let calle = "", altura = "", localidad = "";
+        
+                    components.forEach(c => {
+                        if (c.types.includes("route")) calle = c.long_name;
+                        if (c.types.includes("street_number")) altura = c.long_name;
+                        if (c.types.includes("locality") || c.types.includes("administrative_area_level_2")) {
+                            if(!localidad) localidad = c.long_name;
+                        }
+                    });
+
+                    const direccionLimpia = `${calle} ${altura}, ${localidad}`.trim();
+                    document.getElementById('direccion').value = direccionLimpia;
+        
                     if (mapa) {
                         mapa.setCenter(pos);
                         mapa.setZoom(17);
                     }
-
-                    // CORRECCIÓN: Movemos el marcador existente
                     if (marcador) {
                         marcador.setPosition(pos);
-                        marcador.setVisible(true);
                     }
-                    
-                    inputDireccion.dispatchEvent(new Event('change'));
                 } else {
-                    alert("No se pudo determinar la dirección exacta.");
+                    alert("No se pudo determinar la dirección.");
                 }
             });
         }, (error) => {
