@@ -2300,7 +2300,7 @@ document.getElementById('btn-geoloc').addEventListener('click', () => {
                 if (status === "OK") {
                     if (results[0]) {
                         // Completamos el input de dirección
-                        document.getElementById('direccion-input').value = results[0].formatted_address;
+                        document.getElementById('direccion').value = results[0].formatted_address;
                         
                         // Opcional: Centrar el mapa en esa posición
                         map.setCenter(pos);
