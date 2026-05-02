@@ -1261,27 +1261,29 @@ function toggleHorarios() {
     }
 }
 
-// Función centralizada para limpiar todo y mostrar los botones de nuevo
 function cerrarTodo() {
+    // 1. Quitamos las clases activas de todos los modales y el fondo oscuro
     document.getElementById("sidebar").classList.remove("active");
     document.getElementById("modal-horarios").classList.remove("active");
     document.getElementById("modal-contactos").classList.remove("active");
     document.getElementById("modal-sabores").classList.remove("active");
     document.getElementById("overlay").classList.remove("active");
 
-    const esPasoProductos = document.getElementById("paso-productos").style.display !== "none";
+    // 2. Identificamos en qué pantalla estamos
+    const pantallaInicio = document.getElementById("pantalla-inicio");
+    const esPantallaInicioVisible = pantallaInicio.style.display !== "none";
 
-    if (esPasoProductos) {
-        const navBtns = document.getElementById("nav-btns");
-        const quickSwitch = document.getElementById("quick-switch");
+    // 3. Restauramos la visibilidad de los botones de navegación
+    const navBtns = document.getElementById("nav-btns");
+    const btnHorariosFlotante = document.querySelector(".btn-horarios-flotante");
 
-        if (navBtns) {
-            navBtns.classList.remove("hidden-btn");
-            navBtns.style.display = "flex";
-        }
-        if (quickSwitch) {
-            quickSwitch.style.display = "flex";
-        }
+    if (navBtns) {
+        navBtns.classList.remove("hidden-btn");
+    }
+
+    // El botón de horarios solo debe reaparecer si estamos en la pantalla de INICIO
+    if (btnHorariosFlotante && esPantallaInicioVisible) {
+        btnHorariosFlotante.classList.remove("hidden-btn");
     }
 }
 
