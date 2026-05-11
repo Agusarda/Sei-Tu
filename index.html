@@ -56,12 +56,22 @@
         .btn-admin-opt:hover { background: #5a6268; }
 
         .sidebar-header { 
-            padding: 40px 20px; 
+            padding: 30px 20px; /* Reducimos un poco el padding superior */
             background: linear-gradient(135deg, var(--primary), var(--secondary)); 
             color: white; 
             text-align: center; 
             position: relative;
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); /* Corte diagonal moderno */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        /* Estilo para que el subtítulo no compita con el logo */
+        .sidebar-header p {
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .sidebar-header h3 { 
