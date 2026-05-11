@@ -629,7 +629,29 @@
         #monto { font-size: 26px; color: var(--primary); font-weight: 600; }
         .btn-principal { width: 100%; padding: 10px; border: none; border-radius: 12px; background: var(--primary); color: white; font-size: 16px; font-weight: 600; cursor: pointer; }
         .btn-whatsapp { background: var(--accent); }
-        .btn-volver { background: #eee; color: #555; margin-bottom: 15px; padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; }
+        .btn-volver { 
+            background: var(--primary); /* Usa el azul característico de tu página */
+            color: white; 
+            margin-bottom: 20px; 
+            padding: 12px 25px; 
+            border-radius: 50px; /* Forma de píldora para que combine con el resto de la interfaz */
+            border: none; 
+            cursor: pointer; 
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 114, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-volver:hover {
+            transform: translateX(-5px); /* Pequeño movimiento a la izquierda al señalarlo */
+            box-shadow: 0 6px 20px rgba(0, 114, 255, 0.3);
+            filter: brightness(1.1);
+        }
 
         .btn-sabores { 
             padding: 4px 6px; 
@@ -953,7 +975,21 @@
                 🛍️ TAKE AWAY
             </button>
         </div>
-        
+        <!-- Agregá esto justo debajo del div que contiene los botones de Delivery y Take Away -->
+        <div id="aviso-horario-inicio" style="
+            color: #ffd400; 
+            font-size: 14px; 
+            margin-top: -25px; 
+            margin-bottom: 30px; 
+            font-weight: 600; 
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.3);
+            padding: 8px 15px;
+            border-radius: 10px;
+            display: inline-block;
+        ">
+            🛵 El servicio de delivery inicia a las 18:00hs
+</div>
         <div class="inicio-redes">
             <a href="https://wa.me/5491131725515" target="_blank" class="red-item wa"><i class="fab fa-whatsapp"></i></a>
             <a href="https://www.instagram.com/seitu.ituzaingosur/" target="_blank" class="red-item ig"><i class="fab fa-instagram"></i></a>
@@ -1046,7 +1082,9 @@
     <div id="paso-productos"><div id="dinamico"></div></div>
 
     <div id="paso-datos">
-        <button class="btn-volver" onclick="cambiarPaso(1)">← Volver a productos</button>
+        <button class="btn-volver" onclick="cambiarPaso(1)">
+            <i class="fas fa-arrow-left"></i> Volver a productos
+        </button>
         <h3 class="categoria">📍 Finalizar Pedido</h3>
         
         <div class="form">
@@ -1209,25 +1247,13 @@ function guardarEnNube() {
 }
 
 // --- DETECTOR DE CONTRASEÑA ---
-let adminTimeout; // Variable para limpiar el buffer por tiempo
-
 window.addEventListener('keydown', (e) => {
-    // Ignorar teclas que no sean letras o números (Shift, Control, etc)
-    if (e.key.length > 1) return;
-
     passwordBuffer += e.key;
-
-    // Si pasan 2 segundos sin escribir, se limpia lo acumulado
-    clearTimeout(adminTimeout);
-    adminTimeout = setTimeout(() => {
-        passwordBuffer = "";
-    }, 2000);
-
     if (passwordBuffer.includes(ADMIN_PASS)) {
         abrirAdmin();
         passwordBuffer = "";
-        clearTimeout(adminTimeout);
     }
+    if (passwordBuffer.length > 20) passwordBuffer = "";
 });
 
 let totalGlobalNumerico = 0;
@@ -1485,9 +1511,9 @@ function init() {
                     const nombreOriginal = p.n ? p.n.trim().toUpperCase() : "";
                     
                     // --- Lógica de Etiquetas Automáticas ---
-                    const esSinTacc = /SIN TACC/i.test(nombreOriginal);
-                    const esVegano = /VEGANO/i.test(nombreOriginal);
-                    const esDietetico = /CORMILLOT/i.test(nombreOriginal);
+                    const esSinTacc = nombreOriginal.includes("SIN TACC");
+                    const esVegano = nombreOriginal.includes("VEGANO");
+                    const esDietetico = nombreOriginal.includes("DIETETICO");
 
                     let logosHtml = '';
                     if (esSinTacc) logosHtml += `<img src="./sintacc.webp" class="logo-tacc" alt="Sin TACC">`;
@@ -1501,17 +1527,15 @@ function init() {
                     const nombreAMostrar = nombreOriginal
                         .replace(/SIN TACC/g, "")
                         .replace(/VEGANO/g, "")
-                        .replace(/CORMILLOT/gi, "")
+                        .replace(/DIETETICO/g, "")
                         .trim();
                     
                     return `
                         <div class="card ${esSoloLocal ? 'solo-local-card' : ''}"> 
                             ${logosHtml} 
         
-                            <div style="position: relative; width: 100%;">
-                                ${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''}
-                                ${esDietetico ? `<img src="./cormillot.webp" class="logo-dietetico" alt="Dietético" style="position: absolute; bottom: 0; right: 0; width: 50px;">` : ''}
-                            </div>
+                            ${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''}
+                            ${logoCormillotHtml}
         
                             <h4>${nombreAMostrar}</h4>
                             <p class="price">$${p.p}</p>
