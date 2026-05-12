@@ -1071,6 +1071,7 @@
         <button class="btn-cerrar-sidebar" onclick="toggleMenu()">×</button>
         <img src="icono.webp" style="width: 140px; height: auto; margin-bottom: 10px;">
         <p style="font-size: 16px; margin:0; opacity: 0.9;">Ituzaingó Sur</p>
+        <div onclick="accesoAdmin()" style="position: absolute; top: 0; left: 0; width: 40px; height: 40px; cursor: default; opacity: 0.05;"></div>
     </div>
     <div class="sidebar-redes">
         <a href="https://wa.me/5491131725515" target="_blank" class="red-item wa"><i class="fab fa-whatsapp"></i></a>
@@ -1203,8 +1204,6 @@ const firebaseConfig = {
   };
 let completo = {}; // Se cargará desde la nube
 let seleccionesUsuario = {};
-let passwordBuffer = "";
-const ADMIN_PASS = "admin123"; // Cambiá esto
 const btnVaciar = document.getElementById("btn-vaciar");
 
 firebase.initializeApp(firebaseConfig);
@@ -1256,15 +1255,6 @@ function guardarEnNube() {
         });
 }
 
-// --- DETECTOR DE CONTRASEÑA ---
-window.addEventListener('keydown', (e) => {
-    passwordBuffer += e.key;
-    if (passwordBuffer.includes(ADMIN_PASS)) {
-        abrirAdmin();
-        passwordBuffer = "";
-    }
-    if (passwordBuffer.length > 20) passwordBuffer = "";
-});
 
 let totalGlobalNumerico = 0;
 let idActualModal = null;
@@ -2001,10 +1991,19 @@ function filtrarProductosPorEntrega() {
 
     actualizar();
 }
+function accesoAdmin() {
+    const pass = prompt("Ingrese la clave de administrador:");
+
+    if (pass === "admin123") {
+        abrirAdmin(); 
+    } else if (pass !== null) {
+        alert("Contraseña incorrecta");
+    }
+}
 function abrirAdmin() {
     document.getElementById('modal-admin').classList.add('active');
     document.getElementById('overlay').classList.add('active');
-    renderAdminDashboard();
+    renderAdminDashboard(); 
 }
 
 function cerrarAdmin() {
