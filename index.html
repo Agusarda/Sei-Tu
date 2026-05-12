@@ -724,8 +724,8 @@
                 max-height: 180px; /* Antes estaba en 130px, ahora tiene más aire */
                 object-position: 50% 40%;
             }
-            #modal-admin .admin-row-producto:first-child {
-                display: none;
+            .admin-row-producto:not(:has(input)) {
+                display: none !important;
             }
             .admin-row-producto {
                 display: flex !important;
