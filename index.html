@@ -480,13 +480,15 @@
         }
 
         #modal-admin {
-            max-width: 1200px !important; /* Aumentamos mucho el ancho */
+            max-width: 1200px !important;
             width: 95%;
-            height: 90vh; /* Casi toda la altura de la pantalla */
-            overflow: hidden; /* El scroll lo maneja el contenedor interno */
+            height: 90vh;
+            overflow-y: auto; /* Permite scroll vertical en el modal */
             display: none;
             flex-direction: column;
-            padding: 0; /* Quitamos el padding para que la cabecera sea pegada */
+            padding: 0;
+            background: white;
+            -webkit-overflow-scrolling: touch; /* Suaviza el scroll en iOS */
         }
 
         #modal-admin.active {
@@ -497,7 +499,6 @@
         /* Busca esto cerca de la línea 390 y reemplazalo */
         .admin-row-producto {
             display: grid; 
-            /* Agregamos una columna de 40px al inicio para las flechas */
             grid-template-columns: 40px 2fr 100px 1.5fr 100px 90px 40px; 
             gap: 10px; 
             margin-bottom: 10px; 
@@ -506,7 +507,7 @@
             padding: 8px;
             border-radius: 8px;
             border: 1px solid #eee;
-        }  
+        }
 
         /* Estilo para los inputs dentro del admin para que se vean mejor */
         #modal-admin input {
@@ -701,6 +702,11 @@
 
         /* Ajuste para celulares: lo hacemos un poquito más alto también aquí */
         @media (max-width: 600px) {
+            #modal-admin {
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+            }
             header {
                 margin: 10px auto;
                 width: calc(100% - 20px);
@@ -709,6 +715,24 @@
             .banner-img {
                 max-height: 180px; /* Antes estaba en 130px, ahora tiene más aire */
                 object-position: 50% 40%;
+            }
+            .admin-row-producto {
+                display: flex;
+                flex-direction: column; /* Apila los elementos uno debajo del otro */
+                align-items: stretch;
+                padding: 15px;
+                gap: 8px;
+                position: relative;
+            }
+            .admin-row-producto input, 
+            .admin-row-producto select {
+                width: 100% !important;
+                height: 40px;
+                font-size: 14px;
+            }
+            .admin-row-producto .btn-admin-opt {
+                width: 100%;
+                padding: 10px;
             }
         }
 
