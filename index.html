@@ -702,19 +702,6 @@
 
         /* Ajuste para celulares: lo hacemos un poquito más alto también aquí */
         @media (max-width: 600px) {
-            #modal-admin {
-                width: 100% !important;
-                height: 100vh !important;
-                max-height: 100vh !important;
-                top: 0 !important;
-                left: 0 !important;
-                transform: none !important;
-                border-radius: 0 !important;
-            }
-
-            #modal-admin .admin-header {
-                padding: 20px !important;
-            }
             header {
                 margin: 10px auto;
                 width: calc(100% - 20px);
@@ -723,30 +710,6 @@
             .banner-img {
                 max-height: 180px; /* Antes estaba en 130px, ahora tiene más aire */
                 object-position: 50% 40%;
-            }
-            .admin-row-producto:not(:has(input)) {
-                display: none !important;
-            }
-            .admin-row-producto {
-                display: flex !important;
-                flex-direction: column !important;
-                padding: 15px !important;
-                margin-bottom: 20px !important;
-                border: 2px solid #0072ff !important; /* Color de tu marca para resaltar */
-                background: #fff !important;
-                gap: 8px !important;
-            }
-            .admin-row-producto input, 
-            .admin-row-producto select {
-                width: 100% !important;
-                height: 45px !important;
-                margin: 0 !important;
-            }
-            .admin-row-producto input[placeholder="Nombre"]::before { content: "Producto: "; font-weight: bold; }
-            .admin-row-producto .btn-admin-opt {
-                width: 100%;
-                padding: 10px;
-                font-size: 14px
             }
         }
 
