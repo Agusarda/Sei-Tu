@@ -1657,13 +1657,13 @@ function actualizar() {
             const precio = parseFloat(input.dataset.p);
             
             // Línea para el resumen de WhatsApp y visual
-            const lineaBasica = `🛒 ${cant} x ${nombre} ($${precio * cant})\n`;
+            const lineaBasica = `${cant} x ${nombre} ($${precio * cant})\n`;
             resumenConSabores += lineaBasica;
             
             if (seleccionesUsuario[id]) {
                 seleccionesUsuario[id].forEach((unidad, index) => {
-                    resumenConSabores += `   ✨ Un. ${index + 1}: ${unidad.gustos.join(", ")}`;
-                    if(unidad.salsa) resumenConSabores += ` (Salsa: ${unidad.salsa})`;
+                    resumenConSabores += `${unidad.gustos.join("\n")}`;
+                    if(unidad.salsa) resumenConSabores += ` \n(Salsa: ${unidad.salsa})`;
                     if(unidad.opcion) resumenConSabores += ` (${unidad.opcion})`;
                     resumenConSabores += `\n`;
                 });
@@ -1861,7 +1861,7 @@ function enviar() {
     }
 
     // Formato de pago
-    let detallePago = "*Pago:* " + pago;
+    let detallePago = "*Pago*: " + pago;
     if (pago === "Efectivo") {
         const montoVuelto = parseFloat(vueltoInput.value);
         if (!montoVuelto || montoVuelto < window.totalGlobalNumerico) {
@@ -1870,23 +1870,24 @@ function enviar() {
         detallePago += " (Abona con: $" + montoVuelto + ". Vuelto: $" + (montoVuelto - window.totalGlobalNumerico) + ")";
     }
 
-    // Construcción del mensaje usando solo emojis clásicos y seguros
-    // Nota: Usamos concatenación simple para evitar errores de plantillas
-    let msj = "SEI TU - ITUZAINGO SUR\n";
-    msj += "--------------------------\n";
-    msj += "Nombre: " + n + "\n";
-    msj += "*Entrega:* " + entrega + "\n";
+    let msj = "";
     if (entrega === "Delivery") {
-        msj += "*Dirección:* " + d + "\n";
+        msj += "*DELIVERY* " + "\n";
+    }
+    else
+    {
+        msj += "*TAKE AWAY* " + "\n";
+    }
+    msj += "DETALLE:\n" + window.resumenWhatsApp + "\n";
+    msj += "TOTAL: $" + window.totalGlobalNumerico + "\n";
+    msj += "*Nombre*: " + n + "\n";
+    if (entrega === "Delivery") {
+        msj += "*Dirección*: " + d + "\n";
     }
     msj += detallePago + "\n";
-    msj += "--------------------------\n";
-    msj += "DETALLE:\n" + window.resumenWhatsApp + "\n";
-    msj += "--------------------------\n";
-    msj += "TOTAL: $" + window.totalGlobalNumerico;
-    
+
     if (notas) {
-        msj += "\n\nNotas: " + notas;
+        msj += "*Notas*: " + notas;
     }
 
     // CODIFICACIÓN MANUAL PARA WHATSAPP
