@@ -1,725 +1,50 @@
 {
-  "helado": {
-    "t": "Helado",
-    "i": [
-      {
-        "n": "1 KG Helado",
-        "p": 14000,
-        "g": 4,
-        "img": "1kg.webp",
-        "sl": false,
-        "opt": [
-          "Americana",
-          "Ananá",
-          "Banana Split",
-          "Bananita Dolca",
-          "Cereza a la Crema",
-          "Chocolate",
-          "Chocolate Blanco",
-          "Chocolate con Almendras",
-          "Chocolate Dubai",
-          "Chocolate Marroc",
-          "Chocolate Milka",
-          "Chocolate Shot",
-          "Crema del Cielo",
-          "Crema Flan",
-          "Crema Oreo",
-          "Dulce de Leche",
-          "Dulce de Leche con Nuez",
-          "Dulce de Leche Granizado",
-          "Dulce de Leche Oreo",
-          "Dulce de Leche Sei Tu",
-          "Durazno",
-          "Frutilla a la Crema",
-          "Frutilla al Agua",
-          "Frutilla Cadbury",
-          "Frutos Patagonicos",
-          "Granizado",
-          "Limon",
-          "Limon a la Reina",
-          "Mantecol",
-          "Mascarpone con Frutos Rojos",
-          "Menta Granizada",
-          "Multisabor",
-          "Pistacho",
-          "Sambayon",
-          "Super Chocolate Sei Tu",
-          "Super Dulce de Leche",
-          "Tiramisu",
-          "Tramontana",
-          "Vainilla"
-        ],
-        "llevaSalsa": false,
-        "salsas": []
-      },
-      {
-        "n": "1/2 KG Helado",
-        "p": 7500,
-        "g": 3,
-        "img": "medio-kg.webp",
-        "opt": [
-          "Americana",
-          "Ananá",
-          "Banana Split",
-          "Bananita Dolca",
-          "Cereza a la Crema",
-          "Chocolate",
-          "Chocolate Blanco",
-          "Chocolate con Almendras",
-          "Chocolate Dubai",
-          "Chocolate Marroc",
-          "Chocolate Milka",
-          "Chocolate Shot",
-          "Crema del Cielo",
-          "Crema Flan",
-          "Crema Oreo",
-          "Dulce de Leche",
-          "Dulce de Leche con Nuez",
-          "Dulce de Leche Granizado",
-          "Dulce de Leche Oreo",
-          "Dulce de Leche Sei Tu",
-          "Durazno",
-          "Frutilla a la Crema",
-          "Frutilla al Agua",
-          "Frutilla Cadbury",
-          "Frutos Patagonicos",
-          "Granizado",
-          "Limon",
-          "Limon a la Reina",
-          "Mantecol",
-          "Mascarpone con Frutos Rojos",
-          "Menta Granizada",
-          "Multisabor",
-          "Pistacho",
-          "Sambayon",
-          "Super Chocolate Sei Tu",
-          "Super Dulce de Leche",
-          "Tiramisu",
-          "Tramontana",
-          "Vainilla"
-        ]
-      },
-      {
-        "n": "1/4 KG Helado",
-        "p": 4500,
-        "g": 3,
-        "img": "cuarto-kg.webp",
-        "opt": [
-          "Americana",
-          "Ananá",
-          "Banana Split",
-          "Bananita Dolca",
-          "Cereza a la Crema",
-          "Chocolate",
-          "Chocolate Blanco",
-          "Chocolate con Almendras",
-          "Chocolate Dubai",
-          "Chocolate Marroc",
-          "Chocolate Milka",
-          "Chocolate Shot",
-          "Crema del Cielo",
-          "Crema Flan",
-          "Crema Oreo",
-          "Dulce de Leche",
-          "Dulce de Leche con Nuez",
-          "Dulce de Leche Granizado",
-          "Dulce de Leche Oreo",
-          "Dulce de Leche Sei Tu",
-          "Durazno",
-          "Frutilla a la Crema",
-          "Frutilla al Agua",
-          "Frutilla Cadbury",
-          "Frutos Patagonicos",
-          "Granizado",
-          "Limon",
-          "Limon a la Reina",
-          "Mantecol",
-          "Mascarpone con Frutos Rojos",
-          "Menta Granizada",
-          "Multisabor",
-          "Pistacho",
-          "Sambayon",
-          "Super Chocolate Sei Tu",
-          "Super Dulce de Leche",
-          "Tiramisu",
-          "Tramontana",
-          "Vainilla"
-        ],
-        "sl": false
-      },
-      {
-        "n": "Bolsita Cucuruchos Dulces x3",
-        "p": 400,
-        "img": "bolsita-cucuruchos.webp",
-        "opt": []
-      },
-      {
-        "n": "Cucuruchon Suelto",
-        "p": 250,
-        "img": "cucuruchon.webp"
-      },
-      {
-        "n": "Cucurucho 1 bocha",
-        "p": 2000,
-        "g": 1,
-        "s": true,
-        "img": "cucurucho-1.webp",
-        "sl": true,
-        "opt": [
-          "Americana",
-          "Ananá",
-          "Banana Split",
-          "Bananita Dolca",
-          "Cereza a la Crema",
-          "Chocolate",
-          "Chocolate Blanco",
-          "Chocolate con Almendras",
-          "Chocolate Dubai",
-          "Chocolate Marroc",
-          "Chocolate Milka",
-          "Chocolate Shot",
-          "Crema del Cielo",
-          "Crema Flan",
-          "Crema Oreo",
-          "Dulce de Leche",
-          "Dulce de Leche con Nuez",
-          "Dulce de Leche Granizado",
-          "Dulce de Leche Oreo",
-          "Dulce de Leche Sei Tu",
-          "Durazno",
-          "Frutilla a la Crema",
-          "Frutilla al Agua",
-          "Frutilla Cadbury",
-          "Frutos Patagonicos",
-          "Granizado",
-          "Limon",
-          "Limon a la Reina",
-          "Mantecol",
-          "Mascarpone con Frutos Rojos",
-          "Menta Granizada",
-          "Multisabor",
-          "Pistacho",
-          "Sambayon",
-          "Super Chocolate Sei Tu",
-          "Super Dulce de Leche",
-          "Tiramisu",
-          "Tramontana",
-          "Vainilla"
-        ],
-        "llevaSalsa": true,
-        "salsas": [
-          "Caramelo",
-          "Chocolate",
-          "Dulce de Leche",
-          "Frutilla"
-        ]
-      },
-      {
-        "n": "Cucurucho 2 bochas",
-        "p": 2900,
-        "g": 2,
-        "s": true,
-        "img": "cucurucho-2.webp",
-        "sl": true,
-        "opt": [
-          "Americana",
-          "Ananá",
-          "Banana Split",
-          "Bananita Dolca",
-          "Cereza a la Crema",
-          "Chocolate",
-          "Chocolate Blanco",
-          "Chocolate con Almendras",
-          "Chocolate Dubai",
-          "Chocolate Marroc",
-          "Chocolate Milka",
-          "Chocolate Shot",
-          "Crema del Cielo",
-          "Crema Flan",
-          "Crema Oreo",
-          "Dulce de Leche",
-          "Dulce de Leche con Nuez",
-          "Dulce de Leche Granizado",
-          "Dulce de Leche Oreo",
-          "Dulce de Leche Sei Tu",
-          "Durazno",
-          "Frutilla a la Crema",
-          "Frutilla al Agua",
-          "Frutilla Cadbury",
-          "Frutos Patagonicos",
-          "Granizado",
-          "Limon",
-          "Limon a la Reina",
-          "Mantecol",
-          "Mascarpone con Frutos Rojos",
-          "Menta Granizada",
-          "Multisabor",
-          "Pistacho",
-          "Sambayon",
-          "Super Chocolate Sei Tu",
-          "Super Dulce de Leche",
-          "Tiramisu",
-          "Tramontana",
-          "Vainilla"
-        ],
-        "llevaSalsa": true,
-        "salsas": [
-          "Caramelo",
-          "Chocolate",
-          "Dulce de Leche",
-          "Frutilla"
-        ]
-      },
-      {
-        "n": "Cucurucho 3 bochas",
-        "p": 4000,
-        "g": 3,
-        "s": true,
-        "img": "cucurucho-3.webp",
-        "sl": true,
-        "opt": [
-          "Americana",
-          "Ananá",
-          "Banana Split",
-          "Bananita Dolca",
-          "Cereza a la Crema",
-          "Chocolate",
-          "Chocolate Blanco",
-          "Chocolate con Almendras",
-          "Chocolate Dubai",
-          "Chocolate Marroc",
-          "Chocolate Milka",
-          "Chocolate Shot",
-          "Crema del Cielo",
-          "Crema Flan",
-          "Crema Oreo",
-          "Dulce de Leche",
-          "Dulce de Leche con Nuez",
-          "Dulce de Leche Granizado",
-          "Dulce de Leche Oreo",
-          "Dulce de Leche Sei Tu",
-          "Durazno",
-          "Frutilla a la Crema",
-          "Frutilla al Agua",
-          "Frutilla Cadbury",
-          "Frutos Patagonicos",
-          "Granizado",
-          "Limon",
-          "Limon a la Reina",
-          "Mantecol",
-          "Mascarpone con Frutos Rojos",
-          "Menta Granizada",
-          "Multisabor",
-          "Pistacho",
-          "Sambayon",
-          "Super Chocolate Sei Tu",
-          "Super Dulce de Leche",
-          "Tiramisu",
-          "Tramontana",
-          "Vainilla"
-        ],
-        "llevaSalsa": true,
-        "salsas": [
-          "Caramelo",
-          "Chocolate",
-          "Dulce de Leche",
-          "Frutilla"
-        ]
-      },
-      {
-        "n": "Vasito 1 bocha",
-        "p": 2000,
-        "g": 1,
-        "s": true,
-        "img": "vasito-1.webp",
-        "sl": true,
-        "opt": [
-          "Americana",
-          "Ananá",
-          "Banana Split",
-          "Bananita Dolca",
-          "Cereza a la Crema",
-          "Chocolate",
-          "Chocolate Blanco",
-          "Chocolate con Almendras",
-          "Chocolate Dubai",
-          "Chocolate Marroc",
-          "Chocolate Milka",
-          "Chocolate Shot",
-          "Crema del Cielo",
-          "Crema Flan",
-          "Crema Oreo",
-          "Dulce de Leche",
-          "Dulce de Leche con Nuez",
-          "Dulce de Leche Granizado",
-          "Dulce de Leche Oreo",
-          "Dulce de Leche Sei Tu",
-          "Durazno",
-          "Frutilla a la Crema",
-          "Frutilla al Agua",
-          "Frutilla Cadbury",
-          "Frutos Patagonicos",
-          "Granizado",
-          "Limon",
-          "Limon a la Reina",
-          "Mantecol",
-          "Mascarpone con Frutos Rojos",
-          "Menta Granizada",
-          "Multisabor",
-          "Pistacho",
-          "Sambayon",
-          "Super Chocolate Sei Tu",
-          "Super Dulce de Leche",
-          "Tiramisu",
-          "Tramontana",
-          "Vainilla"
-        ],
-        "llevaSalsa": true,
-        "salsas": [
-          "Caramelo",
-          "Chocolate",
-          "Dulce de Leche",
-          "Frutilla"
-        ]
-      },
-      {
-        "n": "Vasito 2 bochas",
-        "p": 2900,
-        "g": 2,
-        "s": true,
-        "img": "vasito-2.webp",
-        "sl": true,
-        "opt": [
-          "Americana",
-          "Ananá",
-          "Banana Split",
-          "Bananita Dolca",
-          "Cereza a la Crema",
-          "Chocolate",
-          "Chocolate Blanco",
-          "Chocolate con Almendras",
-          "Chocolate Dubai",
-          "Chocolate Marroc",
-          "Chocolate Milka",
-          "Chocolate Shot",
-          "Crema del Cielo",
-          "Crema Flan",
-          "Crema Oreo",
-          "Dulce de Leche",
-          "Dulce de Leche con Nuez",
-          "Dulce de Leche Granizado",
-          "Dulce de Leche Oreo",
-          "Dulce de Leche Sei Tu",
-          "Durazno",
-          "Frutilla a la Crema",
-          "Frutilla al Agua",
-          "Frutilla Cadbury",
-          "Frutos Patagonicos",
-          "Granizado",
-          "Limon",
-          "Limon a la Reina",
-          "Mantecol",
-          "Mascarpone con Frutos Rojos",
-          "Menta Granizada",
-          "Multisabor",
-          "Pistacho",
-          "Sambayon",
-          "Super Chocolate Sei Tu",
-          "Super Dulce de Leche",
-          "Tiramisu",
-          "Tramontana",
-          "Vainilla"
-        ],
-        "llevaSalsa": true,
-        "salsas": [
-          "Caramelo",
-          "Chocolate",
-          "Dulce de Leche",
-          "Frutilla"
-        ]
-      }
-    ]
-  },
   "agua": {
-    "t": "Palitos de Agua",
     "i": [
       {
+        "img": "palito-agua.webp",
         "n": "Palito de Agua",
-        "p": 850,
         "opt": [
           "Frutilla",
           "Limón",
           "Uva"
         ],
-        "img": "palito-agua.webp"
+        "p": 850
       },
       {
+        "img": "palito-acido.webp",
         "n": "Palito Extra Ácido",
-        "p": 1100,
-        "img": "palito-acido.webp"
+        "p": 1100
       },
       {
-        "n": "Sei Tu Fan (Naranja)",
-        "p": 900,
-        "img": "seitu-fan.webp"
+        "img": "seitu-fan.webp",
+        "n": "Sei Tu Fan Naranja",
+        "p": 900
       },
       {
-        "n": "Piccole",
-        "p": 900,
-        "img": "piccole.webp"
+        "img": "piccole.webp",
+        "n": "Piccole Sin TACC",
+        "p": 900
       },
       {
-        "n": "Fruti Frozen",
-        "p": 1200,
-        "img": "fruti-frozen.webp"
+        "img": "fruti-frozen.webp",
+        "n": "Fruti Frozen Vegano",
+        "p": 1200
       }
-    ]
-  },
-  "crema": {
-    "t": "Palitos de Crema",
-    "i": [
-      {
-        "n": "Palito Giovi",
-        "p": 1000,
-        "opt": [
-          "Frutilla",
-          "Chocolate",
-          "Crema"
-        ],
-        "img": "giovi.webp"
-      },
-      {
-        "n": "Granizado Americana",
-        "p": 1100,
-        "img": "granizado-americana.webp"
-      },
-      {
-        "n": "Dietético Vainilla-Frutilla",
-        "p": 1700,
-        "img": "dietetico-palito.webp"
-      },
-      {
-        "n": "Bombón Helado",
-        "p": 1300,
-        "img": "bombon-helado.webp"
-      },
-      {
-        "n": "Bombón Crocante",
-        "p": 1400,
-        "img": "bombon-crocante.webp"
-      },
-      {
-        "n": "Friski",
-        "p": 1000,
-        "img": "frisky.webp"
-      },
-      {
-        "n": "Palito Carita",
-        "p": 1300,
-        "opt": [
-          "Americana-Frutilla",
-          "Choco-Vainilla",
-          "Crema del Cielo-Americana"
-        ],
-        "img": "carita.webp"
-      }
-    ]
-  },
-  "postres": {
-    "t": "Postres Individuales",
-    "i": [
-      {
-        "n": "Bombon Escoces",
-        "p": 1700,
-        "opt": [
-          "Clasico",
-          "Nevado",
-          "Pistacho"
-        ],
-        "img": "escoces.webp"
-      },
-      {
-        "n": "Alfajor Seichoc",
-        "p": 2000,
-        "img": "seichoc.webp"
-      },
-      {
-        "n": "Alfajor Helado Negro",
-        "p": 1800,
-        "img": "alfajor-negro.webp"
-      },
-      {
-        "n": "Postre Almendrado",
-        "p": 1500,
-        "img": "almendrado-ind.webp"
-      },
-      {
-        "n": "Postre Suizo",
-        "p": 1600,
-        "img": "suizo-ind.webp"
-      },
-      {
-        "n": "Postre Tricolor",
-        "p": 1500,
-        "img": "tricolor-ind.webp"
-      }
-    ]
-  },
-  "postres_caja": {
-    "t": "Postres por Caja",
-    "i": [
-      {
-        "n": "Caja Bombon Escoces x8",
-        "p": 13000,
-        "opt": [
-          "Clasico",
-          "Nevado",
-          "Pistacho"
-        ],
-        "img": "caja-escoces.webp"
-      },
-      {
-        "n": "Alfajor Helado x8",
-        "p": 13000,
-        "opt": [
-          "Clasico",
-          "Nevado"
-        ],
-        "img": "caja-alfajor.webp"
-      },
-      {
-        "n": "Alfajor Seichoc x8",
-        "p": 15800,
-        "img": "caja-seichoc.webp"
-      },
-      {
-        "n": "Minitorta Cookie x8",
-        "p": 13000,
-        "img": "caja-minitorta.webp"
-      },
-      {
-        "n": "Bombon Suizo x8",
-        "p": 11500,
-        "img": "caja-suizo.webp"
-      },
-      {
-        "n": "Tricolor x8",
-        "p": 10500,
-        "img": "caja-tricolor.webp"
-      },
-      {
-        "n": "Almendrado x8",
-        "p": 10500,
-        "img": "caja-almendrado.webp"
-      },
-      {
-        "n": "Tricolor Dietetico x6",
-        "p": 14000,
-        "img": "caja-dietetico.webp"
-      }
-    ]
-  },
-  "copitas_y_conos": {
-    "t": "Copitas y Conos",
-    "i": [
-      {
-        "n": "Copa 220cc Cookies",
-        "p": 2600,
-        "img": "copa-cookie.webp"
-      },
-      {
-        "n": "Copa 220cc Frutilla y Americana",
-        "p": 2600,
-        "img": "copa-fr.webp"
-      },
-      {
-        "n": "Copa 220cc Chocolate y DDL",
-        "p": 2600,
-        "img": "copa-ch.webp"
-      },
-      {
-        "n": "Cono Tu Dulce de Leche",
-        "p": 2500,
-        "img": "cono-ddl.webp"
-      },
-      {
-        "n": "Cono Tu Americana",
-        "p": 2500,
-        "img": "cono-ame.webp"
-      }
-    ]
-  },
-  "seibom": {
-    "t": "Palito Sei Bom",
-    "i": [
-      {
-        "n": "Sei Bom Dubai x4",
-        "p": 9500,
-        "img": "seibom-dubai-x4.webp"
-      },
-      {
-        "n": "Sei Bom Dubai Individual",
-        "p": 2500,
-        "img": "seibom-dubai.webp"
-      },
-      {
-        "n": "Sei Bom Cookies",
-        "p": 2200,
-        "img": "seibom-cookie.webp"
-      },
-      {
-        "n": "Sei Bom Blanco",
-        "p": 2200,
-        "img": "seibom-blanco.webp"
-      },
-      {
-        "n": "Sei Bom Almendras",
-        "p": 2200,
-        "img": "seibom-almendra.webp"
-      }
-    ]
-  },
-  "tortas": {
-    "t": "Tortas 800gr",
-    "i": [
-      {
-        "n": "Torta Bombón 800gr",
-        "p": 13000,
-        "img": "torta-bombon.webp"
-      },
-      {
-        "n": "Torta Lemon Pie 800gr",
-        "p": 13000,
-        "img": "torta-lemon-pie.webp"
-      },
-      {
-        "n": "Torta Cookies 800gr",
-        "p": 13000,
-        "img": "torta-cookies.webp"
-      },
-      {
-        "n": "Torta Frutilla y DDL 800gr",
-        "p": 13000,
-        "img": "torta-frutilla-ddl.webp"
-      },
-      {
-        "n": "Torta Chocolate y Vainilla 800gr",
-        "p": 13000,
-        "img": "torta-choc-vainilla.webp"
-      }
-    ]
+    ],
+    "o": 1,
+    "t": "Palitos de Agua"
   },
   "baldes_y_bombones": {
-    "t": "Baldes y Bomboncitos",
     "i": [
       {
+        "img": "balde-2l.webp",
         "n": "Balde 2 Litros (Pistacho-Cookies-Flan)",
-        "p": 13000,
-        "img": "balde-2l.webp"
+        "p": 13000
       },
       {
+        "img": "balde-3l.webp",
         "n": "Balde 3 Litros",
-        "p": 14000,
         "opt": [
           "Amer-Choco-DDL-Frutilla",
           "Americana-DDL-Frutilla",
@@ -728,110 +53,795 @@
           "Granizado-Choco-DDL-Flan",
           "Tiramisú-Tramontana-DDL"
         ],
-        "img": "balde-3l.webp"
+        "p": 14000
       },
       {
+        "img": "balde-5l.webp",
         "n": "Balde 5 Litros",
-        "p": 19500,
         "opt": [
           "Amer-Choco-DDL-Frutilla",
           "Americana-DDL-Frutilla",
           "Banana-Flan-Granizado",
           "Granizado-Choco-DDL-Flan"
         ],
-        "img": "balde-5l.webp"
+        "p": 19500
       },
       {
-        "n": "Bomboncito Especial (Frambuesa)",
-        "p": 7900,
-        "img": "bomboncito-especial.webp"
+        "img": "bomboncito-especial.webp",
+        "n": "Bomboncito Frambuesa",
+        "p": 7900
       },
       {
+        "img": "bomboncito-clasico.webp",
         "n": "Bomboncito Clásico",
-        "p": 7000,
         "opt": [
           "Americana",
           "Dulce de Leche",
           "Menta",
           "Pistacho"
         ],
-        "img": "bomboncito-clasico.webp"
+        "p": 7000
       }
-    ]
-  },
-  "potes": {
-    "t": "Potes Especiales",
-    "i": [
-      {
-        "n": "Pote Sin TACC Americana-Frutilla",
-        "p": 7500,
-        "img": "pote-fr.webp"
-      },
-      {
-        "n": "Pote Sin TACC Chocolate-DDL",
-        "p": 7500,
-        "img": "pote-ch.webp"
-      },
-      {
-        "n": "Pote Sin TACC Limón",
-        "p": 7500,
-        "img": "pote-limon.webp"
-      },
-      {
-        "n": "Pote Dietético Choco-Vainilla",
-        "p": 5900,
-        "img": "pote-dietetico.webp"
-      },
-      {
-        "n": "Pote Vegano Vainilla-Choc",
-        "p": 8000,
-        "img": "pote-vegano.webp"
-      }
-    ]
+    ],
+    "o": 7,
+    "t": "Baldes y Bomboncitos"
   },
   "bebidas": {
-    "t": "Bebidas",
     "i": [
       {
+        "img": "coca-600.webp",
         "n": "Coca Cola 600ml",
-        "p": 1900,
-        "img": "coca-600.webp"
+        "p": 1900
       },
       {
-        "n": "Agua Sierra de los Padres",
-        "p": 1200,
-        "img": "agua-mineral.webp"
+        "img": "agua-mineral.webp",
+        "n": "Agua Sierra de los Padres 500ml",
+        "p": 1200
       },
       {
+        "img": "agua-saborizada.webp",
         "n": "Agua Saborizada 500ml",
-        "p": 1400,
         "opt": [
           "Manzana",
           "Naranja",
           "Pomelo"
         ],
-        "img": "agua-saborizada.webp"
+        "p": 1400
       }
-    ]
+    ],
+    "o": 10,
+    "t": "Bebidas"
   },
   "congelados": {
-    "t": "Congelados",
     "i": [
       {
+        "img": "papas-380.webp",
         "n": "Papas Fritas 380g",
-        "p": 2900,
-        "img": "papas-380.webp"
+        "p": 2900
       },
       {
+        "img": "papas-2500.webp",
         "n": "Papas Fritas 2500g",
-        "p": 11800,
-        "img": "papas-2500.webp"
+        "p": 11800
       },
       {
+        "img": "patitas-500.webp",
         "n": "Patitas de Pollo 500g",
-        "p": 5300,
-        "img": "patitas-500.webp"
+        "p": 5300
       }
-    ]
+    ],
+    "o": 11,
+    "t": "Congelados"
+  },
+  "copitas_y_conos": {
+    "i": [
+      {
+        "img": "copa-cookie.webp",
+        "n": "Copa 220cc Cookies",
+        "p": 2600
+      },
+      {
+        "img": "copa-fr.webp",
+        "n": "Copa 220cc Fru/Ame Sin TACC",
+        "p": 2600
+      },
+      {
+        "img": "copa-ch.webp",
+        "n": "Copa 220cc Cho/Ddl Sin TACC",
+        "p": 2600
+      },
+      {
+        "img": "cono-ddl.webp",
+        "n": "Cono Tu Dulce de Leche",
+        "p": 2500
+      },
+      {
+        "img": "cono-ame.webp",
+        "n": "Cono Tu Americana",
+        "p": 2500
+      }
+    ],
+    "o": 4,
+    "t": "Copitas y Conos"
+  },
+  "crema": {
+    "i": [
+      {
+        "img": "giovi.webp",
+        "n": "Palito Giovi",
+        "opt": [
+          "Frutilla",
+          "Chocolate",
+          "Crema"
+        ],
+        "p": 1000
+      },
+      {
+        "img": "granizado-americana.webp",
+        "n": "Granizado Americana",
+        "p": 1100
+      },
+      {
+        "img": "dietetico-palito.webp",
+        "n": "Palito Dietetico Vai-Fru Sin TACC",
+        "p": 1700
+      },
+      {
+        "img": "bombon-helado.webp",
+        "n": "Bombón Helado",
+        "p": 1300
+      },
+      {
+        "img": "bombon-crocante.webp",
+        "n": "Bombón Crocante",
+        "p": 1400
+      },
+      {
+        "img": "frisky.webp",
+        "n": "Friski",
+        "p": 1000
+      },
+      {
+        "img": "carita.webp",
+        "n": "Palito Carita Sin TACC",
+        "opt": [
+          "Americana-Frutilla",
+          "Choco-Vainilla",
+          "Crema del Cielo-Americana"
+        ],
+        "p": 1300
+      }
+    ],
+    "o": 2,
+    "t": "Palitos de Crema"
+  },
+  "helado": {
+    "i": [
+      {
+        "g": 4,
+        "img": "1kg.webp",
+        "llevaSalsa": false,
+        "n": "1 KG Helado",
+        "opt": [
+          "Americana",
+          "Ananá",
+          "Banana Split",
+          "Bananita Dolca",
+          "Cereza a la Crema",
+          "Chocolate",
+          "Chocolate Blanco",
+          "Chocolate con Almendras",
+          "Chocolate Dubai",
+          "Chocolate Marroc",
+          "Chocolate Milka",
+          "Chocolate Shot",
+          "Crema del Cielo",
+          "Crema Flan",
+          "Crema Oreo",
+          "Dulce de Leche",
+          "Dulce de Leche con Nuez",
+          "Dulce de Leche Granizado",
+          "Dulce de Leche Oreo",
+          "Dulce de Leche Sei Tu",
+          "Durazno",
+          "Frutilla a la Crema",
+          "Frutilla al Agua",
+          "Frutilla Cadbury",
+          "Frutos Patagonicos",
+          "Granizado",
+          "Limon",
+          "Limon a la Reina",
+          "Mantecol",
+          "Mascarpone con Frutos Rojos",
+          "Menta Granizada",
+          "Multisabor",
+          "Pistacho",
+          "Sambayon",
+          "Super Chocolate Sei Tu",
+          "Super Dulce de Leche",
+          "Tiramisu",
+          "Tramontana",
+          "Vainilla"
+        ],
+        "p": 14000,
+        "sl": false
+      },
+      {
+        "g": 3,
+        "img": "medio-kg.webp",
+        "n": "1/2 KG Helado",
+        "opt": [
+          "Americana",
+          "Ananá",
+          "Banana Split",
+          "Bananita Dolca",
+          "Cereza a la Crema",
+          "Chocolate",
+          "Chocolate Blanco",
+          "Chocolate con Almendras",
+          "Chocolate Dubai",
+          "Chocolate Marroc",
+          "Chocolate Milka",
+          "Chocolate Shot",
+          "Crema del Cielo",
+          "Crema Flan",
+          "Crema Oreo",
+          "Dulce de Leche",
+          "Dulce de Leche con Nuez",
+          "Dulce de Leche Granizado",
+          "Dulce de Leche Oreo",
+          "Dulce de Leche Sei Tu",
+          "Durazno",
+          "Frutilla a la Crema",
+          "Frutilla al Agua",
+          "Frutilla Cadbury",
+          "Frutos Patagonicos",
+          "Granizado",
+          "Limon",
+          "Limon a la Reina",
+          "Mantecol",
+          "Mascarpone con Frutos Rojos",
+          "Menta Granizada",
+          "Multisabor",
+          "Pistacho",
+          "Sambayon",
+          "Super Chocolate Sei Tu",
+          "Super Dulce de Leche",
+          "Tiramisu",
+          "Tramontana",
+          "Vainilla"
+        ],
+        "p": 7500
+      },
+      {
+        "g": 3,
+        "img": "cuarto-kg.webp",
+        "n": "1/4 KG Helado",
+        "opt": [
+          "Americana",
+          "Ananá",
+          "Banana Split",
+          "Bananita Dolca",
+          "Cereza a la Crema",
+          "Chocolate",
+          "Chocolate Blanco",
+          "Chocolate con Almendras",
+          "Chocolate Dubai",
+          "Chocolate Marroc",
+          "Chocolate Milka",
+          "Chocolate Shot",
+          "Crema del Cielo",
+          "Crema Flan",
+          "Crema Oreo",
+          "Dulce de Leche",
+          "Dulce de Leche con Nuez",
+          "Dulce de Leche Granizado",
+          "Dulce de Leche Oreo",
+          "Dulce de Leche Sei Tu",
+          "Durazno",
+          "Frutilla a la Crema",
+          "Frutilla al Agua",
+          "Frutilla Cadbury",
+          "Frutos Patagonicos",
+          "Granizado",
+          "Limon",
+          "Limon a la Reina",
+          "Mantecol",
+          "Mascarpone con Frutos Rojos",
+          "Menta Granizada",
+          "Multisabor",
+          "Pistacho",
+          "Sambayon",
+          "Super Chocolate Sei Tu",
+          "Super Dulce de Leche",
+          "Tiramisu",
+          "Tramontana",
+          "Vainilla"
+        ],
+        "p": 4500,
+        "sl": false
+      },
+      {
+        "img": "bolsita-cucuruchos.webp",
+        "n": "Bolsita Cucuruchos Dulces x3",
+        "p": 400
+      },
+      {
+        "img": "cucuruchon.webp",
+        "n": "Cucuruchon Suelto",
+        "p": 250
+      },
+      {
+        "g": 1,
+        "img": "cucurucho-1.webp",
+        "llevaSalsa": true,
+        "n": "Cucurucho 1 bocha",
+        "opt": [
+          "Americana",
+          "Ananá",
+          "Banana Split",
+          "Bananita Dolca",
+          "Cereza a la Crema",
+          "Chocolate",
+          "Chocolate Blanco",
+          "Chocolate con Almendras",
+          "Chocolate Dubai",
+          "Chocolate Marroc",
+          "Chocolate Milka",
+          "Chocolate Shot",
+          "Crema del Cielo",
+          "Crema Flan",
+          "Crema Oreo",
+          "Dulce de Leche",
+          "Dulce de Leche con Nuez",
+          "Dulce de Leche Granizado",
+          "Dulce de Leche Oreo",
+          "Dulce de Leche Sei Tu",
+          "Durazno",
+          "Frutilla a la Crema",
+          "Frutilla al Agua",
+          "Frutilla Cadbury",
+          "Frutos Patagonicos",
+          "Granizado",
+          "Limon",
+          "Limon a la Reina",
+          "Mantecol",
+          "Mascarpone con Frutos Rojos",
+          "Menta Granizada",
+          "Multisabor",
+          "Pistacho",
+          "Sambayon",
+          "Super Chocolate Sei Tu",
+          "Super Dulce de Leche",
+          "Tiramisu",
+          "Tramontana",
+          "Vainilla"
+        ],
+        "p": 2000,
+        "s": true,
+        "salsas": [
+          "Caramelo",
+          "Chocolate",
+          "Dulce de Leche",
+          "Frutilla"
+        ],
+        "sl": true
+      },
+      {
+        "g": 2,
+        "img": "cucurucho-2.webp",
+        "llevaSalsa": true,
+        "n": "Cucurucho 2 bochas",
+        "opt": [
+          "Americana",
+          "Ananá",
+          "Banana Split",
+          "Bananita Dolca",
+          "Cereza a la Crema",
+          "Chocolate",
+          "Chocolate Blanco",
+          "Chocolate con Almendras",
+          "Chocolate Dubai",
+          "Chocolate Marroc",
+          "Chocolate Milka",
+          "Chocolate Shot",
+          "Crema del Cielo",
+          "Crema Flan",
+          "Crema Oreo",
+          "Dulce de Leche",
+          "Dulce de Leche con Nuez",
+          "Dulce de Leche Granizado",
+          "Dulce de Leche Oreo",
+          "Dulce de Leche Sei Tu",
+          "Durazno",
+          "Frutilla a la Crema",
+          "Frutilla al Agua",
+          "Frutilla Cadbury",
+          "Frutos Patagonicos",
+          "Granizado",
+          "Limon",
+          "Limon a la Reina",
+          "Mantecol",
+          "Mascarpone con Frutos Rojos",
+          "Menta Granizada",
+          "Multisabor",
+          "Pistacho",
+          "Sambayon",
+          "Super Chocolate Sei Tu",
+          "Super Dulce de Leche",
+          "Tiramisu",
+          "Tramontana",
+          "Vainilla"
+        ],
+        "p": 2900,
+        "s": true,
+        "salsas": [
+          "Caramelo",
+          "Chocolate",
+          "Dulce de Leche",
+          "Frutilla"
+        ],
+        "sl": true
+      },
+      {
+        "g": 3,
+        "img": "cucurucho-3.webp",
+        "llevaSalsa": true,
+        "n": "Cucurucho 3 bochas",
+        "opt": [
+          "Americana",
+          "Ananá",
+          "Banana Split",
+          "Bananita Dolca",
+          "Cereza a la Crema",
+          "Chocolate",
+          "Chocolate Blanco",
+          "Chocolate con Almendras",
+          "Chocolate Dubai",
+          "Chocolate Marroc",
+          "Chocolate Milka",
+          "Chocolate Shot",
+          "Crema del Cielo",
+          "Crema Flan",
+          "Crema Oreo",
+          "Dulce de Leche",
+          "Dulce de Leche con Nuez",
+          "Dulce de Leche Granizado",
+          "Dulce de Leche Oreo",
+          "Dulce de Leche Sei Tu",
+          "Durazno",
+          "Frutilla a la Crema",
+          "Frutilla al Agua",
+          "Frutilla Cadbury",
+          "Frutos Patagonicos",
+          "Granizado",
+          "Limon",
+          "Limon a la Reina",
+          "Mantecol",
+          "Mascarpone con Frutos Rojos",
+          "Menta Granizada",
+          "Multisabor",
+          "Pistacho",
+          "Sambayon",
+          "Super Chocolate Sei Tu",
+          "Super Dulce de Leche",
+          "Tiramisu",
+          "Tramontana",
+          "Vainilla"
+        ],
+        "p": 4000,
+        "s": true,
+        "salsas": [
+          "Caramelo",
+          "Chocolate",
+          "Dulce de Leche",
+          "Frutilla"
+        ],
+        "sl": true
+      },
+      {
+        "g": 1,
+        "img": "vasito-1.webp",
+        "llevaSalsa": true,
+        "n": "Vasito 1 bocha",
+        "opt": [
+          "Americana",
+          "Ananá",
+          "Banana Split",
+          "Bananita Dolca",
+          "Cereza a la Crema",
+          "Chocolate",
+          "Chocolate Blanco",
+          "Chocolate con Almendras",
+          "Chocolate Dubai",
+          "Chocolate Marroc",
+          "Chocolate Milka",
+          "Chocolate Shot",
+          "Crema del Cielo",
+          "Crema Flan",
+          "Crema Oreo",
+          "Dulce de Leche",
+          "Dulce de Leche con Nuez",
+          "Dulce de Leche Granizado",
+          "Dulce de Leche Oreo",
+          "Dulce de Leche Sei Tu",
+          "Durazno",
+          "Frutilla a la Crema",
+          "Frutilla al Agua",
+          "Frutilla Cadbury",
+          "Frutos Patagonicos",
+          "Granizado",
+          "Limon",
+          "Limon a la Reina",
+          "Mantecol",
+          "Mascarpone con Frutos Rojos",
+          "Menta Granizada",
+          "Multisabor",
+          "Pistacho",
+          "Sambayon",
+          "Super Chocolate Sei Tu",
+          "Super Dulce de Leche",
+          "Tiramisu",
+          "Tramontana",
+          "Vainilla"
+        ],
+        "p": 2000,
+        "s": true,
+        "salsas": [
+          "Caramelo",
+          "Chocolate",
+          "Dulce de Leche",
+          "Frutilla"
+        ],
+        "sl": true
+      },
+      {
+        "g": 2,
+        "img": "vasito-2.webp",
+        "llevaSalsa": true,
+        "n": "Vasito 2 bochas",
+        "opt": [
+          "Americana",
+          "Ananá",
+          "Banana Split",
+          "Bananita Dolca",
+          "Cereza a la Crema",
+          "Chocolate",
+          "Chocolate Blanco",
+          "Chocolate con Almendras",
+          "Chocolate Dubai",
+          "Chocolate Marroc",
+          "Chocolate Milka",
+          "Chocolate Shot",
+          "Crema del Cielo",
+          "Crema Flan",
+          "Crema Oreo",
+          "Dulce de Leche",
+          "Dulce de Leche con Nuez",
+          "Dulce de Leche Granizado",
+          "Dulce de Leche Oreo",
+          "Dulce de Leche Sei Tu",
+          "Durazno",
+          "Frutilla a la Crema",
+          "Frutilla al Agua",
+          "Frutilla Cadbury",
+          "Frutos Patagonicos",
+          "Granizado",
+          "Limon",
+          "Limon a la Reina",
+          "Mantecol",
+          "Mascarpone con Frutos Rojos",
+          "Menta Granizada",
+          "Multisabor",
+          "Pistacho",
+          "Sambayon",
+          "Super Chocolate Sei Tu",
+          "Super Dulce de Leche",
+          "Tiramisu",
+          "Tramontana",
+          "Vainilla"
+        ],
+        "p": 2900,
+        "s": true,
+        "salsas": [
+          "Caramelo",
+          "Chocolate",
+          "Dulce de Leche",
+          "Frutilla"
+        ],
+        "sl": true
+      }
+    ],
+    "o": 0,
+    "t": "Helado"
+  },
+  "postres": {
+    "i": [
+      {
+        "img": "escoces.webp",
+        "n": "Bombon Escoces",
+        "opt": [
+          "Clasico",
+          "Nevado",
+          "Pistacho"
+        ],
+        "p": 1700
+      },
+      {
+        "img": "seichoc.webp",
+        "n": "Alfajor Seichoc",
+        "p": 2000
+      },
+      {
+        "img": "alfajor-negro.webp",
+        "n": "Alfajor Helado ",
+        "p": 1800
+      },
+      {
+        "img": "almendrado-ind.webp",
+        "n": "Almendrado",
+        "p": 1500
+      },
+      {
+        "img": "suizo-ind.webp",
+        "n": "Bombon Suizo",
+        "p": 1600
+      },
+      {
+        "img": "tricolor-ind.webp",
+        "n": "Tricolor",
+        "p": 1500
+      }
+    ],
+    "o": 5,
+    "t": "Postres Individuales"
+  },
+  "postres_caja": {
+    "i": [
+      {
+        "img": "caja-escoces.webp",
+        "n": "Bombon Escoces x8",
+        "opt": [
+          "Clasico",
+          "Nevado",
+          "Pistacho"
+        ],
+        "p": 13000
+      },
+      {
+        "img": "caja-alfajor.webp",
+        "n": "Alfajor Helado x8",
+        "opt": [
+          "Clasico",
+          "Nevado"
+        ],
+        "p": 13000
+      },
+      {
+        "img": "caja-seichoc.webp",
+        "n": "Alfajor Seichoc x8",
+        "p": 15800
+      },
+      {
+        "img": "caja-minitorta.webp",
+        "n": "Minitorta Cookie x8",
+        "p": 13000
+      },
+      {
+        "img": "caja-suizo.webp",
+        "n": "Bombon Suizo x8",
+        "p": 11500
+      },
+      {
+        "img": "caja-tricolor.webp",
+        "n": "Tricolor x8",
+        "p": 10500
+      },
+      {
+        "img": "caja-almendrado.webp",
+        "n": "Almendrado x8",
+        "p": 10500
+      },
+      {
+        "img": "caja-dietetico.webp",
+        "n": "Tricolor Dietetico x6 Sin TACC",
+        "p": 14000
+      }
+    ],
+    "o": 6,
+    "t": "Postres por Caja"
+  },
+  "potes": {
+    "i": [
+      {
+        "img": "pote-fr.webp",
+        "n": "Pote Sin TACC Ame/Fru",
+        "p": 7500
+      },
+      {
+        "img": "pote-ch.webp",
+        "n": "Pote Sin TACC Cho/Ddl",
+        "p": 7500
+      },
+      {
+        "img": "pote-limon.webp",
+        "n": "Pote Sin TACC Limón",
+        "p": 7500
+      },
+      {
+        "img": "pote-dietetico.webp",
+        "n": "Pote Dietetico Cho/Vai Sin TACC",
+        "p": 5900
+      },
+      {
+        "img": "pote-vegano.webp",
+        "n": "Pote Vegano Cho/Vai",
+        "p": 8000
+      }
+    ],
+    "o": 8,
+    "t": "Potes Especiales"
+  },
+  "seibom": {
+    "i": [
+      {
+        "img": "seibom-dubai-x4.webp",
+        "n": "Sei Bom Dubai x4",
+        "p": 9500
+      },
+      {
+        "img": "seibom-dubai.webp",
+        "n": "Sei Bom Dubai ",
+        "p": 2500
+      },
+      {
+        "img": "seibom-cookie.webp",
+        "n": "Sei Bom Cookies",
+        "p": 2200
+      },
+      {
+        "img": "seibom-blanco.webp",
+        "n": "Sei Bom Blanco",
+        "p": 2200
+      },
+      {
+        "img": "seibom-almendra.webp",
+        "n": "Sei Bom Almendras",
+        "p": 2200
+      }
+    ],
+    "o": 3,
+    "t": "Palito Sei Bom"
+  },
+  "tortas": {
+    "i": [
+      {
+        "img": "torta-bombon.webp",
+        "n": "Torta Bombón 800gr",
+        "p": 13000
+      },
+      {
+        "img": "torta-lemon-pie.webp",
+        "n": "Torta Lemon Pie 800gr",
+        "p": 13000
+      },
+      {
+        "img": "torta-cookies.webp",
+        "n": "Torta Cookies 800gr",
+        "p": 13000
+      },
+      {
+        "img": "torta-frutilla-ddl.webp",
+        "n": "Torta Frutilla y DDL 800gr",
+        "p": 13000
+      },
+      {
+        "img": "torta-choc-vainilla.webp",
+        "n": "Torta Chocolate y Vainilla 800gr",
+        "p": 13000
+      }
+    ],
+    "o": 9,
+    "t": "Tortas 800gr"
   }
 }
