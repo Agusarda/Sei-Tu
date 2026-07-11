@@ -1072,7 +1072,6 @@
         <button class="btn-cerrar-sidebar" onclick="toggleMenu()">×</button>
         <img src="icono.webp" style="width: 140px; height: auto; margin-bottom: 10px;">
         <p style="font-size: 16px; margin:0; opacity: 0.9;">Ituzaingó Sur</p>
-        <div onclick="accesoAdmin()" style="position: absolute; top: 0; left: 0; width: 40px; height: 40px; cursor: default; opacity: 0.05;"></div>
     </div>
     <div class="sidebar-redes">
         <a href="https://wa.me/5491131725515" target="_blank" class="red-item wa"><i class="fab fa-whatsapp"></i></a>
@@ -2023,15 +2022,24 @@ function filtrarProductosPorEntrega() {
 
     actualizar();
 }
-function accesoAdmin() {
-    const pass = prompt("Ingrese la clave de administrador:");
+let secuenciaTeclas = "";
+const passwordAdmin = "ezegasadmin"; // Podés cambiarla por la palabra que quieras
 
-    if (pass === "admin123") {
-        abrirAdmin(); 
-    } else if (pass !== null) {
-        alert("Contraseña incorrecta");
+document.addEventListener("keydown", (evento) => {
+    // Vamos acumulando las letras presionadas
+    secuenciaTeclas += evento.key;
+
+    // Mantenemos la cadena del tamaño de la contraseña para que no crezca infinitamente
+    if (secuenciaTeclas.length > passwordAdmin.length) {
+        secuenciaTeclas = secuenciaTeclas.substring(secuenciaTeclas.length - passwordAdmin.length);
     }
-}
+
+    // Si coincide lo que escribiste con la clave, se abre el panel directo
+    if (secuenciaTeclas === passwordAdmin) {
+        secuenciaTeclas = ""; // Reseteamos la secuencia
+        abrirAdmin();
+    }
+});
 function abrirAdmin() {
     document.getElementById('modal-admin').classList.add('active');
     document.getElementById('overlay').classList.add('active');
