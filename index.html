@@ -1210,6 +1210,7 @@ const btnVaciar = document.getElementById("btn-vaciar");
 const ORIGEN_HELADERIA = "Fray Luis Beltran 2004, Ituzaingo, Buenos Aires, Argentina";
 let costoEnvioCalculado = 0;
 let distanciaEnvioTexto = "";
+let envioCalculado = false;
 
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
@@ -1252,6 +1253,7 @@ function guardarEnNube() {
 
 let totalGlobalNumerico = 0;
 let idActualModal = null;
+
 
 function toggleMenu() { 
     const sidebar = document.getElementById("sidebar");
@@ -1383,6 +1385,7 @@ function iniciarAutocomplete() {
         // Al cambiar la dirección reseteamos el envío
         costoEnvioCalculado = 0;
         distanciaEnvioTexto = "";
+        envioCalculado = false;
         document.getElementById('resultado-envio').style.display = 'none';
         actualizar();
     });
@@ -1667,6 +1670,7 @@ function calcularCostoEnvio() {
             const divResultado = document.getElementById('resultado-envio');
             divResultado.style.display = 'block';
             divResultado.innerHTML = `Distancia aproximada: <b>${distanciaEnvioTexto}</b><br>Costo de Envío: <b>$${costoEnvioCalculado}</b>`;
+            envioCalculado = true;
 
             actualizar();
         } else {
@@ -1841,6 +1845,7 @@ function vaciarCarrito() {
         seleccionesUsuario = {};
         costoEnvioCalculado = 0;
         distanciaEnvioTexto = "";
+        envioCalculado = false;
         document.getElementById('resultado-envio').style.display = 'none';
 
         actualizar();
@@ -1885,6 +1890,10 @@ function enviar() {
     
     if (entrega === "Delivery") {
         if (!d) return alert("Por favor, ingresá tu dirección.");
+        if (!envioCalculado) {
+        alert("Por favor, hacé clic en '🛵 Calcular costo de envío' antes de enviar tu pedido.");
+        return;
+        }
         const checkHorario = esHorarioDelivery();
         if (!checkHorario.abierto) {
             alert("ATENCIÓN: " + checkHorario.motivo);
