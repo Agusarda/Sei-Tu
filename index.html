@@ -16,7 +16,6 @@
         body { 
             margin: 0; 
             font-family: 'Poppins', sans-serif; 
-            /* Cambiá 'tu-imagen-de-fondo.jpg' por el nombre real de tu archivo */
             background: url('tu-imagen-de-fondo.webp') no-repeat center center fixed; 
             background-size: cover; 
             color: var(--text); 
@@ -56,7 +55,7 @@
         .btn-admin-opt:hover { background: #5a6268; }
 
         .sidebar-header { 
-            padding: 30px 20px; /* Reducimos un poco el padding superior */
+            padding: 30px 20px; 
             background: linear-gradient(135deg, var(--primary), var(--secondary)); 
             color: white; 
             text-align: center; 
@@ -67,7 +66,6 @@
             clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
         }
 
-        /* Estilo para que el subtítulo no compita con el logo */
         .sidebar-header p {
             font-weight: 400;
             letter-spacing: 1px;
@@ -119,7 +117,6 @@
             transform: scale(0.95);
         }
 
-        /* Scrollbar personalizado para el menú */
         .sidebar-menu::-webkit-scrollbar { width: 4px; }
         .sidebar-menu::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
         
@@ -128,14 +125,14 @@
             background: var(--primary); 
             color: white; 
             border: none; 
-            padding: 10px 18px; /* Mismo padding que horarios */
-            border-radius: 50px; /* Forma de píldora */
+            padding: 10px 18px; 
+            border-radius: 50px; 
             cursor: pointer; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
             font-family: 'Poppins', sans-serif;
             font-weight: 600; 
-            font-size: 14px; /* Misma fuente que horarios */
-            width: auto; /* Para que el tamaño dependa del contenido igual que el otro */
+            font-size: 14px; 
+            width: auto; 
             display: flex;
             align-items: center;
             gap: 8px;
@@ -159,13 +156,13 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: center; /* Centra el contenido */
+            justify-content: center; 
             gap: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
-            margin: 30px auto; /* Agrega espacio arriba y lo centra */
-            width: 100%; /* Para que ocupe el ancho de su contenedor */
-            max-width: 200px; /* Evita que sea gigante en PC */
+            margin: 30px auto; 
+            width: 100%; 
+            max-width: 200px; 
         }
 
         .btn-horarios-flotante:hover {
@@ -178,17 +175,13 @@
             font-size: 16px;
         }
 
-        /* Ajuste para celulares: si el banner es muy grande, 
-        podemos bajarlo un poquito para que no tape nada importante */
         @media (max-width: 600px) {
-        /* Achicamos un toque los botones para que no se choquen en el medio */
             .menu-toggle, .btn-horarios-flotante {
                 padding: 8px 12px;
                 font-size: 12px;
             }
         }
 
-        /* Clase para ocultar los botones cuando los modales están abiertos */
         .hidden-btn {
             opacity: 0 !important;
             pointer-events: none !important;
@@ -198,7 +191,6 @@
         .overlay { position: fixed; top:0; left:0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); display: none; z-index: 9000; opacity: 0; transition: opacity 0.3s ease; }
         .overlay.active { display: block; opacity: 1; }
 
-        /* AJUSTE DE LA CRUZ DE CIERRE */
         .btn-cerrar-modal {
             position: absolute;
             top: 15px;
@@ -222,8 +214,8 @@
 
         .card-img {
             width: 100%;
-            height: 80px; /* Altura fija para que todas las cards midan lo mismo */
-            object-fit: contain; /* Ajusta la imagen sin deformarla */
+            height: 80px; 
+            object-fit: contain; 
             margin-bottom: 8px;
             border-radius: 10px;
         }
@@ -258,11 +250,10 @@
         .modal-horarios::-webkit-scrollbar-track, .modal-sabores::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
         .modal-horarios::-webkit-scrollbar-thumb, .modal-sabores::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
 
-        /* AJUSTE DEL TÍTULO PARA QUE NO SE SUPERPONGA CON LA CRUZ */
         #modal-sabores-titulo, .modal-horarios h3 { 
             color: var(--primary); 
             margin: 0; 
-            padding: 25px 55px 25px 20px; /* Padding derecho aumentado para la cruz */
+            padding: 25px 55px 25px 20px; 
             font-size: 19px; 
             font-weight: 600; 
             border-bottom: 2px solid #f0f7ff;
@@ -339,7 +330,6 @@
             width: 95%; 
             max-width: 1200px; 
             margin: 20px auto; 
-            /* Aumentamos el padding bottom para que el carrito no tape el último producto */
             padding-bottom: 250px !important; 
             transition: 0.4s; 
             display: flex;
@@ -364,14 +354,12 @@
             padding-left: 15px; 
             text-transform: uppercase; 
             font-size: 1.1rem;
-            align-self: flex-start; /* Mantiene el título a la izquierda del contenedor centrado */
+            align-self: flex-start; 
             width: fit-content;
         }
         
-        /* Cambiamos el minmax de 280px a 200px para que entren más columnas */
         .grid { 
             display: grid; 
-            /* Cambiamos 200px por 140px para que en el celu entren 2 columnas */
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
             gap: 8px; 
             padding: 15px; 
@@ -383,11 +371,11 @@
         #paso-productos, #dinamico {
             width: 100%;
         }
-        /* Reducimos el padding interno de la card y el tamaño de los textos */
+
         .card { 
             background: rgba(255, 255, 255, 1.0);
-            border-radius: 15px; /* Bordes un poco más finos */
-            padding: 8px; /* Menos espacio interno */
+            border-radius: 15px; 
+            padding: 8px; 
             text-align: center; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
             display: flex; 
@@ -400,7 +388,7 @@
             position: absolute;
             top: 5px;
             right: 5px;
-            width: 35px; /* Tamaño del simbolito */
+            width: 35px; 
             height: auto;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
@@ -411,10 +399,10 @@
 
         .card h4 {
             margin: 3px 0;
-            font-size: 0.85rem; /* Aumentamos un poquito el tamaño */
-            height: auto;       /* Cambiado de 32px a auto */
-            min-height: 40px;   /* Asegura que las cards sigan alineadas */
-            overflow: visible;  /* Para que no corte el texto */
+            font-size: 0.85rem; 
+            height: auto;       
+            min-height: 40px;   
+            overflow: visible;  
             display: flex;
             align-items: center;
             justify-content: center;
@@ -422,12 +410,11 @@
 
         .price { 
             color: var(--primary); 
-            font-size: 0.8rem; /* Precio un poco más chico */
+            font-size: 0.8rem; 
             font-weight: 600; 
             margin-bottom: 5px; 
         }
 
-        /* SECCIÓN DATOS DEL PEDIDO */
         #paso-datos { 
             display: none; 
             padding: 20px; 
@@ -455,7 +442,6 @@
             padding-left: 5px;
         }
 
-        /* INPUTS MODERNOS */
         input[type="text"], 
         input[type="number"], 
         textarea, 
@@ -479,24 +465,50 @@
             box-shadow: 0 0 0 4px rgba(0, 198, 255, 0.1);
         }
 
+        /* Estilos para los botones de geolocalización y cálculo de delivery */
+        .btn-location, .btn-calc-envio {
+            margin-top: 10px;
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-location {
+            background: #eef2f5;
+            color: var(--primary);
+            margin-right: 5px;
+        }
+
+        .btn-calc-envio {
+            background: #e67e22;
+            color: white;
+            box-shadow: 0 3px 10px rgba(230,126,34,0.3);
+        }
+
+        .btn-calc-envio:hover {
+            background: #d35400;
+        }
+
         #modal-admin {
             max-width: 1200px !important;
             width: 95%;
             height: 90vh;
-            overflow-y: auto; /* Permite scroll vertical en el modal */
+            overflow-y: auto; 
             display: none;
             flex-direction: column;
             padding: 0;
             background: white;
-            -webkit-overflow-scrolling: touch; /* Suaviza el scroll en iOS */
+            -webkit-overflow-scrolling: touch; 
         }
 
         #modal-admin.active {
             display: flex;
         }
 
-        /* Contenedor de los productos para que no se amontonen */
-        /* Busca esto cerca de la línea 390 y reemplazalo */
         .admin-row-producto {
             display: grid; 
             grid-template-columns: 40px 2fr 100px 1.5fr 100px 90px 40px; 
@@ -509,7 +521,6 @@
             border: 1px solid #eee;
         }
 
-        /* Estilo para los inputs dentro del admin para que se vean mejor */
         #modal-admin input {
             padding: 6px;
             border: 1px solid #ccc;
@@ -539,7 +550,6 @@
             text-align: center;
         }
 
-        /* RESUMEN DE PAGO ESTILIZADO */
         .resumen-caja {
             background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
             border: 2px dashed var(--primary) !important;
@@ -575,28 +585,27 @@
             background: white; 
             padding: 20px; 
             box-shadow: 0 -10px 30px rgba(0,0,0,0.2); 
-            /* Bajamos el z-index para que el menú y modales lo tapen */
             z-index: 5000; 
             border-radius: 25px 25px 0 0; 
             box-sizing: border-box;
             display: none; 
         }
+
         #resumen-mini { 
-            max-height: 0; /* Cerrado por defecto */
+            max-height: 0; 
             overflow: hidden;
-            transition: max-height 0.3s ease-out; /* Animación suave */
+            transition: max-height 0.3s ease-out; 
             background: #f9f9f9;
             border-radius: 8px;
         }
 
         #resumen-mini.abierto {
-            max-height: 200px; /* Altura máxima cuando está expandido */
+            max-height: 200px; 
             margin-bottom: 15px;
             padding: 10px;
             overflow-y: auto;
         }
 
-        /* Estilo para el nuevo botón de Ver Detalles */
         .btn-ver-detalle {
             background: none;
             border: none;
@@ -614,7 +623,6 @@
             transition: transform 0.3s;
         }
 
-        /* Rota la flecha cuando está abierto */
         .btn-ver-detalle.activo i {
             transform: rotate(180deg);
         }
@@ -628,7 +636,6 @@
             padding-bottom: 8px;
         }
 
-        /* Opcional: Estilo para la barrita de scroll para que no sea fea */
         #resumen-mini::-webkit-scrollbar { 
             width: 4px; 
         }
@@ -641,11 +648,11 @@
         .btn-principal { width: 100%; padding: 10px; border: none; border-radius: 12px; background: var(--primary); color: white; font-size: 16px; font-weight: 600; cursor: pointer; }
         .btn-whatsapp { background: var(--accent); }
         .btn-volver { 
-            background: var(--primary); /* Usa el azul característico de tu página */
+            background: var(--primary); 
             color: white; 
             margin-bottom: 20px; 
             padding: 12px 25px; 
-            border-radius: 50px; /* Forma de píldora para que combine con el resto de la interfaz */
+            border-radius: 50px; 
             border: none; 
             cursor: pointer; 
             font-family: 'Poppins', sans-serif;
@@ -659,14 +666,14 @@
         }
 
         .btn-volver:hover {
-            transform: translateX(-5px); /* Pequeño movimiento a la izquierda al señalarlo */
+            transform: translateX(-5px); 
             box-shadow: 0 6px 20px rgba(0, 114, 255, 0.3);
             filter: brightness(1.1);
         }
 
         .btn-sabores { 
             padding: 4px 6px; 
-            font-size: 10px; /* Botón de sabores más compacto */
+            font-size: 10px; 
             width: 100%;
         }
 
@@ -679,28 +686,24 @@
             overflow: hidden; 
             width: calc(100% - 40px); 
             max-width: 1160px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Agregué una sombra suave para que resalte más */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
         }
 
         .banner-img {
             width: 100%;
             height: auto;
-            /* Subimos la altura para que el logo central entre cómodo */
             max-height: 300px; 
             display: block;
-            /* 'cover' asegura que llene el ancho, 'center' mantiene el logo al medio */
             object-fit: cover; 
             object-position: 50% 40%;
         }
 
-        /* Ajuste para tablets/PC */
         @media (min-width: 1024px) {
             header {
                 width: 100%; 
             }
         }
 
-        /* Ajuste para celulares: lo hacemos un poquito más alto también aquí */
         @media (max-width: 600px) {
             header {
                 margin: 10px auto;
@@ -708,11 +711,10 @@
                 border-radius: 15px;
             }
             .banner-img {
-                max-height: 180px; /* Antes estaba en 130px, ahora tiene más aire */
+                max-height: 180px; 
                 object-position: 50% 40%;
             }
         }
-
 
         .control-cantidad {
             display: flex;
@@ -757,7 +759,6 @@
             transform: scale(1.2);
         }
 
-        /* Para que el input no se vea como un cuadro de texto editable */
         input[type="number"].cantidad {
             width: 25px;
             text-align: center;
@@ -768,7 +769,6 @@
             padding: 0;
         }
 
-        /* Quita las flechas originales en Chrome/Safari */
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -800,7 +800,6 @@
             transform: scale(1.1);
         }
 
-        /* Ajuste para que el título no pise el botón */
         .sidebar-header h3 {
             margin-top: 5px;
         }
@@ -811,9 +810,9 @@
             border: none;
             padding: 5px;
             cursor: pointer;
-            font-size: 18px; /* Tamaño del tacho */
+            font-size: 18px; 
             transition: transform 0.2s;
-            display: none; /* Se controla por JS */
+            display: none; 
             margin: 0;
         }
 
@@ -821,7 +820,7 @@
             background: none;
             transform: scale(1.2);
         }
-        /* Botón para añadir selectores dinámicamente */
+
         .btn-add-selector {
             background: #f0f7ff;
             color: var(--primary);
@@ -838,8 +837,8 @@
             background: var(--primary);
             color: white;
         }
-        .titulo-llamativo {       /* Fondo amarillo vibrante */
-            color: #d32f2f;               /* Texto rojo fuerte */
+        .titulo-llamativo {       
+            color: #d32f2f;               
             padding: 12px;
             border-radius: 8px;
             text-align: center;
@@ -848,16 +847,15 @@
             text-transform: uppercase;
             border: 2px dashed #d32f2f;
             margin-bottom: 15px;
-            animation: latido 2s infinite; /* Animación de pulso para que llame la atención */
+            animation: latido 2s infinite; 
         }
 
-        /* Animación de latido suave */
         @keyframes latido {
             0% { transform: scale(1); }
             50% { transform: scale(1.02); box-shadow: 0 0 15px rgba(211, 47, 47, 0.3); }
             100% { transform: scale(1); }
         }
-        /* Estilos generales para los iconos de redes (reutilizables) */
+
         .red-item {
             width: 45px;
             height: 45px;
@@ -872,9 +870,9 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .logo-dietetico {
-            width: 60px; /* Ajustá el tamaño según prefieras */
+            width: 60px; 
             height: auto;
-            margin-top: 5px auto; /* Sube un poquito para pegarse a la imagen */
+            margin-top: 5px auto; 
             margin-bottom: 5px;
             display: block;
             z-index: 5;
@@ -884,17 +882,15 @@
         .ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
         .maps { background: #4285F4; }
 
-        /* Contenedor dentro del Sidebar */
         .sidebar-redes {
             display: flex;
             justify-content: center;
             gap: 20px;
             padding: 20px 0;
             border-bottom: 1px solid #eee;
-                background: #fdfdfd;
+            background: #fdfdfd;
         }
 
-        /* Contenedor en la Pantalla de Inicio */
         .inicio-redes {
             display: flex;
             justify-content: center;
@@ -914,7 +910,7 @@
             border: 1px solid #ffa39e;
             border-radius: 8px;
             width: 40px;
-            height: 48px; /* Misma altura que el select */
+            height: 48px; 
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -926,7 +922,6 @@
             background: #e74c3c;
             color: white;
         }
-    
     </style>
 </head>
 <body>
@@ -952,7 +947,6 @@
         
         <h1 style="color: white; font-family: 'Poppins', sans-serif; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); margin-bottom: 40px;">¡HELADO TODO EL AÑO!</h1>
 
-        <!-- Reemplaza el botón de INICIAR PEDIDO por estos dos -->
         <div style="display: flex; gap: 15px; margin-bottom: 40px;">
             <button onclick="comenzarPedido('Delivery')" style="
                 background: #e67e22;
@@ -986,7 +980,7 @@
                 🛍️ TAKE AWAY
             </button>
         </div>
-        <!-- Agregá esto justo debajo del div que contiene los botones de Delivery y Take Away -->
+        
         <div id="aviso-horario-inicio" style="
             color: #ffd400; 
             font-size: 14px; 
@@ -1000,7 +994,7 @@
             display: inline-block;
         ">
             🛵 El servicio de delivery inicia a las 18:00hs
-</div>
+        </div>
         <div class="inicio-redes">
             <a href="https://wa.me/5491131725515" target="_blank" class="red-item wa"><i class="fab fa-whatsapp"></i></a>
             <a href="https://www.instagram.com/seitu.ituzaingosur/" target="_blank" class="red-item ig"><i class="fab fa-instagram"></i></a>
@@ -1015,7 +1009,7 @@
 <div class="nav-buttons" id="nav-btns">
     <button class="menu-toggle" onclick="toggleMenu()">☰ Menú</button>
 </div>
-<!-- Botones de intercambio rápido (Arriba a la derecha) -->
+
 <div id="quick-switch" style="position: fixed; top: 15px; right: 15px; z-index: 8500; display: none; gap: 10px;">
     <button id="switch-to-takeaway" onclick="comenzarPedido('Retiro')" style="background: #0072ff; color: white; border: none; padding: 10px 18px; border-radius: 50px; font-weight: 600; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: none;">
         🛍️ Ir a Take Away
@@ -1088,7 +1082,7 @@
 
 <div class="main-content">
     <header>
-    <img src="banner.webp" alt="Sei Tu Ituzaingó Sur" class="banner-img">
+        <img src="banner.webp" alt="Sei Tu Ituzaingó Sur" class="banner-img">
     </header>
     <div id="paso-productos"><div id="dinamico"></div></div>
 
@@ -1107,10 +1101,19 @@
             <div class="form-group" id="group-direccion" style="display: none;">
                 <label>Dirección y Altura</label>
                 <input type="text" id="direccion" placeholder="Ej: Av. Rivadavia 1234">
-                <!-- Agrega esto cerca de tu input de dirección -->
-                <button id="btn-geoloc" type="button" class="btn-location">
-                    📍 Usar mi ubicación actual
-                </button>
+                
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button id="btn-geoloc" type="button" class="btn-location">
+                        📍 Usar mi ubicación actual
+                    </button>
+                    <!-- BOTÓN PARA CALCULAR EL ENVÍO -->
+                    <button id="btn-calcular-envio" type="button" class="btn-calc-envio" onclick="calcularCostoEnvio()">
+                        🛵 Calcular costo de envío
+                    </button>
+                </div>
+
+                <div id="resultado-envio" style="display: none; margin-top: 10px; font-weight: 600; font-size: 14px; color: #27ae60; background: #e8f8f5; padding: 10px; border-radius: 10px; border: 1px solid #a3e4d7;"></div>
+                
                 <div id="mapa-confirmacion" style="width: 100%; height: 300px; margin-top: 10px; border-radius: 8px;"></div>
             </div>
 
@@ -1143,7 +1146,6 @@
     </div>
     <div id="carrito">
         <div class="carrito-header">
-            <!-- Botón que controla la expansión -->
             <button class="btn-ver-detalle" onclick="toggleDetalle()">
                 <i class="fas fa-chevron-up"></i> Ver detalle del pedido
             </button>
@@ -1153,7 +1155,6 @@
             </button>
         </div>
 
-        <!-- El resumen ahora empieza vacío y oculto -->
         <div id="resumen-mini"></div>
 
         <div class="footer-total" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; margin-top: 10px;">
@@ -1184,13 +1185,12 @@
         </button>
     </div>
 </div>
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCg-wCGlI5EJRfcfP32gm0YIuu22-hEksg&libraries=places"></script>
-<!-- Firebase App (el núcleo) -->
 <script src="https://www.gstatic.com/firebasejs/9.1.1/firebase-app-compat.js"></script>
-<!-- Firebase Realtime Database -->
 <script src="https://www.gstatic.com/firebasejs/9.1.1/firebase-database-compat.js"></script>
+
 <script>
-    
 const firebaseConfig = {
   apiKey: "AIzaSyA8bgdAF5FTboKh5Ub8Tz4KmkD1NO7n1fY",
   authDomain: "seitu-27462.firebaseapp.com",
@@ -1201,21 +1201,25 @@ const firebaseConfig = {
   appId: "1:206657762604:web:a79b6404a9783e2b39a889",
   measurementId: "G-F9QWCQ9VH0"
 };
-let completo = {}; // Se cargará desde la nube
+
+let completo = {}; 
 let seleccionesUsuario = {};
 const btnVaciar = document.getElementById("btn-vaciar");
+
+// VARIABLES PARA EL CÁLCULO DE ENVÍO
+const ORIGEN_HELADERIA = "Fray Luis Beltran 2004, Ituzaingo, Buenos Aires, Argentina";
+let costoEnvioCalculado = 0;
+let distanciaEnvioTexto = "";
 
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
-// --- CARGA DE DATOS ---
 async function cargarDatos() {
     try {
         const snapshot = await database.ref('/').once('value');
         const data = snapshot.val();
         
         if (data) {
-            // Convertimos a array, ordenamos por 'o' y volvemos a objeto
             const ordenado = Object.entries(data)
                 .sort(([, a], [, b]) => (a.o || 0) - (b.o || 0));
             
@@ -1229,31 +1233,22 @@ async function cargarDatos() {
         console.error("Error:", err);
     }
 }
-function guardarEnNube() {
-    // 1. Referencia a la base de datos
-    const dbRef = database.ref('/');
 
-    // 2. Intentar guardar
+function guardarEnNube() {
+    const dbRef = database.ref('/');
     dbRef.set(completo)
         .then(() => {
-            // Si entra acá, Firebase confirmó la recepción
             console.log("Confirmado por Firebase");
             alert("¡Cambios guardados con éxito!");
-            
-            // Cerramos el panel antes de recargar para evitar bugs visuales
             const panel = document.getElementById('modal-admin');
             if(panel) panel.style.display = 'none';
-
-            // Recargamos para limpiar la memoria y ver el nuevo orden
             location.reload(); 
         })
         .catch((error) => {
-            // Solo si falla la conexión o los permisos
             console.error("Error real de Firebase:", error);
             alert("Error al guardar: " + error.message);
         });
 }
-
 
 let totalGlobalNumerico = 0;
 let idActualModal = null;
@@ -1264,12 +1259,9 @@ function toggleMenu() {
 
     sidebar.classList.toggle("active"); 
     
-    // Si el menú se activa, ocultamos los botones para que no se pisen
     if(sidebar.classList.contains("active")) {
         btnsNav.classList.add("hidden-btn");
-        // Eliminamos la activación del overlay aquí para que no se oscurezca
     } else {
-        // Si se cierra, restauramos los botones
         btnsNav.classList.remove("hidden-btn");
     }
 }
@@ -1279,7 +1271,6 @@ function toggleHorarios() {
     const overlay = document.getElementById("overlay");
     const btnsNav = document.getElementById("nav-btns");
     const btnHorarios = document.querySelector(".btn-horarios-flotante");
-  
 
     modal.classList.toggle("active");
     overlay.classList.toggle("active");
@@ -1293,18 +1284,15 @@ function toggleHorarios() {
 }
 
 function cerrarTodo() {
-    // 1. Quitamos las clases activas de todos los modales y el fondo oscuro
     document.getElementById("sidebar").classList.remove("active");
     document.getElementById("modal-horarios").classList.remove("active");
     document.getElementById("modal-contactos").classList.remove("active");
     document.getElementById("modal-sabores").classList.remove("active");
     document.getElementById("overlay").classList.remove("active");
 
-    // 2. Identificamos en qué pantalla estamos
     const pantallaInicio = document.getElementById("pantalla-inicio");
     const esPantallaInicioVisible = pantallaInicio.style.display !== "none";
 
-    // 3. Restauramos la visibilidad de los botones de navegación
     const navBtns = document.getElementById("nav-btns");
     const btnHorariosFlotante = document.querySelector(".btn-horarios-flotante");
 
@@ -1312,7 +1300,6 @@ function cerrarTodo() {
         navBtns.classList.remove("hidden-btn");
     }
 
-    // El botón de horarios solo debe reaparecer si estamos en la pantalla de INICIO
     if (btnHorariosFlotante && esPantallaInicioVisible) {
         btnHorariosFlotante.classList.remove("hidden-btn");
     }
@@ -1320,16 +1307,12 @@ function cerrarTodo() {
 
 function esHorarioDelivery() {
     const ahora = new Date();
-    const dia = ahora.getDay(); // 0: Domingo, 1: Lunes, ..., 2: Martes
+    const dia = ahora.getDay(); 
     const hora = ahora.getHours();
 
-    // Martes cerrado (según tu cartel y modal)
     if (dia === 2) return { abierto: false, motivo: "Los martes el local permanece cerrado." };
-
-    // El delivery arranca a las 18:00hs
     if (hora < 18) return { abierto: false, motivo: "El servicio de delivery comienza a las 18:00hs." };
 
-    // Cierre según el día (Viernes es 5, Sábado es 6)
     const horaCierre = (dia === 5 || dia === 6) ? 23 : 22;
 
     if (hora >= horaCierre) {
@@ -1338,6 +1321,7 @@ function esHorarioDelivery() {
 
     return { abierto: true };
 }
+
 let mapa;
 let marcador;
 
@@ -1359,10 +1343,9 @@ function iniciarAutocomplete() {
         position: centroItuzaingo
     });
 
-    // Filtramos para que solo busque en Argentina
     const autocomplete = new google.maps.places.Autocomplete(inputDireccion, {
         componentRestrictions: { country: "ar" },
-        fields: ["geometry", "address_components"] // Pedimos los componentes por separado
+        fields: ["geometry", "address_components"] 
     });
 
     autocomplete.addListener('place_changed', () => {
@@ -1372,7 +1355,6 @@ function iniciarAutocomplete() {
             return;
         }
 
-        // --- LÓGICA DE FILTRADO DE DIRECCIÓN ---
         let calle = "";
         let altura = "";
         let partido = "";
@@ -1386,37 +1368,34 @@ function iniciarAutocomplete() {
                 } else if (types.includes("street_number")) {
                     altura = component.long_name;
                 } else if (types.includes("locality") || types.includes("administrative_area_level_2")) {
-                    // Solo tomamos el primero que encuentre (usualmente el partido/localidad)
                     if (!partido) partido = component.long_name;
                 }
             });
         }
 
-        // Construimos la dirección limpia: "Calle Altura, Partido"
         const direccionLimpia = `${calle} ${altura}${partido ? ', ' + partido : ''}`.trim();
-        
-        // Asignamos solo el texto limpio al input
         inputDireccion.value = direccionLimpia;
 
-        // Actualizamos el mapa visualmente
         mapa.setCenter(place.geometry.location);
         mapa.setZoom(17);
         marcador.setPosition(place.geometry.location);
+
+        // Al cambiar la dirección reseteamos el envío
+        costoEnvioCalculado = 0;
+        distanciaEnvioTexto = "";
+        document.getElementById('resultado-envio').style.display = 'none';
+        actualizar();
     });
 }
 
 function esHorarioLocalAbierto() {
     const ahora = new Date();
-    const dia = ahora.getDay(); // 0: Domingo, 1: Lunes...
+    const dia = ahora.getDay(); 
     const hora = ahora.getHours();
 
-    // Martes cerrado
     if (dia === 2) return { abierto: false, motivo: "Los martes el local permanece cerrado." };
-
-    // Horarios de apertura general (11:00hs)
     if (hora < 11) return { abierto: false, motivo: "El local abre a las 11:00hs." };
 
-    // Cierre según el día
     const horaCierre = (dia === 5 || dia === 6) ? 23 : 22;
 
     if (hora >= horaCierre) {
@@ -1425,8 +1404,8 @@ function esHorarioLocalAbierto() {
 
     return { abierto: true };
 }
+
 function toggleDireccion() {
-    // CAMBIO: Ahora usamos la variable global en lugar de buscar el elemento en el HTML
     const esDelivery = (modoEntregaGlobal === "Delivery");
     
     const grupoDireccion = document.getElementById("group-direccion");
@@ -1436,20 +1415,23 @@ function toggleDireccion() {
     if (grupoDireccion) {
         grupoDireccion.style.display = esDelivery ? "block" : "none";
     }
+
+    if (!esDelivery) {
+        costoEnvioCalculado = 0;
+        distanciaEnvioTexto = "";
+    }
+
     if (selectPago) {
         const opcionTarjeta = selectPago.querySelector('option[value="Tarjeta"]');
         
         if (esDelivery) {
-            // Si es delivery, ocultamos la opción de tarjeta
             if (opcionTarjeta) opcionTarjeta.style.display = "none";
             
-            // Si justo estaba seleccionada la tarjeta, reseteamos a Efectivo
             if (selectPago.value === "Tarjeta") {
                 selectPago.value = "Efectivo";
-                toggleEfectivo(); // Para que aparezca el campo de "vuelto"
+                toggleEfectivo(); 
             }
         } else {
-            // Si es Take Away, volvemos a mostrar la tarjeta
             if (opcionTarjeta) opcionTarjeta.style.display = "block";
         }
     }
@@ -1460,11 +1442,10 @@ function toggleDireccion() {
         if (esDelivery) {
             const check = esHorarioDelivery();
             if (!check.abierto) {
-                aviso.style.color = "#e74c3c"; // Rojo alerta
-                // Quitamos la parte de "Selecciona Retiro en Local" porque ya no hay selector
+                aviso.style.color = "#e74c3c"; 
                 aviso.innerHTML = `⚠️ ${check.motivo}`; 
             } else {
-                aviso.style.color = "#fc67a2"; // Tu color rosa/naranja
+                aviso.style.color = "#fc67a2"; 
                 aviso.innerHTML = `✅ Delivery disponible en este momento.`;
             }
         }
@@ -1474,17 +1455,11 @@ function toggleDireccion() {
 function toggleEfectivo() {
     const pago = document.getElementById('pago').value;
     const groupEfectivo = document.getElementById('group-efectivo');
-    const groupTransferencia = document.getElementById('group-transferencia');
 
     if (pago === 'Efectivo') {
         groupEfectivo.style.display = 'block';
-        groupTransferencia.style.display = 'none';
-    } else if (pago === 'Transferencia') {
-        groupEfectivo.style.display = 'none';
-        groupTransferencia.style.display = 'block';
     } else {
         groupEfectivo.style.display = 'none';
-        groupTransferencia.style.display = 'none';
     }
 }
 
@@ -1521,7 +1496,6 @@ function init() {
                     const esSoloLocal = p.sl === true;
                     const nombreOriginal = p.n ? p.n.trim().toUpperCase() : "";
                     
-                    // --- Lógica de Etiquetas Automáticas ---
                     const esSinTacc = nombreOriginal.includes("SIN TACC");
                     const esVegano = nombreOriginal.includes("VEGANO");
                     const esDietetico = nombreOriginal.includes("DIETETICO");
@@ -1534,7 +1508,6 @@ function init() {
                         logoCormillotHtml = `<img src="./cormillot.webp" class="logo-dietetico" alt="Dietético">`;
                     }
 
-                    // Limpiamos el nombre para que no se vea el texto técnico en la card
                     const nombreAMostrar = nombreOriginal
                         .replace(/SIN TACC/g, "")
                         .replace(/VEGANO/g, "")
@@ -1576,14 +1549,13 @@ function ajustarCant(id, cambio, catKey, itemIdx) {
     valor += cambio;
     if (valor < 0) valor = 0;
     
-    // Seteamos el valor directamente en el elemento
     input.value = valor;
-    // Forzamos el atributo visual para la persistencia del selector
     input.setAttribute('value', valor); 
 
     generarSelectores(id, catKey, itemIdx);
-    actualizar(); // Esto ahora detectará el 'valor' correctamente
+    actualizar(); 
 }
+
 function generarSelectores(id, catKey, itemIdx) {
     const item = completo[catKey].i[itemIdx];
     const cant = parseInt(document.getElementById(id).value) || 0;
@@ -1595,7 +1567,6 @@ function generarSelectores(id, catKey, itemIdx) {
         contenedor.innerHTML = "";
         delete seleccionesUsuario[id];
     } else if (item.g || (item.opt && item.opt.length > 0)) {
-        // Corregido: Pasamos el ID del input, la Key de categoría y el índice
         if (!document.getElementById("btn-sab-" + id)) {
             contenedor.innerHTML = `<button class="btn-sabores" id="btn-sab-${id}" 
                 onclick="abrirModalSabores('${id}', '${catKey}', ${itemIdx})" 
@@ -1644,6 +1615,66 @@ function guardarSabores() {
     actualizar();
 }
 
+// FUNCIONES NUEVAS: CÁLCULO DE ENVÍO POR RECORRIDO DE MOTO
+function calcularCostoEnvio() {
+    const direccionDestino = document.getElementById('direccion').value.trim();
+    if (!direccionDestino) {
+        alert("Por favor, ingresá una dirección para calcular el costo de envío.");
+        return;
+    }
+
+    const btn = document.getElementById('btn-calcular-envio');
+    btn.innerText = "⏳ Calculando...";
+    btn.disabled = true;
+
+    const service = new google.maps.DistanceMatrixService();
+    
+    // Configuración para simular el recorrido en moto / auto por calles
+    service.getDistanceMatrix({
+        origins: [ORIGEN_HELADERIA],
+        destinations: [direccionDestino + ", Buenos Aires, Argentina"],
+        travelMode: google.maps.TravelMode.DRIVING, // Rutas por calle (cuadra por cuadra)
+        unitSystem: google.maps.UnitSystem.METRIC
+    }, (response, status) => {
+        btn.innerText = "🛵 Calcular costo de envío";
+        btn.disabled = false;
+
+        if (status === "OK" && response.rows[0].elements[0].status === "OK") {
+            const element = response.rows[0].elements[0];
+            const metros = element.distance.value; // Distancia en metros (ej: 2040)
+
+            // 1. Redondeamos a 1 decimal primero (coincide con lo que se muestra en pantalla)
+            const kmRedondeado = Math.round((metros / 1000) * 10) / 10; // ej: 2.04 -> 2.0
+
+            // 2. Guardamos el texto exactamente como se ve en tu imagen
+            distanciaEnvioTexto = kmRedondeado.toFixed(1).replace('.', ',') + " km";
+
+            // 3. Calculamos la tarifa usando kmRedondeado
+            if (kmRedondeado <= 1.0) {
+                costoEnvioCalculado = 0;
+            } else if (kmRedondeado <= 2.0) {
+                costoEnvioCalculado = 400;
+            } else if (kmRedondeado <= 3.0) {
+                costoEnvioCalculado = 800;
+            } else if (kmRedondeado <= 4.0) {
+                costoEnvioCalculado = 1200;
+            } else {
+                // Para 4.1 km en adelante (dinámico):
+                const tramosAdicionales = Math.ceil(kmRedondeado) - 1;
+                costoEnvioCalculado = tramosAdicionales * 400;
+            }
+
+            const divResultado = document.getElementById('resultado-envio');
+            divResultado.style.display = 'block';
+            divResultado.innerHTML = `Distancia aproximada: <b>${distanciaEnvioTexto}</b><br>Costo de Envío: <b>$${costoEnvioCalculado}</b>`;
+
+            actualizar();
+        } else {
+            alert("No se pudo calcular la ruta para esa dirección. Verificá que la dirección y la altura sean correctas.");
+        }
+    });
+}
+
 function actualizar() {
     let t = 0;  
     let miniResumen = ""; 
@@ -1657,7 +1688,6 @@ function actualizar() {
             const nombre = input.dataset.n;
             const precio = parseFloat(input.dataset.p);
             
-            // Línea para el resumen de WhatsApp y visual
             const lineaBasica = `${cant} x ${nombre} ($${precio * cant})\n`;
             resumenConSabores += lineaBasica;
             
@@ -1684,31 +1714,40 @@ function actualizar() {
         }
     });
 
+    // Agregar el costo de envío al resumen y al total si corresponde
+    if (modoEntregaGlobal === "Delivery" && costoEnvioCalculado > 0) {
+        resumenConSabores += `\n🛵 Costo de envío (${distanciaEnvioTexto}): $${costoEnvioCalculado}\n`;
+        miniResumen += `
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; border-bottom:1px solid #f0f0f0; padding:6px 0; color: #e67e22; font-weight:600;">
+                <span>🛵 Envío (${distanciaEnvioTexto})</span>
+                <span>+$${costoEnvioCalculado}</span>
+            </div>`;
+        t += costoEnvioCalculado;
+    }
+
     if (btnVaciar) {
-        btnVaciar.style.display = t > 0 ? "flex" : "none";
+        btnVaciar.style.display = (t > 0 || costoEnvioCalculado > 0) ? "flex" : "none";
     }
 
     window.totalGlobalNumerico = t;
     window.resumenWhatsApp = resumenConSabores; 
 
-    // Actualizar Total y Mini Carrito
     const montoDisplay = document.getElementById("monto");
     const resumenMiniDisplay = document.getElementById("resumen-mini");
     
     if (montoDisplay) montoDisplay.innerText = `$${t}`;
     if (resumenMiniDisplay) resumenMiniDisplay.innerHTML = miniResumen || "Tu carrito está vacío";
     
-    // MOSTRAR EN LA SECCIÓN DE DATOS
     const contenedorResumen = document.getElementById("resumen-final");
     if (contenedorResumen) {
         const textoFinal = t > 0 ? resumenConSabores + `\n💰 TOTAL: $${t}` : "No hay productos seleccionados.";
         contenedorResumen.innerText = textoFinal;
     }
-    // Buscamos el botón de acción
+
     const btnAccion = document.getElementById("btn-accion");
     if (btnAccion) {
         if (window.totalGlobalNumerico <= 0) {
-            btnAccion.disabled = true; // Bloqueo nativo de HTML
+            btnAccion.disabled = true; 
             btnAccion.style.opacity = "0.5";
             btnAccion.style.cursor = "not-allowed";
         } else {
@@ -1718,6 +1757,7 @@ function actualizar() {
         }
     }
 }
+
 function cambiarPaso(paso) {
     actualizar();
 
@@ -1728,13 +1768,11 @@ function cambiarPaso(paso) {
     const btnAccion = document.getElementById("btn-accion");
 
     if (paso === 2) {
-        // --- VALIDACIÓN 1: Carrito vacío ---
         if (!window.totalGlobalNumerico || window.totalGlobalNumerico <= 0) {
             alert("Tu carrito está vacío.");
             return;
         }
 
-        // --- VALIDACIÓN 2: Restricción de Delivery para productos "Solo Local" ---
         let productosProhibidos = [];
         let faltanConfigurar = [];
 
@@ -1745,12 +1783,10 @@ function cambiarPaso(paso) {
                 const partes = id.split("-");
                 const item = completo[partes[0]].i[partes[1]];
 
-                // Verificar si es solo local y estamos en delivery
                 if (modoEntregaGlobal === "Delivery" && item.sl === true) {
                     productosProhibidos.push(item.n);
                 }
 
-                // Verificar sabores
                 const requiereConfig = item.g || (item.opt && item.opt.length > 0);
                 if (requiereConfig && !seleccionesUsuario[id]) {
                     faltanConfigurar.push(item.n);
@@ -1762,15 +1798,14 @@ function cambiarPaso(paso) {
             alert("⚠️ No podemos enviar por Delivery los siguientes productos:\n- " + 
                   productosProhibidos.join("\n- ") + 
                   "\n\nPor favor, quitalos del carrito o cambia a 'Take Away'.");
-            return; // Detiene el proceso y NO oculta los botones de arriba
+            return; 
         }
 
         if (faltanConfigurar.length > 0) {
             alert("Por favor, elegí los sabores para:\n- " + faltanConfigurar.join("\n- "));
-            return; // Detiene el proceso y NO oculta los botones de arriba
+            return; 
         }
 
-        // --- SI TODO ESTÁ BIEN: Recién aquí ocultamos la navegación y cambiamos de paso ---
         pasoProductos.style.display = "none";
         pasoDatos.style.display = "block";
         quickSwitch.style.display = "none";
@@ -1782,7 +1817,6 @@ function cambiarPaso(paso) {
         window.scrollTo(0, 0);
 
     } else {
-        // VOLVER AL PASO 1
         pasoProductos.style.display = "block";
         pasoDatos.style.display = "none";
         quickSwitch.style.display = "flex";
@@ -1794,9 +1828,9 @@ function cambiarPaso(paso) {
         window.scrollTo(0, 0);
     }
 }
+
 function vaciarCarrito() {
     if (confirm("¿Estás seguro de que quieres vaciar todo el carrito?")) {
-        // Ponemos todos los inputs en 0
         document.querySelectorAll("input.cantidad").forEach(input => {
             input.value = 0;
             const id = input.id;
@@ -1804,30 +1838,27 @@ function vaciarCarrito() {
             if (contenedor) contenedor.innerHTML = "";
         });
 
-        // Limpiamos las selecciones de sabores
         seleccionesUsuario = {};
-        
-        // Actualizamos la vista
+        costoEnvioCalculado = 0;
+        distanciaEnvioTexto = "";
+        document.getElementById('resultado-envio').style.display = 'none';
+
         actualizar();
     }
 }
+
 function eliminarGrupoProductos(id) {
     const input = document.getElementById(id);
     if (input) {
-        // Ponemos la cantidad en 0
         input.value = 0;
         input.setAttribute('value', 0);
 
-        // Limpiamos los selectores de sabores visuales (el botón naranja/verde)
         const contenedorSabores = document.getElementById("box-" + id);
         if (contenedorSabores) {
             contenedorSabores.innerHTML = "";
         }
 
-        // Borramos las selecciones guardadas del usuario para este producto
         delete seleccionesUsuario[id];
-
-        // Refrescamos todo el carrito y el total
         actualizar();
     }
 }
@@ -1835,7 +1866,7 @@ function eliminarGrupoProductos(id) {
 function enviar() {
     if (!window.totalGlobalNumerico || window.totalGlobalNumerico <= 0) {
         alert("El carrito está vacío. No se puede enviar el pedido.");
-        return; // Detiene la ejecución por completo
+        return; 
     }
     const n = document.getElementById("nombre").value.trim();
     const d = document.getElementById("direccion").value.trim();
@@ -1861,7 +1892,6 @@ function enviar() {
         }
     }
 
-    // Formato de pago
     let detallePago = "*Pago*: " + pago;
     if (pago === "Efectivo") {
         const montoVuelto = parseFloat(vueltoInput.value);
@@ -1891,25 +1921,23 @@ function enviar() {
         msj += "*Notas*: " + notas;
     }
 
-    // CODIFICACIÓN MANUAL PARA WHATSAPP
-    // Esto asegura que los saltos de línea y espacios se conviertan correctamente
     const textoFinal = encodeURIComponent(msj);
     const telefono = "5491131725515";
-    
-    // Usamos el formato de link más compatible que existe
     const url = "https://api.whatsapp.com/send?phone=" + telefono + "&text=" + textoFinal;
     
     window.open(url, "_blank");
 }
+
 window.onload = () => {
     cargarDatos();
     iniciarAutocomplete();
 };
+
 let modoEntregaGlobal = "";
 function comenzarPedido(tipo) {
     modoEntregaGlobal = tipo;
     const inicio = document.getElementById('pantalla-inicio');
-    const carrito = document.getElementById('carrito'); // Referencia al carrito
+    const carrito = document.getElementById('carrito'); 
     const quickSwitch = document.getElementById('quick-switch');
     const btnToTakeAway = document.getElementById('switch-to-takeaway');
     const btnToDelivery = document.getElementById('switch-to-delivery');
@@ -1921,13 +1949,12 @@ function comenzarPedido(tipo) {
     filtrarProductosPorEntrega();
     toggleDireccion()
 
-    // 2. Lógica de los botones superiores (Intercambio)
     quickSwitch.style.display = "flex";
     if (tipo === 'Delivery') {
-        btnToTakeAway.style.display = "block";  // Si elijo Delivery, muestro botón Take Away
+        btnToTakeAway.style.display = "block";  
         btnToDelivery.style.display = "none";
     } else {
-        btnToDelivery.style.display = "block";  // Si elijo Take Away, muestro botón Delivery
+        btnToDelivery.style.display = "block";  
         btnToTakeAway.style.display = "none";
     }
 
@@ -1942,10 +1969,10 @@ function comenzarPedido(tipo) {
             window.scrollTo(0, 0);
         }, 600);
     } else {
-        // Si el usuario ya estaba en el menú y cambió de modo, cerramos el sidebar por si estaba abierto
         cerrarTodo();
     }
 }
+
 function toggleDetalle() {
     const resumen = document.getElementById('resumen-mini');
     const btn = document.querySelector('.btn-ver-detalle');
@@ -1953,48 +1980,42 @@ function toggleDetalle() {
     resumen.classList.toggle('abierto');
     btn.classList.toggle('activo');
 }
+
 function filtrarProductosPorEntrega() {
     if (!modoEntregaGlobal) return;
 
     const cardsSoloLocal = document.querySelectorAll('.solo-local-card');
     
     cardsSoloLocal.forEach(card => {
-        // Buscamos todos los elementos interactivos, incluyendo el botón de sabores si existe
         const elementosInteractivos = card.querySelectorAll('button, input, .btn-sabores');
         
         if (modoEntregaGlobal === 'Delivery') {
-            // Deshabilitamos la tarjeta visualmente
             card.style.opacity = "0.5";
             card.style.filter = "grayscale(80%)";
-            card.style.pointerEvents = "none"; // Esto bloquea clicks en el botón de sabores también
+            card.style.pointerEvents = "none"; 
             
-            // Si el botón de sabores ya existe, nos aseguramos de que se vea desactivado
             const btnSabores = card.querySelector('.btn-sabores');
             if (btnSabores) {
                 btnSabores.style.background = "#ccc";
                 btnSabores.style.cursor = "not-allowed";
             }
 
-            // Opcional: Resetear cantidad a 0 para evitar errores en el carrito
             const input = card.querySelector('.cantidad');
             if (input) {
                 input.value = 0;
-                // También limpiamos el contenedor de sabores visualmente si estaba abierto
                 const boxId = "box-" + input.id;
                 const contenedorSabores = document.getElementById(boxId);
                 if (contenedorSabores) contenedorSabores.innerHTML = "";
-                // Y borramos la selección del usuario para ese ID
                 delete seleccionesUsuario[input.id];
             }
         } else {
-            // Restauramos estado normal para Take Away
             card.style.opacity = "1";
             card.style.filter = "none";
             card.style.pointerEvents = "auto";
             
             const btnSabores = card.querySelector('.btn-sabores');
             if (btnSabores) {
-                btnSabores.style.background = "#ff9800"; // Color original
+                btnSabores.style.background = "#ff9800"; 
                 btnSabores.style.cursor = "pointer";
             }
         }
@@ -2002,24 +2023,23 @@ function filtrarProductosPorEntrega() {
 
     actualizar();
 }
+
 let secuenciaTeclas = "";
-const passwordAdmin = "ezegasadmin"; // Podés cambiarla por la palabra que quieras
+const passwordAdmin = "ezegasadmin"; 
 
 document.addEventListener("keydown", (evento) => {
-    // Vamos acumulando las letras presionadas
     secuenciaTeclas += evento.key;
 
-    // Mantenemos la cadena del tamaño de la contraseña para que no crezca infinitamente
     if (secuenciaTeclas.length > passwordAdmin.length) {
         secuenciaTeclas = secuenciaTeclas.substring(secuenciaTeclas.length - passwordAdmin.length);
     }
 
-    // Si coincide lo que escribiste con la clave, se abre el panel directo
     if (secuenciaTeclas === passwordAdmin) {
-        secuenciaTeclas = ""; // Reseteamos la secuencia
+        secuenciaTeclas = ""; 
         abrirAdmin();
     }
 });
+
 function abrirAdmin() {
     document.getElementById('modal-admin').classList.add('active');
     document.getElementById('overlay').classList.add('active');
@@ -2050,7 +2070,6 @@ function renderAdminDashboard() {
                 </div>
                 
                 <div id="productos-${catKey}">
-                    <!-- CABECERA ACTUALIZADA: Agregamos un div vacío al inicio para las flechas -->
                     <div style="display: grid; grid-template-columns: 40px 2fr 80px 1fr 60px 60px 180px 40px; gap: 10px; font-size: 10px; font-weight: bold; color: #888; text-align: center; margin-bottom: 10px;">
                         <div></div><div style="text-align:left">PRODUCTO</div><div>PRECIO</div><div>LINK IMG</div><div>SOLO L.</div><div>SALSAS?</div><div>OPCIONES</div><div></div>
                     </div>
@@ -2058,7 +2077,6 @@ function renderAdminDashboard() {
                     ${cat.i.map((prod, idx) => `
                         <div class="admin-row-producto" style="grid-template-columns: 40px 2fr 80px 1fr 60px 60px 180px 40px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
                             
-                            <!-- COLUMNA 1: FLECHAS DE ORDEN (Separadas del nombre) -->
                             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
                                 <i class="fas fa-chevron-up" onclick="moverProd('${catKey}', ${idx}, -1)" 
                                     style="cursor:pointer; font-size:14px; color:${idx === 0 ? '#ccc' : 'var(--primary)'};"></i>
@@ -2066,9 +2084,7 @@ function renderAdminDashboard() {
                                     style="cursor:pointer; font-size:14px; color:${idx === cat.i.length - 1 ? '#ccc' : 'var(--primary)'};"></i>
                             </div>
 
-                            <!-- COLUMNA 2: NOMBRE DEL PRODUCTO (Ahora tiene todo su espacio) -->
                             <input type="text" value="${prod.n}" onchange="completo['${catKey}'].i[${idx}].n = this.value">
-                            
                             <input type="number" value="${prod.p}" onchange="completo['${catKey}'].i[${idx}].p = parseInt(this.value)">
                             <input type="text" value="${prod.img || ''}" onchange="completo['${catKey}'].i[${idx}].img = this.value">
                             <input type="checkbox" ${prod.sl ? 'checked' : ''} onchange="completo['${catKey}'].i[${idx}].sl = this.checked">
@@ -2097,19 +2113,17 @@ function renderAdminDashboard() {
         container.innerHTML += catHtml;
     });
 }
+
 function moverProd(catKey, index, direccion) {
     const arr = completo[catKey].i;
     const nuevoIndex = index + direccion;
 
     if (nuevoIndex < 0 || nuevoIndex >= arr.length) return;
 
-    // Intercambio de posición
     const temp = arr[index];
     arr[index] = arr[nuevoIndex];
     arr[nuevoIndex] = temp;
 
-    // IMPORTANTE: Refrescar el dashboard para que los inputs 
-    // reflejen el nuevo orden antes de guardar
     renderAdminDashboard();
 }
 
@@ -2120,27 +2134,24 @@ function moverCat(catKey, direccion) {
 
     if (nuevoIndex < 0 || nuevoIndex >= entries.length) return;
 
-    // Intercambio de posición en el array temporal
     let temp = entries[index];
     entries[index] = entries[nuevoIndex];
     entries[nuevoIndex] = temp;
 
-    // Reconstrucción del objeto y ASIGNACIÓN DE ORDEN
     let nuevoCompleto = {};
     entries.forEach(([key, value], i) => {
-        value.o = i; // Asignamos la propiedad 'o' (orden)
+        value.o = i; 
         nuevoCompleto[key] = value;
     });
 
     completo = nuevoCompleto;
     renderAdminDashboard();
 }
-// Funciones Auxiliares ABM
+
 function nuevaCategoria() {
     const nombreVisible = prompt("Nombre de la categoría (ej: Postres Especiales):");
-    if (!nombreVisible) return; // Si cancela, no hace nada
+    if (!nombreVisible) return; 
 
-    // Generamos un ID técnico basado en el nombre (minúsculas y sin espacios)
     const key = nombreVisible.toLowerCase().trim().replace(/\s/g, '_');
 
     if (completo[key]) {
@@ -2148,13 +2159,11 @@ function nuevaCategoria() {
         return;
     }
 
-    // Creamos la estructura con el nombre que el usuario escribió
     completo[key] = { 
         t: nombreVisible, 
         i: [] 
     };
 
-    // Refrescamos el panel administrativo para que aparezca
     renderAdminDashboard();
 }
 
@@ -2191,7 +2200,6 @@ function abrirModalSabores(idInput, catKey, itemIdx) {
         const datosUnidad = previas[i - 1] || { gustos: [], salsa: "", opcion: "" };
         let htmlUnidad = `<div class="unidad-bloque"><p>Unidad ${i}</p>`;
         
-        // --- SECCIÓN GUSTOS DINÁMICOS ---
         if (item.g && item.g > 0) {
             htmlUnidad += `<div class="contenedor-gustos">`;
             const gustosAMostrar = datosUnidad.gustos.length > 0 ? datosUnidad.gustos : [""];
@@ -2208,7 +2216,6 @@ function abrirModalSabores(idInput, catKey, itemIdx) {
                     <i class="fas fa-plus"></i> Agregar otro gusto
                 </button>`;
         } 
-        // --- SECCIÓN OPCIÓN ÚNICA (Si no usa variable G) ---
         else if (item.opt && item.opt.length > 0) {
             const opcionGuardada = datosUnidad.opcion || "";
             htmlUnidad += `
@@ -2218,7 +2225,6 @@ function abrirModalSabores(idInput, catKey, itemIdx) {
                 </select>`;
         }
 
-        // --- SECCIÓN SALSAS (RESTAURADA) ---
         if (item.llevaSalsa && item.salsas && item.salsas.length > 0) {
             const salsaGuardada = datosUnidad.salsa || "";
             htmlUnidad += `
@@ -2239,7 +2245,6 @@ function abrirModalSabores(idInput, catKey, itemIdx) {
     document.getElementById("overlay").classList.add("active");
 }
 
-// Función auxiliar para renderizar el HTML del select
 function renderizarSelectGusto(opciones, seleccionado = "", puedeBorrar = false) {
     const selectHtml = `
         <select class="opcion-sel m-gusto" style="margin-bottom: 0; flex: 1;">
@@ -2257,7 +2262,6 @@ function renderizarSelectGusto(opciones, seleccionado = "", puedeBorrar = false)
         </div>`;
 }
 
-// Lógica para añadir el nuevo listbox al hacer click
 function agregarGustoSelector(btn, maxG, catKey, itemIdx) {
     const contenedor = btn.parentElement.querySelector(".contenedor-gustos");
     const opciones = completo[catKey].i[itemIdx].opt;
@@ -2277,6 +2281,7 @@ function eliminarGustoSelector(btnEliminar) {
     btnEliminar.parentElement.remove();
     if (btnAdd) btnAdd.style.display = "block";
 }
+
 function gestionarOpciones(catKey, idx, campo) {
     const prod = completo[catKey].i[idx];
     if (!prod[campo]) prod[campo] = [];
@@ -2303,7 +2308,6 @@ function gestionarOpciones(catKey, idx, campo) {
             <div>
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
                     <label style="font-size:11px; font-weight:700; text-transform: uppercase; color: #666;">Lista Actual:</label>
-                    <!-- BOTÓN DE ORDENAR -->
                     <button onclick="ordenarOpcionesAlfabeticamente('${catKey}', ${idx}, '${campo}')" style="background:#3498db; color:white; border:none; padding:4px 8px; border-radius:5px; font-size:10px; cursor:pointer; font-weight:600;">
                         <i class="fas fa-sort-alpha-down"></i> ORDENAR A-Z
                     </button>
@@ -2326,29 +2330,26 @@ function gestionarOpciones(catKey, idx, campo) {
     document.body.appendChild(divTemp.firstElementChild);
 }
 
-// Función para AGREGAR desde la nueva pantalla
 function ejecutarAltaAdmin(catKey, idx, campo) {
     const input = document.getElementById('nuevo-nombre-admin');
     const valor = input.value.trim();
     
     if (valor) {
         completo[catKey].i[idx][campo].push(valor);
-        input.value = ""; // Limpiamos el input
+        input.value = ""; 
         
-        // Refrescamos la lista interna del cuadro sin cerrarlo
         const select = document.getElementById('lista-gestion-admin');
         const nuevaOpcion = document.createElement('option');
         nuevaOpcion.value = completo[catKey].i[idx][campo].length - 1;
         nuevaOpcion.text = valor;
         select.add(nuevaOpcion);
         
-        renderAdminDashboard(); // Actualizamos el panel de fondo
+        renderAdminDashboard(); 
     } else {
         alert("Escribí un nombre válido.");
     }
 }
 
-// Función para ELIMINAR desde la nueva pantalla
 function ejecutarBajaAdmin(catKey, idx, campo) {
     const select = document.getElementById('lista-gestion-admin');
     const elIdx = select.value;
@@ -2357,8 +2358,6 @@ function ejecutarBajaAdmin(catKey, idx, campo) {
         const nombreEliminar = completo[catKey].i[idx][campo][elIdx];
         if(confirm(`¿Eliminar "${nombreEliminar}"?`)) {
             completo[catKey].i[idx][campo].splice(parseInt(elIdx), 1);
-            
-            // Refrescamos el cuadro de gestión (re-llamamos a la función para que se actualice el select)
             gestionarOpciones(catKey, idx, campo);
             renderAdminDashboard();
         }
@@ -2366,18 +2365,17 @@ function ejecutarBajaAdmin(catKey, idx, campo) {
         alert("Seleccioná qué querés borrar de la lista.");
     }
 }
+
 function ordenarOpcionesAlfabeticamente(catKey, idx, campo) {
     const prod = completo[catKey].i[idx];
     
     if (prod[campo] && prod[campo].length > 0) {
-        // Ordenamos el array ignorando mayúsculas/minúsculas
         prod[campo].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
-        
-        // Actualizamos visualmente el cuadro y el dashboard de fondo
         gestionarOpciones(catKey, idx, campo);
         renderAdminDashboard();
     }
 }
+
 document.getElementById('btn-geoloc').addEventListener('click', () => {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -2391,7 +2389,6 @@ document.getElementById('btn-geoloc').addEventListener('click', () => {
                 if (status === "OK" && results[0]) {
                     const components = results[0].address_components;
         
-                    // Filtramos para obtener: Calle + Altura + Localidad
                     let calle = "", altura = "", localidad = "";
         
                     components.forEach(c => {
@@ -2412,6 +2409,9 @@ document.getElementById('btn-geoloc').addEventListener('click', () => {
                     if (marcador) {
                         marcador.setPosition(pos);
                     }
+
+                    // Calcular envío automáticamente al obtener la geolocalización
+                    calcularCostoEnvio();
                 } else {
                     alert("No se pudo determinar la dirección.");
                 }
