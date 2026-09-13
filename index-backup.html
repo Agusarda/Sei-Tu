@@ -1214,7 +1214,6 @@ let envioCalculado = false;
 
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
-let precioKmGlobal = 400; // Variable independiente para el precio por km
 
 async function cargarDatos() {
     try {
@@ -1222,58 +1221,34 @@ async function cargarDatos() {
         const data = snapshot.val();
         
         if (data) {
-            // Separa el precioKm si existe en la base de datos
-            if (data.configuracion && data.configuracion.precioKm) {
-                precioKmGlobal = data.configuracion.precioKm;
-            } else if (data.precioKm) {
-                precioKmGlobal = data.precioKm;
-            }
-
-            // Filtra 'configuracion' o 'precioKm' para que 'completo' SOLO tenga categorías
-            const categoriasSolamente = Object.entries(data).filter(([key]) => key !== 'precioKm' && key !== 'configuracion');
-
-            const ordenado = categoriasSolamente.sort(([, a], [, b]) => (a.o || 0) - (b.o || 0));
+            const ordenado = Object.entries(data)
+                .sort(([, a], [, b]) => (a.o || 0) - (b.o || 0));
             
             completo = {};
             ordenado.forEach(([k, v]) => completo[k] = v);
-
-            console.log("Datos cargados correctamente");
+            
+            console.log("Datos cargados y ordenados");
             init(); 
         }
     } catch (err) {
-        console.error("Error al cargar datos:", err);
+        console.error("Error:", err);
     }
 }
 
 function guardarEnNube() {
-    // 1. Leemos el valor ingresado en el input del admin
-    const inputKm = document.getElementById('input-precio-km');
-    if (inputKm) {
-        precioKmGlobal = parseFloat(inputKm.value) || 400;
-    }
-
-    // 2. Preparamos los datos a guardar en Firebase:
-    // Mantenemos todas las categorías intactas y agregamos 'configuracion' por separado
-    const datosAGuardar = {
-        ...completo,
-        configuracion: {
-            precioKm: precioKmGlobal
-        }
-    };
-
     const dbRef = database.ref('/');
-    dbRef.set(datosAGuardar)
-    .then(() => {
-        console.log("Confirmado por Firebase");
-        alert("¡Cambios guardados con éxito!");
-        const panel = document.getElementById('modal-admin');
-        if(panel) panel.style.display = 'none';
-        location.reload();
-    })
-    .catch((error) => {
-        console.error("Error real de Firebase:", error);
-        alert("Error al guardar: " + error.message);
-    });
+    dbRef.set(completo)
+        .then(() => {
+            console.log("Confirmado por Firebase");
+            alert("¡Cambios guardados con éxito!");
+            const panel = document.getElementById('modal-admin');
+            if(panel) panel.style.display = 'none';
+            location.reload(); 
+        })
+        .catch((error) => {
+            console.error("Error real de Firebase:", error);
+            alert("Error al guardar: " + error.message);
+        });
 }
 
 let totalGlobalNumerico = 0;
@@ -1657,9 +1632,6 @@ function calcularCostoEnvio() {
 
     const service = new google.maps.DistanceMatrixService();
     
-    // Obtenemos la tarifa configurada desde el Admin (o 400 por defecto si no se definió)
-    const tarifaBase = precioKmGlobal || 400;
-
     // Configuración para simular el recorrido en moto / auto por calles
     service.getDistanceMatrix({
         origins: [ORIGEN_HELADERIA],
@@ -1680,19 +1652,19 @@ function calcularCostoEnvio() {
             // 2. Guardamos el texto exactamente como se ve en tu imagen
             distanciaEnvioTexto = kmRedondeado.toFixed(1).replace('.', ',') + " km";
 
-            // 3. Calculamos la tarifa usando kmRedondeado y la tarifaBase dinámica
+            // 3. Calculamos la tarifa usando kmRedondeado
             if (kmRedondeado <= 1.0) {
                 costoEnvioCalculado = 0;
             } else if (kmRedondeado <= 2.0) {
-                costoEnvioCalculado = tarifaBase;
+                costoEnvioCalculado = 400;
             } else if (kmRedondeado <= 3.0) {
-                costoEnvioCalculado = tarifaBase * 2;
+                costoEnvioCalculado = 800;
             } else if (kmRedondeado <= 4.0) {
-                costoEnvioCalculado = tarifaBase * 3;
+                costoEnvioCalculado = 1200;
             } else {
                 // Para 4.1 km en adelante (dinámico):
                 const tramosAdicionales = Math.ceil(kmRedondeado) - 1;
-                costoEnvioCalculado = tramosAdicionales * tarifaBase;
+                costoEnvioCalculado = tramosAdicionales * 400;
             }
 
             const divResultado = document.getElementById('resultado-envio');
@@ -2091,29 +2063,10 @@ function cerrarAdmin() {
 function renderAdminDashboard() {
     const container = document.getElementById('admin-lista-categorias');
     container.innerHTML = "";
+    const keys = Object.keys(completo);
 
-    // 🛵 1. TARJETA DE CONFIGURACIÓN DEL ENVÍO
-    let configEnvioHtml = `
-        <div style="background: #eef7ff; border: 2px dashed var(--primary); padding: 15px; border-radius: 12px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-            <div>
-                <strong style="color: var(--primary); font-size: 16px;">🛵 Tarifas de Delivery</strong>
-                <p style="margin: 3px 0 0 0; font-size: 12px; color: #555;">Precio base por tramo / km de envío ($)</p>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-weight: bold; font-size: 16px;">$</span>
-                <input type="number" id="input-precio-km" value="${precioKmGlobal}" 
-                       onchange="precioKmGlobal = parseFloat(this.value) || 0" 
-                       style="width: 100px; padding: 8px; font-weight: bold; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; text-align: center;">
-            </div>
-        </div>
-    `;
-    container.innerHTML = configEnvioHtml;
-
-    // 2. RENDERIZADO DE TODAS LAS CATEGORÍAS NORMALMENTE
-    Object.keys(completo).forEach((catKey) => {
+    keys.forEach((catKey) => {
         const cat = completo[catKey];
-        if (!cat || !cat.i) return; // Validación de seguridad extra
-
         let catHtml = `
             <div style="border: 1px solid #ddd; border-left: 5px solid var(--primary); padding: 20px; border-radius: 12px; margin-bottom: 30px; background: #fff;">
                 <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
@@ -2168,12 +2121,6 @@ function renderAdminDashboard() {
         `;
         container.innerHTML += catHtml;
     });
-
-    container.innerHTML += `
-        <button class="btn-principal" onclick="nuevaCategoria()" style="background: var(--primary); color: #fff; width: 100%; padding: 12px; margin-top: 10px; font-weight: bold;">
-            + Nueva Categoría
-        </button>
-    `;
 }
 
 function moverProd(catKey, index, direccion) {
