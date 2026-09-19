@@ -1724,25 +1724,47 @@ function actualizar() {
             const lineaBasica = `${cant} x ${nombre} ($${precio * cant})\n`;
             resumenConSabores += lineaBasica;
             
+            let detalleMiniSabores = "";
+
             if (seleccionesUsuario[id]) {
                 seleccionesUsuario[id].forEach((unidad, index) => {
-                    resumenConSabores += `${unidad.gustos.join("\n")}`;
-                    if(unidad.salsa) resumenConSabores += ` \n(Salsa: ${unidad.salsa})`;
-                    if(unidad.opcion) resumenConSabores += ` (${unidad.opcion})`;
-                    resumenConSabores += `\n`;
+                    // Si hay más de 1 unidad, numeramos cada pote/producto
+                    const prefijoUnidad = cant > 1 ? `  • Unidad ${index + 1}: ` : `  • Sabores: `;
+                    
+                    let detallesPartes = [];
+                    if (unidad.gustos && unidad.gustos.length > 0) {
+                        detallesPartes.push(unidad.gustos.join(", "));
+                    }
+                    if (unidad.salsa) {
+                        detallesPartes.push(`Salsa: ${unidad.salsa}`);
+                    }
+                    if (unidad.opcion) {
+                        detallesPartes.push(unidad.opcion);
+                    }
+
+                    const textoUnidad = prefijoUnidad + detallesPartes.join(" - ");
+                    
+                    // Se agrega con sangría limpia para WhatsApp y Resumen Final
+                    resumenConSabores += `${textoUnidad}\n`;
+
+                    // Formato HTML limpio para el Mini Resumen
+                    detalleMiniSabores += `<div style="font-size:11px; color:#666; padding-left:24px; margin-top:2px;">${textoUnidad}</div>`;
                 });
             }
             
             t += (precio * cant);
             miniResumen += `
-                <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; border-bottom:1px solid #f0f0f0; padding:6px 0;">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <button class="btn-borrar-item" onclick="eliminarGrupoProductos('${id}')" title="Eliminar todos">
-                            <i class="fas fa-trash-can"></i>
-                        </button>
-                        <span>${cant} x ${nombre}</span>
+                <div style="border-bottom:1px solid #f0f0f0; padding:6px 0;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <button class="btn-borrar-item" onclick="eliminarGrupoProductos('${id}')" title="Eliminar todos">
+                                <i class="fas fa-trash-can"></i>
+                            </button>
+                            <span style="font-weight:600;">${cant} x ${nombre}</span>
+                        </div>
+                        <span style="font-weight:600;">$${precio * cant}</span>
                     </div>
-                    <span style="font-weight:600;">$${precio * cant}</span>
+                    ${detalleMiniSabores}
                 </div>`;
         }
     });
