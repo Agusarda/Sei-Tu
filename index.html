@@ -1259,6 +1259,10 @@ async function cargarDatos() {
 
             console.log("Datos cargados correctamente");
             init(); 
+            if (modoEntregaGlobal) {
+                filtrarProductosPorEntrega();
+                toggleDireccion();
+            }
         }
     } catch (err) {
         console.error("Error al cargar datos:", err);
