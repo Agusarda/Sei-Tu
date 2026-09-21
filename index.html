@@ -1456,83 +1456,103 @@ function esHorarioLocalAbierto() {
 function toggleDireccion() {
     const esDelivery = (modoEntregaGlobal === "Delivery");
     const esMayorista = (modoEntregaGlobal === "Mayorista");
-    const requiereDireccion = esDelivery || esMayorista;
+    
+    // Si es mayorista, consultamos el tipo de entrega elegido en su selector
+    let tipoEntregaMayorista = "Delivery";
+    const selectMayo = document.getElementById("select-tipo-mayorista");
+    if (selectMayo) {
+        tipoEntregaMayorista = selectMayo.value;
+    }
+
+    // Requieren dirección y envío si es Delivery minorista o si es Mayorista opción Delivery
+    const requiereDireccion = esDelivery || (esMayorista && tipoEntregaMayorista === "Delivery");
     
     const grupoDireccion = document.getElementById("group-direccion");
     const aviso = document.getElementById("aviso-delivery-texto");
     const selectPago = document.getElementById("pago");
-    const groupEfectivo = document.getElementById("group-efectivo");
-    
-    // Elementos relacionados al cálculo de costo/km de envío
-    const btnCalcularEnvio = document.getElementById("btn-calcular-envio") || document.querySelector('.btn-calcular-envio');
-    const cartelDistancia = document.getElementById("distancia-info") || document.getElementById("info-envio") || document.querySelector('.distancia-info');
+    const btnCalcularEnvio = document.getElementById("btn-calcular-envio") || document.querySelector('.btn-calc-envio');
+    const cartelDistancia = document.getElementById("resultado-envio") || document.querySelector('.distancia-info');
 
-    // 1. Mostrar/Ocultar el campo de Dirección
+    // Manejo dinámico del selector Delivery / Take Away para Mayoristas
+    let contenedorSelectorMayo = document.getElementById("contenedor-selector-mayorista");
+    if (esMayorista) {
+        if (!contenedorSelectorMayo) {
+            contenedorSelectorMayo = document.createElement("div");
+            contenedorSelectorMayo.id = "contenedor-selector-mayorista";
+            contenedorSelectorMayo.className = "form-group";
+            contenedorSelectorMayo.innerHTML = `
+                <label>Tipo de Entrega</label>
+                <select id="select-tipo-mayorista" onchange="toggleDireccion()">
+                    <option value="Delivery">🛵 Delivery</option>
+                    <option value="Retiro">🛍️ Take Away (Retiro en local)</option>
+                </select>
+            `;
+            const form = document.querySelector("#paso-datos .form");
+            if (form) form.insertBefore(contenedorSelectorMayo, form.firstChild);
+        } else {
+            contenedorSelectorMayo.style.display = "block";
+        }
+    } else if (contenedorSelectorMayo) {
+        contenedorSelectorMayo.style.display = "none";
+    }
+
+    // 1. Mostrar/Ocultar el campo de Dirección y Mapa
     if (grupoDireccion) {
         grupoDireccion.style.display = requiereDireccion ? "block" : "none";
     }
 
-    // 2. Si no es Delivery clásico, reseteamos costo de envío y ocultamos carteles de KM
-    if (!esDelivery) {
+    // 2. Si es Retiro / Take Away, reseteamos el envío
+    if (!requiereDireccion) {
         costoEnvioCalculado = 0;
         distanciaEnvioTexto = "";
         envioCalculado = false;
         
-        // Ocultar el cartel verde/información de los km y costo
         if (cartelDistancia) {
             cartelDistancia.style.display = "none";
             cartelDistancia.innerHTML = "";
         }
 
-        if (typeof actualizarTotal === 'function') {
-            actualizarTotal(); // Recalcular total sin recargo de envío
+        if (typeof actualizar === 'function') {
+            actualizar();
         }
-    } else {
-        if (cartelDistancia && distanciaEnvioTexto) {
-            cartelDistancia.style.display = "block";
-        }
+    } else if (cartelDistancia && distanciaEnvioTexto) {
+        cartelDistancia.style.display = "block";
     }
 
-    // 3. Ocultar el botón de calcular envío en Mayorista
+    // 3. Mostrar botón de calcular costo de envío si requiere dirección
     if (btnCalcularEnvio) {
-        btnCalcularEnvio.style.display = esDelivery ? "block" : "none";
+        btnCalcularEnvio.style.display = requiereDireccion ? "block" : "none";
     }
 
-    // 4. Configurar Forma de Pago y Vuelto (Ocultar si es Mayorista)
+    // 4. Configurar Forma de Pago y Vuelto
     if (selectPago && selectPago.closest('.form-group')) {
         const contenedorPago = selectPago.closest('.form-group');
+        contenedorPago.style.display = "block";
         
-        if (esMayorista) {
-            contenedorPago.style.display = "none";
-            if (groupEfectivo) groupEfectivo.style.display = "none";
-        } else {
-            contenedorPago.style.display = "block";
-            
-            const opcionTarjeta = selectPago.querySelector('option[value="Tarjeta"]');
-            if (esDelivery) {
-                if (opcionTarjeta) opcionTarjeta.style.display = "none";
-                if (selectPago.value === "Tarjeta") {
-                    selectPago.value = "Efectivo";
-                }
-            } else {
-                if (opcionTarjeta) opcionTarjeta.style.display = "block";
+        const opcionTarjeta = selectPago.querySelector('option[value="Tarjeta"]');
+        if (requiereDireccion) {
+            if (opcionTarjeta) opcionTarjeta.style.display = "none";
+            if (selectPago.value === "Tarjeta") {
+                selectPago.value = "Efectivo";
             }
-            toggleEfectivo();
+        } else {
+            if (opcionTarjeta) opcionTarjeta.style.display = "block";
         }
+        toggleEfectivo();
     }
 
-    // 5. Ocultar el cartel del horario/estado de delivery si es Mayorista
+    // 5. Cartel informativo de delivery
     if (aviso) {
-        aviso.style.display = esDelivery ? "block" : "none";
+        aviso.style.display = requiereDireccion ? "block" : "none";
 
-        if (esDelivery) {
+        if (requiereDireccion) {
             const check = esHorarioDelivery();
             if (!check.abierto) {
                 aviso.style.color = "#e74c3c"; 
                 aviso.innerHTML = `⚠️ ${check.motivo}`; 
             } else {
-                aviso.style.color = "#fc67a2"; 
-                aviso.innerHTML = `✅ Delivery disponible en este momento.`;
+                aviso.style.color = "#27ae60"; 
+                aviso.innerHTML = `✅ Servicio disponible en este momento.`;
             }
         }
     }
@@ -1541,10 +1561,12 @@ function toggleEfectivo() {
     const pago = document.getElementById('pago').value;
     const groupEfectivo = document.getElementById('group-efectivo');
 
-    if (pago === 'Efectivo') {
-        groupEfectivo.style.display = 'block';
-    } else {
-        groupEfectivo.style.display = 'none';
+    if (groupEfectivo) {
+        if (pago === 'Efectivo') {
+            groupEfectivo.style.display = 'block';
+        } else {
+            groupEfectivo.style.display = 'none';
+        }
     }
 }
 
@@ -1704,10 +1726,8 @@ function guardarSabores() {
 
 // FUNCIONES NUEVAS: CÁLCULO DE ENVÍO POR RECORRIDO DE MOTO
 function calcularCostoEnvio() {
-    if (modoEntregaGlobal === "Mayorista") {
-        return;
-    }
     const direccionDestino = document.getElementById('direccion').value.trim();
+
     if (!direccionDestino) {
         alert("Por favor, ingresá una dirección para calcular el costo de envío.");
         return;
@@ -2005,7 +2025,13 @@ function enviar() {
     }
     
     // Validación de Dirección y Envío para Delivery
-    if (entrega === "Delivery") {
+    // Determinar sub-tipo de entrega si es Mayorista
+    const selectMayo = document.getElementById("select-tipo-mayorista");
+    const esMayoDelivery = (entrega === "Mayorista" && selectMayo && selectMayo.value === "Delivery");
+    const esMayoTakeAway = (entrega === "Mayorista" && selectMayo && selectMayo.value === "Retiro");
+
+    // Validación para Delivery (tanto Minorista como Mayorista Delivery)
+    if (entrega === "Delivery" || esMayoDelivery) {
         if (!d) return alert("Por favor, ingresá tu dirección.");
         if (!envioCalculado) {
             alert("Por favor, hacé clic en '🛵 Calcular costo de envío' antes de enviar tu pedido.");
@@ -2018,29 +2044,24 @@ function enviar() {
         }
     }
 
-    // Validación de Dirección para Mayorista (Sin exigencia de calcular envío)
-    if (entrega === "Mayorista") {
-        if (!d) return alert("Por favor, ingresá la dirección de entrega.");
-    }
-
     // Detalle de pago solo si NO es Mayorista
     let detallePago = "";
-    if (entrega !== "Mayorista") {
-        detallePago = "*Pago*: " + pago;
-        if (pago === "Efectivo") {
-            const montoVuelto = parseFloat(vueltoInput.value);
-            if (!montoVuelto || montoVuelto < window.totalGlobalNumerico) {
-                return alert("Indicá con cuánto abonás.");
-            }
-            detallePago += " (Abona con: $" + montoVuelto + ". Vuelto: $" + (montoVuelto - window.totalGlobalNumerico) + ")";
+    
+    detallePago = "*Pago*: " + pago;
+    if (pago === "Efectivo") {
+        const montoVuelto = parseFloat(vueltoInput.value);
+        if (!montoVuelto || montoVuelto < window.totalGlobalNumerico) {
+            return alert("Indicá con cuánto abonás.");
         }
+        detallePago += " (Abona con: $" + montoVuelto + ". Vuelto: $" + (montoVuelto - window.totalGlobalNumerico) + ")";
     }
+    
 
     let msj = "";
     if (entrega === "Delivery") {
         msj += "*PEDIDO DELIVERY*\n";
     } else if (entrega === "Mayorista") {
-        msj += "*PEDIDO MAYORISTA*\n";
+        msj += esMayoDelivery ? "*PEDIDO MAYORISTA (DELIVERY)*\n" : "*PEDIDO MAYORISTA (TAKE AWAY)*\n";
     } else {
         msj += "*PEDIDO TAKE AWAY*\n";
     }
@@ -2615,9 +2636,9 @@ document.getElementById('btn-geoloc').addEventListener('click', () => {
                     }
 
                     // Calcular envío automáticamente al obtener la geolocalización
-                    if (modoEntregaGlobal !== "Mayorista") {
-                        calcularCostoEnvio();
-                    }
+                    
+                    calcularCostoEnvio();
+                    
                 } else {
                     alert("No se pudo determinar la dirección.");
                 }
