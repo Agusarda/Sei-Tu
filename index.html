@@ -2110,12 +2110,8 @@ function comenzarPedido(tipo) {
     if(selectEntrega) {
         selectEntrega.value = (tipo === 'Delivery') ? 'Delivery' : 'Retiro en Local';
     }
+    init(); 
     
-    // Si la estructura de categorías aún no ha sido cargada/dibujada, inicializamos
-    const container = document.getElementById('dinamico');
-    if (!container || container.children.length === 0) {
-        init(); 
-    }
 
     // Aplicar las restricciones visuales y deshabilitar los productos "Solo Local" si es Delivery
     filtrarProductosPorEntrega();
