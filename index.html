@@ -2095,6 +2095,7 @@ window.onload = () => {
 let modoEntregaGlobal = "";
 function comenzarPedido(tipo) {
     modoEntregaGlobal = tipo;
+    cerrarTodo();
     const inicio = document.getElementById('pantalla-inicio');
     const carrito = document.getElementById('carrito'); 
     const quickSwitch = document.getElementById('quick-switch');
