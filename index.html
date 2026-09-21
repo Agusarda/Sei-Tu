@@ -1904,8 +1904,12 @@ function cambiarPaso(paso) {
                 }
 
                 const requiereConfig = item.g || (item.opt && item.opt.length > 0);
-                if (requiereConfig && !seleccionesUsuario[id]) {
-                    faltanConfigurar.push(item.n);
+                if (requiereConfig) {
+                    // Verifica que existan selecciones y que coincida exactamente con la cantidad solicitada
+                    const selecciones = seleccionesUsuario[id];
+                    if (!selecciones || selecciones.length < cant) {
+                        faltanConfigurar.push(item.n);
+                    }
                 }
             }
         });
