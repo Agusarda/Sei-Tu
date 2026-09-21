@@ -32,7 +32,7 @@
         "p": 1400
       }
     ],
-    "o": 1,
+    "o": 9,
     "t": "Palitos de Agua"
   },
   "baldes_y_bombones": {
@@ -83,7 +83,7 @@
         "p": 8500
       }
     ],
-    "o": 7,
+    "o": 15,
     "t": "Baldes y Bomboncitos"
   },
   "bebidas": {
@@ -109,7 +109,7 @@
         "p": 1400
       }
     ],
-    "o": 11,
+    "o": 19,
     "t": "Bebidas"
   },
   "cafeteria": {
@@ -124,9 +124,9 @@
         "img": "cleche_jarrito.webp",
         "n": "Café c/leche en Jarrito",
         "opt": [
-          "Mitad y mitad",
           "Cortado",
-          "Lágrima"
+          "Lágrima",
+          "Mitad y mitad"
         ],
         "p": 2000,
         "sl": true
@@ -141,9 +141,9 @@
         "img": "cleche_taza.webp",
         "n": "Café c/leche en Taza",
         "opt": [
-          "Mitad y mitad",
           "Cortado",
-          "Lágrima"
+          "Lágrima",
+          "Mitad y mitad"
         ],
         "p": 2800,
         "sl": true
@@ -212,8 +212,8 @@
         "img": "medialuna.webp",
         "n": "Medialuna",
         "opt": [
-          "Manteca",
-          "Grasa"
+          "Grasa",
+          "Manteca"
         ],
         "p": 600
       },
@@ -232,7 +232,7 @@
         "p": 900
       }
     ],
-    "o": 10,
+    "o": 18,
     "t": "Cafeteria"
   },
   "configuracion": {
@@ -256,7 +256,7 @@
         "p": 5300
       }
     ],
-    "o": 12,
+    "o": 20,
     "t": "Congelados"
   },
   "copitas_y_conos": {
@@ -287,7 +287,7 @@
         "p": 3000
       }
     ],
-    "o": 4,
+    "o": 12,
     "t": "Copitas y Conos"
   },
   "crema": {
@@ -296,9 +296,9 @@
         "img": "giovi.webp",
         "n": "Palito Giovi",
         "opt": [
-          "Frutilla",
           "Chocolate",
-          "Crema"
+          "Crema",
+          "Frutilla"
         ],
         "p": 1200
       },
@@ -338,7 +338,7 @@
         "p": 1400
       }
     ],
-    "o": 2,
+    "o": 10,
     "t": "Palitos de Crema"
   },
   "helado": {
@@ -839,8 +839,324 @@
         "sl": true
       }
     ],
-    "o": 0,
+    "o": 1,
     "t": "Helado"
+  },
+  "mayo_bomboncitos": {
+    "esMayorista": true,
+    "i": [
+      {
+        "img": "bomboncito-especial.webp",
+        "n": "Bomboncito Frambuesa x12",
+        "p": 85000
+      },
+      {
+        "img": "bomboncito-clasico.webp",
+        "n": "Bomboncito Clásico x8",
+        "opt": [
+          "Americana",
+          "Dulce de Leche",
+          "Menta",
+          "Pistacho"
+        ],
+        "p": 49700
+      }
+    ],
+    "o": 6,
+    "t": "Bomboncitos"
+  },
+  "mayo_copitas_y_conos": {
+    "esMayorista": true,
+    "i": [
+      {
+        "img": "copa-cookie.webp",
+        "n": "Copa 220cc Cookies x12",
+        "p": 27400
+      },
+      {
+        "img": "copa-fr.webp",
+        "n": "Copa 220cc Fru/Ame Sin TACC x12",
+        "p": 27400
+      },
+      {
+        "img": "copa-ch.webp",
+        "n": "Copa 220cc Cho/Ddl Sin TACC x12",
+        "p": 27400
+      },
+      {
+        "img": "cono-ddl.webp",
+        "n": "Cono Tu Dulce de Leche x14",
+        "p": 31300
+      },
+      {
+        "img": "cono-ame.webp",
+        "n": "Cono Tu Americana x14",
+        "p": 31300
+      }
+    ],
+    "o": 4,
+    "t": "Copitas y Conos"
+  },
+  "mayo_palito_sei_bom": {
+    "esMayorista": true,
+    "i": [
+      {
+        "img": "seibom-cookie.webp",
+        "n": "Sei Bom Cookies x16",
+        "p": 27900
+      },
+      {
+        "img": "seibom-blanco.webp",
+        "n": "Sei Bom Blanco x16",
+        "p": 27900
+      },
+      {
+        "img": "seibom-almendra.webp",
+        "n": "Sei Bom Almendras",
+        "p": 27900
+      }
+    ],
+    "o": 3,
+    "t": "Palito Sei Bom"
+  },
+  "mayo_palitos_de_agua_x36": {
+    "esMayorista": true,
+    "i": [
+      {
+        "img": "palito-agua.webp",
+        "n": "Palito de Agua x36",
+        "opt": [
+          "Frutilla",
+          "Limón",
+          "Uva"
+        ],
+        "p": 23000
+      },
+      {
+        "img": "palito-acido.webp",
+        "n": "Palito Extra Ácido x24",
+        "p": 20600
+      },
+      {
+        "img": "seitu-fan.webp",
+        "n": "Sei Tu Fan Naranja x24",
+        "p": 17700
+      },
+      {
+        "img": "piccole.webp",
+        "n": "Piccole x24",
+        "p": 17700
+      },
+      {
+        "img": "fruti-frozen.webp",
+        "n": "Fruti Frozen x24",
+        "p": 23400
+      }
+    ],
+    "o": 0,
+    "t": "Palitos de Agua"
+  },
+  "mayo_palitos_de_crema": {
+    "esMayorista": true,
+    "i": [
+      {
+        "img": "giovi.webp",
+        "n": "Palito Giovi x24",
+        "opt": [
+          "Chocolate",
+          "Crema",
+          "Frutilla"
+        ],
+        "p": 19800
+      },
+      {
+        "img": "granizado-americana.webp",
+        "n": "Granizado Americana x24",
+        "p": 22700
+      },
+      {
+        "img": "dietetico-palito.webp",
+        "n": "Palito Dietetico Vai-Fru Sin TACC x24",
+        "p": 36000
+      },
+      {
+        "img": "bombon-helado.webp",
+        "n": "Bombón Helado x24",
+        "p": 27400
+      },
+      {
+        "img": "bombon-crocante.webp",
+        "n": "Bombón Crocante x24",
+        "p": 29000
+      },
+      {
+        "img": "frisky.webp",
+        "n": "Friski x24",
+        "p": 20600
+      },
+      {
+        "img": "carita.webp",
+        "n": "Palito Carita Sin TACC x20",
+        "opt": [
+          "Americana-Frutilla",
+          "Choco-Vainilla",
+          "Crema del Cielo-Americana"
+        ],
+        "p": 20600
+      }
+    ],
+    "o": 2,
+    "t": "Palitos de Crema"
+  },
+  "mayo_postres": {
+    "esMayorista": true,
+    "i": [
+      {
+        "img": "escoces.webp",
+        "n": "Bombon Escoces x24",
+        "opt": [
+          "Clasico",
+          "Nevado",
+          "Pistacho"
+        ],
+        "p": 36800
+      },
+      {
+        "img": "caja-escoces.webp",
+        "n": "Bombon Escoces 6x8",
+        "opt": [
+          "Clasico",
+          "Nevado",
+          "Pistacho"
+        ],
+        "p": 76500
+      },
+      {
+        "img": "seichoc.webp",
+        "n": "Alfajor Seichoc x16",
+        "p": 29900
+      },
+      {
+        "img": "caja-seichoc.webp",
+        "n": "Alfajor Seichoc 6x8",
+        "p": 93000
+      },
+      {
+        "img": "alfajor-negro.webp",
+        "n": "Alfajor Helado x16",
+        "p": 24000
+      },
+      {
+        "img": "caja-alfajor.webp",
+        "n": "Alfajor Helado 6x8",
+        "opt": [
+          "Clasico",
+          "Nevado"
+        ],
+        "p": 73000
+      },
+      {
+        "img": "caja-minitorta.webp",
+        "n": "Minitorta Cookie 6x8",
+        "p": 76500
+      },
+      {
+        "img": "almendrado-ind.webp",
+        "n": "Almendrado x20",
+        "p": 25500
+      },
+      {
+        "img": "caja-almendrado.webp",
+        "n": "Almendrado 6x8",
+        "p": 76500
+      },
+      {
+        "img": "suizo-ind.webp",
+        "n": "Bombon Suizo x20",
+        "p": 27200
+      },
+      {
+        "img": "caja-suizo.webp",
+        "n": "Bombon Suizo 6x8",
+        "p": 68400
+      },
+      {
+        "img": "tricolor-ind.webp",
+        "n": "Tricolor x20",
+        "p": 25500
+      },
+      {
+        "img": "caja-tricolor.webp",
+        "n": "Tricolor 6x8",
+        "p": 62500
+      },
+      {
+        "img": "caja-dietetico.webp",
+        "n": "Tricolor Dietetico 8x6 Sin TACC",
+        "p": 97500
+      }
+    ],
+    "o": 5,
+    "t": "Postres"
+  },
+  "mayo_potes_especiales": {
+    "esMayorista": true,
+    "i": [
+      {
+        "img": "pote-fr.webp",
+        "n": "Pote Sin TACC Ame/Fru x8",
+        "p": 52000
+      },
+      {
+        "img": "pote-ch.webp",
+        "n": "Pote Sin TACC Cho/Ddl x8",
+        "p": 52000
+      },
+      {
+        "img": "pote-limon.webp",
+        "n": "Pote Sin TACC Limón x8",
+        "p": 52000
+      },
+      {
+        "img": "pote-dietetico.webp",
+        "n": "Pote Dietetico Cho/Vai Sin TACC x12",
+        "p": 62000
+      },
+      {
+        "img": "pote-vegano.webp",
+        "n": "Pote Vegano Cho/Vai x6",
+        "p": 41000
+      }
+    ],
+    "o": 7,
+    "t": "Potes Especiales"
+  },
+  "mayo_tortas": {
+    "esMayorista": true,
+    "i": [
+      {
+        "img": "torta-bombon.webp",
+        "n": "Torta Bombón 800gr x6",
+        "p": 72000
+      },
+      {
+        "img": "torta-lemon-pie.webp",
+        "n": "Torta Lemon Pie 800gr x6",
+        "p": 72000
+      },
+      {
+        "img": "torta-cookies.webp",
+        "n": "Torta Cookies 800gr x6",
+        "p": 72000
+      },
+      {
+        "img": "torta-frutilla-ddl.webp",
+        "n": "Torta Frutilla y DDL 800gr x6",
+        "p": 72000
+      }
+    ],
+    "o": 8,
+    "t": "Tortas"
   },
   "postres": {
     "i": [
@@ -880,7 +1196,7 @@
         "p": 1800
       }
     ],
-    "o": 5,
+    "o": 13,
     "t": "Postres Individuales"
   },
   "postres_caja": {
@@ -935,7 +1251,7 @@
         "p": 16000
       }
     ],
-    "o": 6,
+    "o": 14,
     "t": "Postres por Caja"
   },
   "potes": {
@@ -966,7 +1282,7 @@
         "p": 8500
       }
     ],
-    "o": 8,
+    "o": 16,
     "t": "Potes Especiales"
   },
   "seibom": {
@@ -997,7 +1313,7 @@
         "p": 2400
       }
     ],
-    "o": 3,
+    "o": 11,
     "t": "Palito Sei Bom"
   },
   "tortas": {
@@ -1023,7 +1339,7 @@
         "p": 15000
       }
     ],
-    "o": 9,
+    "o": 17,
     "t": "Tortas 800gr"
   }
 }
