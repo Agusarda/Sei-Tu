@@ -1192,11 +1192,30 @@
     </div>
 
     <div id="admin-content" style="flex: 1; overflow-y: auto; padding: 25px; background: #f4f7f9;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <button class="btn-principal" onclick="nuevaCategoria()" style="margin: 0;">+ Nueva Categoría</button>
-            <p style="font-size: 12px; color: #666;">Tip: Usá las flechas para organizar el menú</p>
+        <!-- BOTONES DE NAVEGACIÓN DENTRO DEL ADMIN -->
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button class="btn-principal" onclick="mostrarSeccionAdmin('categorias')" style="margin: 0; flex: 1;">
+                🍦 Categorías y Productos
+            </button>
+            <button class="btn-principal" onclick="mostrarSeccionAdmin('horarios')" style="margin: 0; flex: 1; background: #34495e;">
+                🕒 Editar Horarios
+            </button>
         </div>
-        <div id="admin-lista-categorias"></div>
+
+        <!-- SECCIÓN CATEGORÍAS -->
+        <div id="sec-admin-categorias">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <button class="btn-principal" onclick="nuevaCategoria()" style="margin: 0;">+ Nueva Categoría</button>
+                <p style="font-size: 12px; color: #666;">Tip: Usá las flechas para organizar el menú</p>
+            </div>
+            <div id="admin-lista-categorias"></div>
+        </div>
+
+        <!-- SECCIÓN HORARIOS -->
+        <div id="sec-admin-horarios" style="display: none; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+            <h3 style="color: var(--primary); margin-top: 0;">Configuración de Horarios de Atención</h3>
+            <div id="admin-tabla-horarios"></div>
+        </div>
     </div>
 
     <div class="admin-footer" style="padding: 15px; border-top: 2px solid #eee; background: #fff; text-align: center;">
@@ -1242,15 +1261,25 @@ async function cargarDatos() {
         const data = snapshot.val();
         
         if (data) {
-            // Separa el precioKm si existe en la base de datos
+            // Cargar configuración de precio Km
             if (data.configuracion && data.configuracion.precioKm) {
                 precioKmGlobal = data.configuracion.precioKm;
             } else if (data.precioKm) {
                 precioKmGlobal = data.precioKm;
             }
 
-            // Filtra 'configuracion' o 'precioKm' para que 'completo' SOLO tenga categorías
-            const categoriasSolamente = Object.entries(data).filter(([key]) => key !== 'precioKm' && key !== 'configuracion');
+            // Cargar configuración de Horarios
+            if (data.configuracion && data.configuracion.horarios) {
+                horariosConfig = data.configuracion.horarios;
+            } else if (data.horarios) {
+                horariosConfig = data.horarios;
+            }
+            renderizarModalHorariosCliente();
+
+            // Filtrar claves de configuración para aislar productos/categorías
+            const categoriasSolamente = Object.entries(data).filter(
+                ([key]) => !['precioKm', 'configuracion', 'horarios'].includes(key)
+            );
 
             const ordenado = categoriasSolamente.sort(([, a], [, b]) => (a.o || 0) - (b.o || 0));
             
@@ -1259,7 +1288,7 @@ async function cargarDatos() {
 
             console.log("Datos cargados correctamente");
             init(); 
-            if (modoEntregaGlobal) {
+            if (typeof modoEntregaGlobal !== 'undefined' && modoEntregaGlobal) {
                 filtrarProductosPorEntrega();
                 toggleDireccion();
             }
@@ -1270,32 +1299,46 @@ async function cargarDatos() {
 }
 
 function guardarEnNube() {
-    // 1. Leemos el valor ingresado en el input del admin
+    // 1. Leer precio por km
     const inputKm = document.getElementById('input-precio-km');
     if (inputKm) {
         precioKmGlobal = parseFloat(inputKm.value) || 400;
     }
 
-    // 2. Preparamos los datos a guardar en Firebase:
-    // Mantenemos todas las categorías intactas y agregamos 'configuracion' por separado
+    // 2. Leer configuración de horarios desde la interfaz del panel Admin
+    const orden = [1, 2, 3, 4, 5, 6, 0];
+    orden.forEach(diaIdx => {
+        const chk = document.getElementById(`horario-abierto-${diaIdx}`);
+        const ap = document.getElementById(`horario-apertura-${diaIdx}`);
+        const ci = document.getElementById(`horario-cierre-${diaIdx}`);
+
+        if (chk && ap && ci) {
+            horariosConfig[diaIdx] = {
+                abierto: chk.checked,
+                apertura: ap.value,
+                cierre: ci.value
+            };
+        }
+    });
+
+    // 3. Preparar objeto completo a guardar en Firebase
     const datosAGuardar = {
         ...completo,
         configuracion: {
-            precioKm: precioKmGlobal
+            precioKm: precioKmGlobal,
+            horarios: horariosConfig
         }
     };
 
-    const dbRef = database.ref('/');
-    dbRef.set(datosAGuardar)
+    database.ref('/').set(datosAGuardar)
     .then(() => {
-        console.log("Confirmado por Firebase");
         alert("¡Cambios guardados con éxito!");
         const panel = document.getElementById('modal-admin');
         if(panel) panel.style.display = 'none';
         location.reload();
     })
     .catch((error) => {
-        console.error("Error real de Firebase:", error);
+        console.error("Error en Firebase:", error);
         alert("Error al guardar: " + error.message);
     });
 }
@@ -1303,7 +1346,84 @@ function guardarEnNube() {
 let totalGlobalNumerico = 0;
 let idActualModal = null;
 
+// Variable global con horarios por defecto (Fallback)
+let horariosConfig = {
+    1: { abierto: true,  apertura: "11:00", cierre: "22:00" }, // Lunes
+    2: { abierto: false, apertura: "11:00", cierre: "22:00" }, // Martes (Cerrado)
+    3: { abierto: true,  apertura: "11:00", cierre: "22:00" }, // Miércoles
+    4: { abierto: true,  apertura: "11:00", cierre: "22:00" }, // Jueves
+    5: { abierto: true,  apertura: "11:00", cierre: "23:00" }, // Viernes
+    6: { abierto: true,  apertura: "11:00", cierre: "23:00" }, // Sábado
+    0: { abierto: true,  apertura: "11:00", cierre: "22:00" }  // Domingo
+};
 
+const NOMBRES_DIAS = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+
+// Función para actualizar la modal del cliente con los horarios cargados
+function renderizarModalHorariosCliente() {
+    const contenedor = document.querySelector("#modal-horarios .horarios-list");
+    if (!contenedor) return;
+
+    let html = "";
+    // Orden de visualización: Lunes (1) a Domingo (0)
+    const orden = [1, 2, 3, 4, 5, 6, 0];
+
+    orden.forEach(diaIdx => {
+        const h = horariosConfig[diaIdx];
+        const nombreDia = NOMBRES_DIAS[diaIdx];
+
+        if (!h || !h.abierto) {
+            html += `<div class="horario-dia" style="color: #e74c3c; font-weight: 600;"><span>${nombreDia}</span> <span>Cerrado</span></div>`;
+        } else {
+            const destacado = (diaIdx === 5 || diaIdx === 6) ? 'style="font-weight: 600;"' : '';
+            html += `<div class="horario-dia" ${destacado}><span>${nombreDia}</span> <span>${h.apertura}hs a ${h.cierre}hs</span></div>`;
+        }
+    });
+
+    contenedor.innerHTML = html;
+}
+
+// Validaciones dinámicas basadas en 'horariosConfig'
+function esHorarioLocalAbierto() {
+    const ahora = new Date();
+    const dia = ahora.getDay();
+    const horaActual = ahora.getHours() * 60 + ahora.getMinutes();
+
+    const configDia = horariosConfig[dia];
+
+    if (!configDia || !configDia.abierto) {
+        return { abierto: false, motivo: `Los ${NOMBRES_DIAS[dia].toLowerCase()} el local permanece cerrado.` };
+    }
+
+    const [hAp, mAp] = configDia.apertura.split(":").map(Number);
+    const [hCi, mCi] = configDia.cierre.split(":").map(Number);
+    const minApertura = hAp * 60 + mAp;
+    const minCierre = hCi * 60 + mCi;
+
+    if (horaActual < minApertura) {
+        return { abierto: false, motivo: `El local abre a las ${configDia.apertura}hs.` };
+    }
+    if (horaActual >= minCierre) {
+        return { abierto: false, motivo: `El local ya cerró. Nuestro horario de hoy era hasta las ${configDia.cierre}hs.` };
+    }
+
+    return { abierto: true };
+}
+
+function esHorarioDelivery() {
+    const checkLocal = esHorarioLocalAbierto();
+    if (!checkLocal.abierto) return checkLocal;
+
+    const ahora = new Date();
+    const horaActual = ahora.getHours() * 60 + ahora.getMinutes();
+    const minInicioDelivery = 18 * 60; // 18:00hs
+
+    if (horaActual < minInicioDelivery) {
+        return { abierto: false, motivo: "El servicio de delivery comienza a las 18:00hs." };
+    }
+
+    return { abierto: true };
+}
 function toggleMenu() { 
     const sidebar = document.getElementById("sidebar");
     const btnsNav = document.getElementById("nav-btns");
@@ -1334,6 +1454,62 @@ function toggleHorarios() {
     }
 }
 
+function mostrarSeccionAdmin(seccion) {
+    const secCat = document.getElementById("sec-admin-categorias");
+    const secHor = document.getElementById("sec-admin-horarios");
+
+    if (seccion === 'horarios') {
+        secCat.style.display = "none";
+        secHor.style.display = "block";
+        renderizarEditorHorariosAdmin();
+    } else {
+        secCat.style.display = "block";
+        secHor.style.display = "none";
+    }
+}
+
+function renderizarEditorHorariosAdmin() {
+    const contenedor = document.getElementById("admin-tabla-horarios");
+    if (!contenedor) return;
+
+    const orden = [1, 2, 3, 4, 5, 6, 0];
+    let html = `<div style="display: flex; flex-direction: column; gap: 12px;">`;
+
+    orden.forEach(diaIdx => {
+        const config = horariosConfig[diaIdx] || { abierto: true, apertura: "11:00", cierre: "22:00" };
+        const nombreDia = NOMBRES_DIAS[diaIdx];
+
+        html += `
+            <div style="display: flex; items-center; justify-content: space-between; padding: 10px; background: #f8f9fa; border-radius: 10px; border: 1px solid #ddd; flex-wrap: wrap; gap: 10px;">
+                <div style="width: 110px; font-weight: 600;">${nombreDia}</div>
+                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 14px;">
+                    <input type="checkbox" id="horario-abierto-${diaIdx}" ${config.abierto ? 'checked' : ''} onchange="toggleInputsHorario(${diaIdx})">
+                    Abierto
+                </label>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <input type="time" id="horario-apertura-${diaIdx}" value="${config.apertura}" ${!config.abierto ? 'disabled' : ''} style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    <span>a</span>
+                    <input type="time" id="horario-cierre-${diaIdx}" value="${config.cierre}" ${!config.abierto ? 'disabled' : ''} style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                </div>
+            </div>
+        `;
+    });
+
+    html += `</div>`;
+    contenedor.innerHTML = html;
+}
+
+function toggleInputsHorario(diaIdx) {
+    const chk = document.getElementById(`horario-abierto-${diaIdx}`);
+    const ap = document.getElementById(`horario-apertura-${diaIdx}`);
+    const ci = document.getElementById(`horario-cierre-${diaIdx}`);
+
+    if (chk && ap && ci) {
+        ap.disabled = !chk.checked;
+        ci.disabled = !chk.checked;
+    }
+}
+
 function cerrarTodo() {
     document.getElementById("sidebar").classList.remove("active");
     document.getElementById("modal-horarios").classList.remove("active");
@@ -1356,22 +1532,6 @@ function cerrarTodo() {
     }
 }
 
-function esHorarioDelivery() {
-    const ahora = new Date();
-    const dia = ahora.getDay(); 
-    const hora = ahora.getHours();
-
-    if (dia === 2) return { abierto: false, motivo: "Los martes el local permanece cerrado." };
-    if (hora < 18) return { abierto: false, motivo: "El servicio de delivery comienza a las 18:00hs." };
-
-    const horaCierre = (dia === 5 || dia === 6) ? 23 : 22;
-
-    if (hora >= horaCierre) {
-        return { abierto: false, motivo: `El delivery de hoy finalizó a las ${horaCierre}:00hs.` };
-    }
-
-    return { abierto: true };
-}
 
 let mapa;
 let marcador;
@@ -1440,22 +1600,6 @@ function iniciarAutocomplete() {
     });
 }
 
-function esHorarioLocalAbierto() {
-    const ahora = new Date();
-    const dia = ahora.getDay(); 
-    const hora = ahora.getHours();
-
-    if (dia === 2) return { abierto: false, motivo: "Los martes el local permanece cerrado." };
-    if (hora < 11) return { abierto: false, motivo: "El local abre a las 11:00hs." };
-
-    const horaCierre = (dia === 5 || dia === 6) ? 23 : 22;
-
-    if (hora >= horaCierre) {
-        return { abierto: false, motivo: `El local ya cerró. Nuestro horario de hoy era hasta las ${horaCierre}:00hs.` };
-    }
-
-    return { abierto: true };
-}
 
 function toggleDireccion() {
     const esDelivery = (modoEntregaGlobal === "Delivery");
