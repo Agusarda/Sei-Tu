@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pedí tus helados favoritos en Sei Tu Ituzaingó Sur. Envíos rápidos a domicilio, take away y el mejor catálogo online para hacer tu pedido directo por WhatsApp.">
+    <meta name="description" content="Pedí tus helados favoritos en Sei Tu Ituzaingó Sur. Envíos rápidos a domicilio, take away y el mejor catálogo online para hacer tu pedido.">
     <title>Sei Tu Ituzaingó</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -948,25 +948,44 @@
         
         <h1 style="color: white; font-family: 'Poppins', sans-serif; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); margin-bottom: 40px;">¡HELADO TODO EL AÑO!</h1>
 
-        <div style="display: flex; gap: 15px; margin-bottom: 40px;">
-            <button onclick="comenzarPedido('Delivery')" style="
-                background: #e67e22;
-                color: white;
-                border: none;
-                padding: 15px 20px;
-                font-size: 18px;
-                font-weight: 600;
-                border-radius: 15px;
-                cursor: pointer;
-                flex: 1;
-                font-family: 'Poppins', sans-serif;
-                box-shadow: 0 5px 15px rgba(230,126,34,0.3);
-            ">
-                🛵 DELIVERY
-            </button>
+        <!-- BOTONES PANTALLA INICIO -->
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px;">
+            <div style="display: flex; gap: 15px;">
+                <button onclick="comenzarPedido('Delivery')" style="
+                    background: #e67e22;
+                    color: white;
+                    border: none;
+                    padding: 15px 20px;
+                    font-size: 18px;
+                    font-weight: 600;
+                    border-radius: 15px;
+                    cursor: pointer;
+                    flex: 1;
+                    font-family: 'Poppins', sans-serif;
+                    box-shadow: 0 5px 15px rgba(230,126,34,0.3);
+                ">
+                    🛵 DELIVERY
+                </button>
 
-            <button onclick="comenzarPedido('Retiro')" style="
-                background: #0072ff;
+                <button onclick="comenzarPedido('Retiro')" style="
+                    background: #0072ff;
+                    color: white;
+                    border: none;
+                    padding: 15px 20px;
+                    font-size: 18px;
+                    font-weight: 600;
+                    border-radius: 15px;
+                    cursor: pointer;
+                    flex: 1;
+                    font-family: 'Poppins', sans-serif;
+                    box-shadow: 0 5px 15px rgba(0,114,255,0.3);
+                ">
+                    🛍️ TAKE AWAY
+                </button>
+            </div>
+
+            <button onclick="comenzarPedido('Mayorista')" style="
+                background: #8e44ad;
                 color: white;
                 border: none;
                 padding: 15px 20px;
@@ -974,11 +993,11 @@
                 font-weight: 600;
                 border-radius: 15px;
                 cursor: pointer;
-                flex: 1;
+                width: 100%;
                 font-family: 'Poppins', sans-serif;
-                box-shadow: 0 5px 15px rgba(0,114,255,0.3);
+                box-shadow: 0 5px 15px rgba(142,68,173,0.3);
             ">
-                🛍️ TAKE AWAY
+                📦 MAYORISTA
             </button>
         </div>
         
@@ -1240,6 +1259,10 @@ async function cargarDatos() {
 
             console.log("Datos cargados correctamente");
             init(); 
+            if (modoEntregaGlobal) {
+                filtrarProductosPorEntrega();
+                toggleDireccion();
+            }
         }
     } catch (err) {
         console.error("Error al cargar datos:", err);
@@ -1436,59 +1459,118 @@ function esHorarioLocalAbierto() {
 
 function toggleDireccion() {
     const esDelivery = (modoEntregaGlobal === "Delivery");
+    const esMayorista = (modoEntregaGlobal === "Mayorista");
+    
+    // Si es mayorista, consultamos el tipo de entrega elegido en su selector
+    let tipoEntregaMayorista = "Delivery";
+    const selectMayo = document.getElementById("select-tipo-mayorista");
+    if (selectMayo) {
+        tipoEntregaMayorista = selectMayo.value;
+    }
+
+    // Requieren dirección y envío si es Delivery minorista o si es Mayorista opción Delivery
+    const requiereDireccion = esDelivery || (esMayorista && tipoEntregaMayorista === "Delivery");
     
     const grupoDireccion = document.getElementById("group-direccion");
     const aviso = document.getElementById("aviso-delivery-texto");
     const selectPago = document.getElementById("pago");
+    const btnCalcularEnvio = document.getElementById("btn-calcular-envio") || document.querySelector('.btn-calc-envio');
+    const cartelDistancia = document.getElementById("resultado-envio") || document.querySelector('.distancia-info');
 
-    if (grupoDireccion) {
-        grupoDireccion.style.display = esDelivery ? "block" : "none";
+    // Manejo dinámico del selector Delivery / Take Away para Mayoristas
+    let contenedorSelectorMayo = document.getElementById("contenedor-selector-mayorista");
+    if (esMayorista) {
+        if (!contenedorSelectorMayo) {
+            contenedorSelectorMayo = document.createElement("div");
+            contenedorSelectorMayo.id = "contenedor-selector-mayorista";
+            contenedorSelectorMayo.className = "form-group";
+            contenedorSelectorMayo.innerHTML = `
+                <label>Tipo de Entrega</label>
+                <select id="select-tipo-mayorista" onchange="toggleDireccion()">
+                    <option value="Delivery">🛵 Delivery</option>
+                    <option value="Retiro">🛍️ Take Away (Retiro en local)</option>
+                </select>
+            `;
+            const form = document.querySelector("#paso-datos .form");
+            if (form) form.insertBefore(contenedorSelectorMayo, form.firstChild);
+        } else {
+            contenedorSelectorMayo.style.display = "block";
+        }
+    } else if (contenedorSelectorMayo) {
+        contenedorSelectorMayo.style.display = "none";
     }
 
-    if (!esDelivery) {
+    // 1. Mostrar/Ocultar el campo de Dirección y Mapa
+    if (grupoDireccion) {
+        grupoDireccion.style.display = requiereDireccion ? "block" : "none";
+    }
+
+    // 2. Si es Retiro / Take Away, reseteamos el envío
+    if (!requiereDireccion) {
         costoEnvioCalculado = 0;
         distanciaEnvioTexto = "";
+        envioCalculado = false;
+        
+        if (cartelDistancia) {
+            cartelDistancia.style.display = "none";
+            cartelDistancia.innerHTML = "";
+        }
+
+        if (typeof actualizar === 'function') {
+            actualizar();
+        }
+    } else if (cartelDistancia && distanciaEnvioTexto) {
+        cartelDistancia.style.display = "block";
     }
 
-    if (selectPago) {
-        const opcionTarjeta = selectPago.querySelector('option[value="Tarjeta"]');
+    // 3. Mostrar botón de calcular costo de envío si requiere dirección
+    if (btnCalcularEnvio) {
+        btnCalcularEnvio.style.display = requiereDireccion ? "block" : "none";
+    }
+
+    // 4. Configurar Forma de Pago y Vuelto
+    if (selectPago && selectPago.closest('.form-group')) {
+        const contenedorPago = selectPago.closest('.form-group');
+        contenedorPago.style.display = "block";
         
-        if (esDelivery) {
+        const opcionTarjeta = selectPago.querySelector('option[value="Tarjeta"]');
+        if (requiereDireccion) {
             if (opcionTarjeta) opcionTarjeta.style.display = "none";
-            
             if (selectPago.value === "Tarjeta") {
                 selectPago.value = "Efectivo";
-                toggleEfectivo(); 
             }
         } else {
             if (opcionTarjeta) opcionTarjeta.style.display = "block";
         }
+        toggleEfectivo();
     }
 
+    // 5. Cartel informativo de delivery
     if (aviso) {
-        aviso.style.display = esDelivery ? "block" : "none";
+        aviso.style.display = requiereDireccion ? "block" : "none";
 
-        if (esDelivery) {
+        if (requiereDireccion) {
             const check = esHorarioDelivery();
             if (!check.abierto) {
                 aviso.style.color = "#e74c3c"; 
                 aviso.innerHTML = `⚠️ ${check.motivo}`; 
             } else {
-                aviso.style.color = "#fc67a2"; 
-                aviso.innerHTML = `✅ Delivery disponible en este momento.`;
+                aviso.style.color = "#27ae60"; 
+                aviso.innerHTML = `✅ Servicio disponible en este momento.`;
             }
         }
     }
 }
-
 function toggleEfectivo() {
     const pago = document.getElementById('pago').value;
     const groupEfectivo = document.getElementById('group-efectivo');
 
-    if (pago === 'Efectivo') {
-        groupEfectivo.style.display = 'block';
-    } else {
-        groupEfectivo.style.display = 'none';
+    if (groupEfectivo) {
+        if (pago === 'Efectivo') {
+            groupEfectivo.style.display = 'block';
+        } else {
+            groupEfectivo.style.display = 'none';
+        }
     }
 }
 
@@ -1509,6 +1591,11 @@ function init() {
     for (const key in completo) {
         const cat = completo[key];
         
+        // Si el pedido actual es Mayorista, solo renderizamos categorías mayoristas
+        // Si el pedido es Delivery / Take Away, renderizamos solo minoristas
+        const esPedMayorista = (modoEntregaGlobal === "Mayorista");
+        if (esPedMayorista !== !!cat.esMayorista) continue;
+
         const a = document.createElement('a');
         a.className = 'menu-item';
         a.href = `#${key}`;
@@ -1545,19 +1632,16 @@ function init() {
                     
                     return `
                         <div class="card ${esSoloLocal ? 'solo-local-card' : ''}"> 
-                            ${logosHtml} 
-        
-                            ${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''}
+                            ${logosHtml}${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''}
                             ${logoCormillotHtml}
         
-                            <h4>${nombreAMostrar}</h4>
-                            <p class="price">$${p.p}</p>
+                            <h4>${nombreAMostrar}</h4>                             <p class="price">$${p.p}</p>
 
                             <div class="control-cantidad">
-                                <button class="btn-qty" onclick="ajustarCant('${key}-${idx}', -1, '${key}', ${idx})">-</button>
+                                <button class="btn-qty" onclick="ajustarCant('${key}-${idx}', -1, '${key}',${idx})">-</button>
                                 <input type="number" value="0" class="cantidad" id="${key}-${idx}" 
                                         data-n="${p.n}" data-p="${p.p}" data-sl="${esSoloLocal}" readonly>
-                                <button class="btn-qty" onclick="ajustarCant('${key}-${idx}', 1, '${key}', ${idx})">+</button>
+                                <button class="btn-qty" onclick="ajustarCant('${key}-${idx}', 1, '${key}',${idx})">+</button>
                             </div>
                             <div id="box-${key}-${idx}"></div> 
                         </div>
@@ -1647,6 +1731,7 @@ function guardarSabores() {
 // FUNCIONES NUEVAS: CÁLCULO DE ENVÍO POR RECORRIDO DE MOTO
 function calcularCostoEnvio() {
     const direccionDestino = document.getElementById('direccion').value.trim();
+
     if (!direccionDestino) {
         alert("Por favor, ingresá una dirección para calcular el costo de envío.");
         return;
@@ -1843,8 +1928,12 @@ function cambiarPaso(paso) {
                 }
 
                 const requiereConfig = item.g || (item.opt && item.opt.length > 0);
-                if (requiereConfig && !seleccionesUsuario[id]) {
-                    faltanConfigurar.push(item.n);
+                if (requiereConfig) {
+                    // Verifica que existan selecciones y que coincida exactamente con la cantidad solicitada
+                    const selecciones = seleccionesUsuario[id];
+                    if (!selecciones || selecciones.length < cant) {
+                        faltanConfigurar.push(item.n);
+                    }
                 }
             }
         });
@@ -1939,11 +2028,18 @@ function enviar() {
         return;
     }
     
-    if (entrega === "Delivery") {
+    // Validación de Dirección y Envío para Delivery
+    // Determinar sub-tipo de entrega si es Mayorista
+    const selectMayo = document.getElementById("select-tipo-mayorista");
+    const esMayoDelivery = (entrega === "Mayorista" && selectMayo && selectMayo.value === "Delivery");
+    const esMayoTakeAway = (entrega === "Mayorista" && selectMayo && selectMayo.value === "Retiro");
+
+    // Validación para Delivery (tanto Minorista como Mayorista Delivery)
+    if (entrega === "Delivery" || esMayoDelivery) {
         if (!d) return alert("Por favor, ingresá tu dirección.");
         if (!envioCalculado) {
-        alert("Por favor, hacé clic en '🛵 Calcular costo de envío' antes de enviar tu pedido.");
-        return;
+            alert("Por favor, hacé clic en '🛵 Calcular costo de envío' antes de enviar tu pedido.");
+            return;
         }
         const checkHorario = esHorarioDelivery();
         if (!checkHorario.abierto) {
@@ -1952,7 +2048,10 @@ function enviar() {
         }
     }
 
-    let detallePago = "*Pago*: " + pago;
+    // Detalle de pago solo si NO es Mayorista
+    let detallePago = "";
+    
+    detallePago = "*Pago*: " + pago;
     if (pago === "Efectivo") {
         const montoVuelto = parseFloat(vueltoInput.value);
         if (!montoVuelto || montoVuelto < window.totalGlobalNumerico) {
@@ -1960,22 +2059,26 @@ function enviar() {
         }
         detallePago += " (Abona con: $" + montoVuelto + ". Vuelto: $" + (montoVuelto - window.totalGlobalNumerico) + ")";
     }
+    
 
     let msj = "";
     if (entrega === "Delivery") {
-        msj += "*DELIVERY* " + "\n";
-    }
-    else
-    {
-        msj += "*TAKE AWAY* " + "\n";
+        msj += "*PEDIDO DELIVERY*\n";
+    } else if (entrega === "Mayorista") {
+        msj += esMayoDelivery ? "*PEDIDO MAYORISTA (DELIVERY)*\n" : "*PEDIDO MAYORISTA (TAKE AWAY)*\n";
+    } else {
+        msj += "*PEDIDO TAKE AWAY*\n";
     }
     msj += "DETALLE:\n" + window.resumenWhatsApp + "\n";
     msj += "TOTAL: $" + window.totalGlobalNumerico + "\n";
     msj += "*Nombre*: " + n + "\n";
-    if (entrega === "Delivery") {
+    
+    if (entrega === "Delivery" || entrega === "Mayorista") {
         msj += "*Dirección*: " + d + "\n";
     }
-    msj += detallePago + "\n";
+    if (detallePago) {
+        msj += detallePago + "\n";
+    }
 
     if (notas) {
         msj += "*Notas*: " + notas;
@@ -1996,6 +2099,7 @@ window.onload = () => {
 let modoEntregaGlobal = "";
 function comenzarPedido(tipo) {
     modoEntregaGlobal = tipo;
+    cerrarTodo();
     const inicio = document.getElementById('pantalla-inicio');
     const carrito = document.getElementById('carrito'); 
     const quickSwitch = document.getElementById('quick-switch');
@@ -2006,16 +2110,22 @@ function comenzarPedido(tipo) {
     if(selectEntrega) {
         selectEntrega.value = (tipo === 'Delivery') ? 'Delivery' : 'Retiro en Local';
     }
+    init(); 
+    
+
+    // Aplicar las restricciones visuales y deshabilitar los productos "Solo Local" si es Delivery
     filtrarProductosPorEntrega();
-    toggleDireccion()
+    toggleDireccion();
 
     quickSwitch.style.display = "flex";
     if (tipo === 'Delivery') {
         btnToTakeAway.style.display = "block";  
         btnToDelivery.style.display = "none";
-    } else {
+    } else if (tipo === 'Retiro') {
         btnToDelivery.style.display = "block";  
         btnToTakeAway.style.display = "none";
+    } else {
+        quickSwitch.style.display = "none"; // Oculta selector rápido si es pedido mayorista
     }
 
     if (inicio.style.display !== "none") {
@@ -2111,34 +2221,75 @@ function cerrarAdmin() {
     document.getElementById('overlay').classList.remove('active');
 }
 
+let adminTabActual = 'minorista'; // Estado de la pestaña del admin ('minorista' o 'mayorista')
+
 function renderAdminDashboard() {
     const container = document.getElementById('admin-lista-categorias');
     container.innerHTML = "";
 
-    // 🛵 1. TARJETA DE CONFIGURACIÓN DEL ENVÍO
-    let configEnvioHtml = `
-        <div style="background: #eef7ff; border: 2px dashed var(--primary); padding: 15px; border-radius: 12px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-            <div>
-                <strong style="color: var(--primary); font-size: 16px;">🛵 Tarifas de Delivery</strong>
-                <p style="margin: 3px 0 0 0; font-size: 12px; color: #555;">Precio base por tramo / km de envío ($)</p>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-weight: bold; font-size: 16px;">$</span>
-                <input type="number" id="input-precio-km" value="${precioKmGlobal}" 
-                       onchange="precioKmGlobal = parseFloat(this.value) || 0" 
-                       style="width: 100px; padding: 8px; font-weight: bold; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; text-align: center;">
-            </div>
+    // 1. SELECTOR DE PESTAÑAS (MINORISTA / MAYORISTA)
+    let tabsHtml = `
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px;">
+            <button onclick="adminTabActual = 'minorista'; renderAdminDashboard();" 
+                style="flex: 1; padding: 12px; font-weight: bold; border-radius: 10px; border: none; cursor: pointer; font-size: 15px;
+                background: ${adminTabActual === 'minorista' ? 'var(--primary)' : '#e0e0e0'}; 
+                color: ${adminTabActual === 'minorista' ? '#fff' : '#555'};">
+                🛒 CATÁLOGO MINORISTA
+            </button>
+            <button onclick="adminTabActual = 'mayorista'; renderAdminDashboard();" 
+                style="flex: 1; padding: 12px; font-weight: bold; border-radius: 10px; border: none; cursor: pointer; font-size: 15px;
+                background: ${adminTabActual === 'mayorista' ? '#8e44ad' : '#e0e0e0'}; 
+                color: ${adminTabActual === 'mayorista' ? '#fff' : '#555'};">
+                📦 CATÁLOGO MAYORISTA
+            </button>
         </div>
     `;
-    container.innerHTML = configEnvioHtml;
 
-    // 2. RENDERIZADO DE TODAS LAS CATEGORÍAS NORMALMENTE
-    Object.keys(completo).forEach((catKey) => {
+    // 🛵 TARJETA DE CONFIGURACIÓN DEL ENVÍO (Solo en pestaña Minorista)
+    let configEnvioHtml = "";
+    if (adminTabActual === 'minorista') {
+        configEnvioHtml = `
+            <div style="background: #eef7ff; border: 2px dashed var(--primary); padding: 15px; border-radius: 12px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                <div>
+                    <strong style="color: var(--primary); font-size: 16px;">🛵 Tarifas de Delivery</strong>
+                    <p style="margin: 3px 0 0 0; font-size: 12px; color: #555;">Precio base por tramo / km de envío ($)</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-weight: bold; font-size: 16px;">$</span>
+                    <input type="number" id="input-precio-km" value="${precioKmGlobal}" 
+                           onchange="precioKmGlobal = parseFloat(this.value) || 0" 
+                           style="width: 100px; padding: 8px; font-weight: bold; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; text-align: center;">
+                </div>
+            </div>
+        `;
+    }
+
+    container.innerHTML = tabsHtml + configEnvioHtml;
+
+    // 2. FILTRAR CATEGORÍAS SEGÚN LA PESTAÑA ACTIVA
+    const categoriasFiltradas = Object.keys(completo).filter(catKey => {
         const cat = completo[catKey];
-        if (!cat || !cat.i) return; // Validación de seguridad extra
+        if (adminTabActual === 'mayorista') {
+            return cat.esMayorista === true;
+        } else {
+            return !cat.esMayorista; // Minoristas o sin flag definido
+        }
+    });
+
+    if (categoriasFiltradas.length === 0) {
+        container.innerHTML += `
+            <div style="text-align: center; padding: 40px 10px; color: #777;">
+                <p>No hay categorías cargadas en el catálogo <b>${adminTabActual}</b>.</p>
+            </div>
+        `;
+    }
+
+    categoriasFiltradas.forEach((catKey) => {
+        const cat = completo[catKey];
+        if (!cat || !cat.i) return;
 
         let catHtml = `
-            <div style="border: 1px solid #ddd; border-left: 5px solid var(--primary); padding: 20px; border-radius: 12px; margin-bottom: 30px; background: #fff;">
+            <div style="border: 1px solid #ddd; border-left: 5px solid ${adminTabActual === 'mayorista' ? '#8e44ad' : 'var(--primary)'}; padding: 20px; border-radius: 12px; margin-bottom: 30px; background: #fff;">
                 <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
                     <div style="display: flex; flex-direction: column;">
                         <button onclick="moverCat('${catKey}', -1)" style="cursor:pointer;">▲</button>
@@ -2157,9 +2308,9 @@ function renderAdminDashboard() {
                         <div class="admin-row-producto" style="grid-template-columns: 40px 2fr 80px 1fr 60px 60px 180px 40px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
                             
                             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
-                                <i class="fas fa-chevron-up" onclick="moverProd('${catKey}', ${idx}, -1)" 
+                                <i class="fas fa-chevron-up" onclick="moverProd('${catKey}',${idx}, -1)" 
                                     style="cursor:pointer; font-size:14px; color:${idx === 0 ? '#ccc' : 'var(--primary)'};"></i>
-                                <i class="fas fa-chevron-down" onclick="moverProd('${catKey}', ${idx}, 1)" 
+                                <i class="fas fa-chevron-down" onclick="moverProd('${catKey}',${idx}, 1)" 
                                     style="cursor:pointer; font-size:14px; color:${idx === cat.i.length - 1 ? '#ccc' : 'var(--primary)'};"></i>
                             </div>
 
@@ -2182,7 +2333,7 @@ function renderAdminDashboard() {
                                 ` : ''}
                             </div>
 
-                            <button onclick="eliminarProducto('${catKey}', ${idx})" style="color: #e74c3c; border: none; background: none; cursor:pointer; font-size: 20px;">&times;</button>
+                            <button onclick="eliminarProducto('${catKey}',${idx})" style="color: #e74c3c; border: none; background: none; cursor:pointer; font-size: 20px;">&times;</button>
                         </div>
                     `).join('')}
                 </div>
@@ -2191,12 +2342,6 @@ function renderAdminDashboard() {
         `;
         container.innerHTML += catHtml;
     });
-
-    container.innerHTML += `
-        <button class="btn-principal" onclick="nuevaCategoria()" style="background: var(--primary); color: #fff; width: 100%; padding: 12px; margin-top: 10px; font-weight: bold;">
-            + Nueva Categoría
-        </button>
-    `;
 }
 
 function moverProd(catKey, index, direccion) {
@@ -2234,10 +2379,11 @@ function moverCat(catKey, direccion) {
 }
 
 function nuevaCategoria() {
-    const nombreVisible = prompt("Nombre de la categoría (ej: Postres Especiales):");
+    const esMayo = (adminTabActual === 'mayorista');
+    const nombreVisible = prompt(`Nombre de la nueva categoría ${esMayo ? 'MAYORISTA' : 'MINORISTA'} (ej: Postres Especiales):`);
     if (!nombreVisible) return; 
 
-    const key = nombreVisible.toLowerCase().trim().replace(/\s/g, '_');
+    const key = (esMayo ? 'mayo_' : '') + nombreVisible.toLowerCase().trim().replace(/\s/g, '_');
 
     if (completo[key]) {
         alert("Ya existe una categoría con un nombre similar.");
@@ -2246,10 +2392,12 @@ function nuevaCategoria() {
 
     completo[key] = { 
         t: nombreVisible, 
+        esMayorista: esMayo,
         i: [] 
     };
 
     renderAdminDashboard();
+    init();
 }
 
 function nuevoProducto(catKey) {
@@ -2496,7 +2644,9 @@ document.getElementById('btn-geoloc').addEventListener('click', () => {
                     }
 
                     // Calcular envío automáticamente al obtener la geolocalización
+                    
                     calcularCostoEnvio();
+                    
                 } else {
                     alert("No se pudo determinar la dirección.");
                 }
