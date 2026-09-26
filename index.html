@@ -898,6 +898,60 @@
             gap: 25px;
             margin-top: 30px;
         }
+
+        .modal-flyer {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: transparent;
+            z-index: 10050;
+            display: none;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            border: none;
+            padding: 0;
+        }
+        .modal-flyer.active {
+            display: block;
+        }
+        .flyer-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        .flyer-img {
+            width: 100%;
+            height: auto;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: block;
+        }
+        .btn-cerrar-flyer {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 36px;
+            height: 36px;
+            background: #e74c3c;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10060;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease;
+        }
+        .btn-cerrar-flyer:hover {
+            transform: scale(1.15) rotate(90deg);
+            background: #c0392b;
+        }
         .wrapper-gusto {
             display: flex;
             align-items: center;
@@ -1037,6 +1091,13 @@
     <button id="switch-to-delivery" onclick="comenzarPedido('Delivery')" style="background: #e67e22; color: white; border: none; padding: 10px 18px; border-radius: 50px; font-weight: 600; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: none;">
         🛵 Ir a Delivery
     </button>
+</div>
+
+<div class="modal-flyer" id="modal-flyer">
+    <div class="flyer-wrapper">
+        <button class="btn-cerrar-flyer" onclick="cerrarFlyer()">×</button>
+        <img src="flyer.webp" alt="Promoción" class="flyer-img">
+    </div>
 </div>
 
 <div class="overlay" id="overlay" onclick="cerrarTodo()"></div>
@@ -1718,6 +1779,16 @@ function toggleEfectivo() {
     }
 }
 
+function abrirFlyer() {
+    document.getElementById("modal-flyer").classList.add("active");
+    document.getElementById("overlay").classList.add("active");
+}
+
+function cerrarFlyer() {
+    document.getElementById("modal-flyer").classList.remove("active");
+    document.getElementById("overlay").classList.remove("active");
+}
+
 function toggleContactos() {
     document.getElementById("modal-contactos").classList.toggle("active");
     document.getElementById("overlay").classList.toggle("active");
@@ -2244,6 +2315,11 @@ let modoEntregaGlobal = "";
 function comenzarPedido(tipo) {
     modoEntregaGlobal = tipo;
     cerrarTodo();
+
+    if (tipo === 'Delivery' || tipo === 'Retiro') {
+        abrirFlyer();
+    }
+
     const inicio = document.getElementById('pantalla-inicio');
     const carrito = document.getElementById('carrito'); 
     const quickSwitch = document.getElementById('quick-switch');
