@@ -2347,12 +2347,14 @@ window.onload = () => {
 };
 
 let modoEntregaGlobal = "";
+let flyerMostrado = false;
 function comenzarPedido(tipo) {
     modoEntregaGlobal = tipo;
     cerrarTodo();
 
-    if (tipo === 'Delivery' || tipo === 'Retiro') {
+    if ((tipo === 'Delivery' || tipo === 'Retiro') && !flyerMostrado) {
         abrirFlyer();
+        flyerMostrado = true; // Guardamos que ya se mostró
     }
 
     const inicio = document.getElementById('pantalla-inicio');
