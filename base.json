@@ -68,8 +68,13 @@
       },
       {
         "img": "frambuesas.webp",
-        "n": "Bomboncito Frambuesa",
+        "n": "Frambuesa Bañada",
         "p": 9000
+      },
+      {
+        "img": "arandanos.webp",
+        "n": "Arándano Bañado",
+        "p": 8000
       },
       {
         "img": "bomboncito-clasico.webp",
@@ -80,6 +85,11 @@
           "Menta",
           "Pistacho"
         ],
+        "p": 8500
+      },
+      {
+        "img": "seichoc-bombon.webp",
+        "n": "Bomboncito Seichoc",
         "p": 8500
       }
     ],
@@ -236,6 +246,43 @@
     "t": "Cafeteria"
   },
   "configuracion": {
+    "horarios": [
+      {
+        "abierto": true,
+        "apertura": "11:00",
+        "cierre": "22:00"
+      },
+      {
+        "abierto": true,
+        "apertura": "11:00",
+        "cierre": "22:00"
+      },
+      {
+        "abierto": false,
+        "apertura": "11:00",
+        "cierre": "22:00"
+      },
+      {
+        "abierto": true,
+        "apertura": "11:00",
+        "cierre": "22:00"
+      },
+      {
+        "abierto": true,
+        "apertura": "11:00",
+        "cierre": "22:00"
+      },
+      {
+        "abierto": true,
+        "apertura": "11:00",
+        "cierre": "23:00"
+      },
+      {
+        "abierto": true,
+        "apertura": "11:00",
+        "cierre": "23:00"
+      }
+    ],
     "precioKm": 400
   },
   "congelados": {
@@ -846,9 +893,14 @@
     "esMayorista": true,
     "i": [
       {
-        "img": "bomboncito-especial.webp",
-        "n": "Bomboncito Frambuesa x12",
+        "img": "frambuesas.webp",
+        "n": "Frambuesas Bañadas x12",
         "p": 85000
+      },
+      {
+        "img": "arandanos.webp",
+        "n": "Arándanos Bañados x12",
+        "p": 78000
       },
       {
         "img": "bomboncito-clasico.webp",
@@ -859,6 +911,11 @@
           "Menta",
           "Pistacho"
         ],
+        "p": 49700
+      },
+      {
+        "img": "seichoc-bombon.webp",
+        "n": "Bomboncito Seichoc",
         "p": 49700
       }
     ],
