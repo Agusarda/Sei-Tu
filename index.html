@@ -1603,6 +1603,10 @@ function toggleInputsHorario(diaIdx) {
 }
 
 function cerrarTodo() {
+    const flyer = document.getElementById("modal-flyer");
+    if (flyer && flyer.classList.contains("active")) {
+        return; // No hace nada si el flyer está abierto
+    }
     document.getElementById("sidebar").classList.remove("active");
     document.getElementById("modal-horarios").classList.remove("active");
     document.getElementById("modal-contactos").classList.remove("active");
