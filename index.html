@@ -1097,7 +1097,7 @@
             border-radius: 10px;
             display: inline-block;
         ">
-            🛵 El servicio de delivery inicia a las 18:00hs
+            🛵 El servicio de delivery inicia a las 19:00hs
         </div>
         <div class="inicio-redes">
             <a href="https://wa.me/5491131725515" target="_blank" class="red-item wa"><i class="fab fa-whatsapp"></i></a>
@@ -1146,7 +1146,7 @@
         <div class="horario-dia"><span>Domingo</span> <span>11:00hs a 22:00hs</span></div>
     </div>
     <div class="horario-nota">
-        🛵 <b>Nota: El servicio de envío (Delivery) solo está disponible a partir de las 18:00hs.</b> Para coordinar un envío fuera de este horario, o para cualquier otra consulta, escribinos por whatsapp.
+        🛵 <b>Nota: El servicio de envío (Delivery) solo está disponible a partir de las 19:00hs.</b> Para coordinar un envío fuera de este horario, o para cualquier otra consulta, escribinos por whatsapp.
     </div>
 </div>
 
@@ -1508,7 +1508,7 @@ function esHorarioDelivery() {
 
     const ahora = new Date();
     const horaActual = ahora.getHours() * 60 + ahora.getMinutes();
-    const minInicioDelivery = 18 * 60; // 18:00hs
+    const minInicioDelivery = 19 * 60; // 19:00hs
 
     if (horaActual < minInicioDelivery) {
         return { abierto: false, motivo: "El servicio de delivery comienza a las 18:00hs." };
