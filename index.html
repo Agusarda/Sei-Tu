@@ -693,10 +693,9 @@
         .banner-img {
             width: 100%;
             height: auto;
-            max-height: 300px; 
+            max-height: none; /* Permite que la altura crezca proporcionalmente */
             display: block;
-            object-fit: cover; 
-            object-position: 50% 40%;
+            object-fit: contain; /* Evita que la imagen se recorte */
         }
 
         @media (min-width: 1024px) {
@@ -710,10 +709,6 @@
                 margin: 10px auto;
                 width: calc(100% - 20px);
                 border-radius: 15px;
-            }
-            .banner-img {
-                max-height: 180px; 
-                object-position: 50% 40%;
             }
         }
 
