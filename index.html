@@ -1504,7 +1504,7 @@ function esHorarioDelivery() {
     const minInicioDelivery = 19 * 60; // 19:00hs
 
     if (horaActual < minInicioDelivery) {
-        return { abierto: false, motivo: "El servicio de delivery comienza a las 18:00hs." };
+        return { abierto: false, motivo: "El servicio de delivery comienza a las 19:00hs." };
     }
 
     return { abierto: true };
@@ -2315,10 +2315,17 @@ function enviar() {
     msj += "DETALLE:\n" + window.resumenWhatsApp + "\n";
     msj += "TOTAL: $" + window.totalGlobalNumerico + "\n";
     msj += "*Nombre*: " + n + "\n";
-    
-    if (entrega === "Delivery" || entrega === "Mayorista") {
-        msj += "*Dirección*: " + d + "\n";
+
+    if (entrega === "Delivery" || (entrega === "Mayorista" && !esMayoTakeAway)) {
+        // Si es delivery minorista o mayorista con delivery, muestra la dirección ingresada por el usuario
+        if (d) {
+            msj += "*Dirección*: " + d + "\n";
+        }
+    } else if (entrega === "Retiro" || esMayoTakeAway) {
+        // Si es Take Away (tanto minorista como mayorista), muestra la dirección fija del local
+        msj += "*Dirección del local*: Fray Luis Beltrán 2004, Ituzaingó\n";
     }
+
     if (detallePago) {
         msj += detallePago + "\n";
     }
