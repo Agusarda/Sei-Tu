@@ -2316,7 +2316,7 @@ function enviar() {
     msj += "TOTAL: $" + window.totalGlobalNumerico + "\n";
     msj += "*Nombre*: " + n + "\n";
 
-    if (entrega === "Delivery" || (entrega === "Mayorista" && !esMayoDelivery)) {
+    if (entrega === "Delivery" || (entrega === "Mayorista" && !esMayoTakeAway)) {
         // Si es delivery minorista o mayorista con delivery, muestra la dirección ingresada por el usuario
         if (d) {
             msj += "*Dirección*: " + d + "\n";
