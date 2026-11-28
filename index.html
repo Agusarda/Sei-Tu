@@ -1002,6 +1002,19 @@
                 box-shadow: 0 6px 22px rgba(255, 85, 0, 0.8);
             }
         }
+        .badge-sin-stock {
+            background: #e74c3c;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: -2px 0 6px 0;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -1853,6 +1866,7 @@ function init() {
             <div class="grid">
                 ${cat.i.map((p, idx) => {
                     const esSoloLocal = p.sl === true;
+                    const esSinStock = p.ss === true;
                     const nombreOriginal = p.n ? p.n.trim().toUpperCase() : "";
                     
                     const esSinTacc = nombreOriginal.includes("SIN TACC");
@@ -1874,8 +1888,9 @@ function init() {
                         .trim();
                     
                     return `
-                        <div class="card ${esSoloLocal ? 'solo-local-card' : ''}"> 
+                        <div class="card ${esSoloLocal ? 'solo-local-card' : ''} ${esSinStock ? 'sin-stock-card' : ''}"> 
                             ${logosHtml}${p.img ? `<img src="${p.img}" class="card-img" alt="${p.n}">` : ''}
+                            ${esSinStock ? `<div class="badge-sin-stock">Sin Stock</div>` : ''}
                             ${logoCormillotHtml}
         
                             <h4>${nombreAMostrar}</h4>                             <p class="price">$${p.p}</p>
@@ -1883,7 +1898,7 @@ function init() {
                             <div class="control-cantidad">
                                 <button class="btn-qty" onclick="ajustarCant('${key}-${idx}', -1, '${key}',${idx})">-</button>
                                 <input type="number" value="0" class="cantidad" id="${key}-${idx}" 
-                                        data-n="${p.n}" data-p="${p.p}" data-sl="${esSoloLocal}" readonly>
+                                        data-n="${p.n}" data-p="${p.p}" data-sl="${esSoloLocal}" data-ss="${esSinStock}" readonly>
                                 <button class="btn-qty" onclick="ajustarCant('${key}-${idx}', 1, '${key}',${idx})">+</button>
                             </div>
                             <div id="box-${key}-${idx}"></div> 
@@ -2411,12 +2426,14 @@ function toggleDetalle() {
 function filtrarProductosPorEntrega() {
     if (!modoEntregaGlobal) return;
 
-    const cardsSoloLocal = document.querySelectorAll('.solo-local-card');
+    const todasLasCards = document.querySelectorAll('.card');
     
-    cardsSoloLocal.forEach(card => {
-        const elementosInteractivos = card.querySelectorAll('button, input, .btn-sabores');
+    todasLasCards.forEach(card => {
+        const esSoloLocal = card.classList.contains('solo-local-card');
+        const esSinStock = card.classList.contains('sin-stock-card');
+        const debeApagarse = esSinStock || (modoEntregaGlobal === 'Delivery' && esSoloLocal);
         
-        if (modoEntregaGlobal === 'Delivery') {
+        if (debeApagarse) {
             card.style.opacity = "0.5";
             card.style.filter = "grayscale(80%)";
             card.style.pointerEvents = "none"; 
@@ -2557,13 +2574,13 @@ function renderAdminDashboard() {
                 </div>
                 
                 <div id="productos-${catKey}">
-                    <div style="display: grid; grid-template-columns: 40px 2fr 80px 1fr 60px 60px 180px 40px; gap: 10px; font-size: 10px; font-weight: bold; color: #888; text-align: center; margin-bottom: 10px;">
-                        <div></div><div style="text-align:left">PRODUCTO</div><div>PRECIO</div><div>LINK IMG</div><div>SOLO L.</div><div>SALSAS?</div><div>OPCIONES</div><div></div>
+                    <div style="display: grid; grid-template-columns: 40px 2fr 80px 1fr 60px 65px 60px 180px 40px; gap: 10px; font-size: 10px; font-weight: bold; color: #888; text-align: center; margin-bottom: 10px;">
+                        <div></div><div style="text-align:left">PRODUCTO</div><div>PRECIO</div><div>LINK IMG</div><div>SOLO L.</div><div>SIN STOCK</div><div>SALSAS?</div><div>OPCIONES</div><div></div>
                     </div>
 
                     ${cat.i.map((prod, idx) => `
-                        <div class="admin-row-producto" style="grid-template-columns: 40px 2fr 80px 1fr 60px 60px 180px 40px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
-                            
+                        <div class="admin-row-producto" style="grid-template-columns: 40px 2fr 80px 1fr 60px 65px 60px 180px 40px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
+            
                             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
                                 <i class="fas fa-chevron-up" onclick="moverProd('${catKey}',${idx}, -1)" 
                                     style="cursor:pointer; font-size:14px; color:${idx === 0 ? '#ccc' : 'var(--primary)'};"></i>
@@ -2575,6 +2592,7 @@ function renderAdminDashboard() {
                             <input type="number" value="${prod.p}" onchange="completo['${catKey}'].i[${idx}].p = parseInt(this.value)">
                             <input type="text" value="${prod.img || ''}" onchange="completo['${catKey}'].i[${idx}].img = this.value">
                             <input type="checkbox" ${prod.sl ? 'checked' : ''} onchange="completo['${catKey}'].i[${idx}].sl = this.checked">
+                            <input type="checkbox" ${prod.ss ? 'checked' : ''} onchange="completo['${catKey}'].i[${idx}].ss = this.checked">
                             <input type="checkbox" ${prod.llevaSalsa ? 'checked' : ''} onchange="completo['${catKey}'].i[${idx}].llevaSalsa = this.checked; renderAdminDashboard()">
 
                             <div style="display: flex; flex-direction: column; gap: 5px;">
@@ -2587,10 +2605,10 @@ function renderAdminDashboard() {
                                     <button class="btn-admin-opt" style="background:#e67e22" onclick="gestionarOpciones('${catKey}', ${idx}, 'salsas')">
                                         Salsas (${prod.salsas ? prod.salsas.length : 0})
                                     </button>
-                                ` : ''}
-                            </div>
+                        ` : ''}
+                    </div>
 
-                            <button onclick="eliminarProducto('${catKey}',${idx})" style="color: #e74c3c; border: none; background: none; cursor:pointer; font-size: 20px;">&times;</button>
+                    <button onclick="eliminarProducto('${catKey}',${idx})" style="color: #e74c3c; border: none; background: none; cursor:pointer; font-size: 20px;">&times;</button>
                         </div>
                     `).join('')}
                 </div>
