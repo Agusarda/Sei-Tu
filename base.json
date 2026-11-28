@@ -38,11 +38,6 @@
   "baldes_y_bombones": {
     "i": [
       {
-        "img": "balde-2l.webp",
-        "n": "Balde 2 Litros (Pistacho-Cookies-Flan)",
-        "p": 15500
-      },
-      {
         "img": "balde-3l.webp",
         "n": "Balde 3 Litros",
         "opt": [
@@ -95,32 +90,6 @@
     ],
     "o": 15,
     "t": "Baldes y Bomboncitos"
-  },
-  "bebidas": {
-    "i": [
-      {
-        "img": "coca-600.webp",
-        "n": "Coca Cola 600ml",
-        "p": 1900
-      },
-      {
-        "img": "agua-mineral.webp",
-        "n": "Agua Sierra de los Padres 500ml",
-        "p": 1200
-      },
-      {
-        "img": "agua-saborizada.webp",
-        "n": "Agua Saborizada 500ml",
-        "opt": [
-          "Manzana",
-          "Naranja",
-          "Pomelo"
-        ],
-        "p": 1400
-      }
-    ],
-    "o": 19,
-    "t": "Bebidas"
   },
   "cafeteria": {
     "i": [
@@ -215,7 +184,7 @@
           "Tramontana",
           "Vainilla"
         ],
-        "p": 4000,
+        "p": 5000,
         "sl": true
       },
       {
@@ -249,13 +218,13 @@
     "horarios": [
       {
         "abierto": true,
-        "apertura": "11:00",
-        "cierre": "22:00"
+        "apertura": "12:00",
+        "cierre": "23:00"
       },
       {
         "abierto": true,
-        "apertura": "11:00",
-        "cierre": "22:00"
+        "apertura": "12:00",
+        "cierre": "23:00"
       },
       {
         "abierto": false,
@@ -264,43 +233,53 @@
       },
       {
         "abierto": true,
-        "apertura": "11:00",
-        "cierre": "22:00"
-      },
-      {
-        "abierto": true,
-        "apertura": "11:00",
-        "cierre": "22:00"
-      },
-      {
-        "abierto": true,
-        "apertura": "11:00",
+        "apertura": "12:00",
         "cierre": "23:00"
       },
       {
         "abierto": true,
-        "apertura": "11:00",
+        "apertura": "12:00",
         "cierre": "23:00"
+      },
+      {
+        "abierto": true,
+        "apertura": "12:00",
+        "cierre": "23:59"
+      },
+      {
+        "abierto": true,
+        "apertura": "12:00",
+        "cierre": "23:59"
       }
     ],
-    "precioKm": 400
+    "precioKm": 600
   },
   "congelados": {
     "i": [
       {
+        "img": "patitas-500.webp",
+        "n": "Patitas de Pollo 300g",
+        "p": 4500
+      },
+      {
+        "img": "nuggets.webp",
+        "n": "Nuggets Crocantes 300g",
+        "p": 5500
+      },
+      {
+        "img": "muzzarella.webp",
+        "n": "Bastones de Muzzarella 300g",
+        "p": 5500
+      },
+      {
+        "img": "espinaca.webp",
+        "n": "Bocaditos de Espinaca 300g",
+        "p": 3500
+      },
+      {
         "img": "papas-380.webp",
         "n": "Papas Fritas 380g",
         "p": 2900
-      },
-      {
-        "img": "papas-2500.webp",
-        "n": "Papas Fritas 2500g",
-        "p": 11800
-      },
-      {
-        "img": "patitas-500.webp",
-        "n": "Patitas de Pollo 500g",
-        "p": 5300
       }
     ],
     "o": 20,
@@ -915,7 +894,7 @@
       },
       {
         "img": "seichoc-bombon.webp",
-        "n": "Bomboncito Seichoc",
+        "n": "Bomboncito Seichoc x8",
         "p": 49700
       }
     ],
@@ -969,7 +948,7 @@
       },
       {
         "img": "seibom-almendra.webp",
-        "n": "Sei Bom Almendras",
+        "n": "Sei Bom Almendras x16",
         "p": 27900
       }
     ],
@@ -1176,7 +1155,7 @@
       },
       {
         "img": "pote-dietetico.webp",
-        "n": "Pote Dietetico Cho/Vai Sin TACC x12",
+        "n": "Pote Cho/Vai Dietetico Sin TACC x12",
         "p": 62000
       },
       {
@@ -1301,46 +1280,10 @@
         "img": "caja-almendrado.webp",
         "n": "Almendrado x8",
         "p": 14000
-      },
-      {
-        "img": "caja-dietetico.webp",
-        "n": "Tricolor Dietetico x6 Sin TACC",
-        "p": 16000
       }
     ],
     "o": 14,
     "t": "Postres por Caja"
-  },
-  "potes": {
-    "i": [
-      {
-        "img": "pote-fr.webp",
-        "n": "Pote Sin TACC Ame/Fru",
-        "p": 8000
-      },
-      {
-        "img": "pote-ch.webp",
-        "n": "Pote Sin TACC Cho/Ddl",
-        "p": 8000
-      },
-      {
-        "img": "pote-limon.webp",
-        "n": "Pote Sin TACC Limón",
-        "p": 8000
-      },
-      {
-        "img": "pote-dietetico.webp",
-        "n": "Pote Dietetico Cho/Vai Sin TACC",
-        "p": 6500
-      },
-      {
-        "img": "pote-vegano.webp",
-        "n": "Pote Vegano Cho/Vai",
-        "p": 8500
-      }
-    ],
-    "o": 16,
-    "t": "Potes Especiales"
   },
   "seibom": {
     "i": [
