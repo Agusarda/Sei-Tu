@@ -1013,7 +1013,13 @@
             letter-spacing: 0.5px;
             margin: -2px 0 6px 0;
             display: inline-block;
-            box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
+            box-shadow: 0 2px 5px rgba(231, 76, 60, 0.35);
+            filter: none !important;
+            opacity: 1 !important;
+            position: relative;
+            z-index: 15;
+            transform: translateZ(0);
+            -webkit-font-smoothing: antialiased;
         }
     </style>
 </head>
@@ -2432,11 +2438,23 @@ function filtrarProductosPorEntrega() {
         const esSoloLocal = card.classList.contains('solo-local-card');
         const esSinStock = card.classList.contains('sin-stock-card');
         const debeApagarse = esSinStock || (modoEntregaGlobal === 'Delivery' && esSoloLocal);
+        const badgeSinStock = card.querySelector('.badge-sin-stock');
+        const elementosAfectados = card.querySelectorAll('img:not(.badge-sin-stock), h4, .price, .control-cantidad, [id^="box-"]');
         
         if (debeApagarse) {
-            card.style.opacity = "0.5";
-            card.style.filter = "grayscale(80%)";
-            card.style.pointerEvents = "none"; 
+            card.style.opacity = "1";
+            card.style.filter = "none";
+            card.style.pointerEvents = "none";
+
+            elementosAfectados.forEach(el => {
+                el.style.opacity = "0.5";
+                el.style.filter = "grayscale(80%)";
+            });
+
+            if (badgeSinStock) {
+                badgeSinStock.style.opacity = "1";
+                badgeSinStock.style.filter = "none";
+            }
             
             const btnSabores = card.querySelector('.btn-sabores');
             if (btnSabores) {
